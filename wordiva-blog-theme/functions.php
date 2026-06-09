@@ -225,7 +225,14 @@ function wordiva_get_blog_url() {
 }
 
 function wordiva_get_logo_url() {
-    return get_theme_mod('wordiva_logo_url', 'https://wordiva.ai/wordiva-logo-light.png');
+    $default = get_template_directory_uri() . '/assets/images/icon.png';
+    $logo_url = get_theme_mod('wordiva_logo_url', $default);
+
+    if ($logo_url === 'https://wordiva.ai/wordiva-logo-light.png') {
+        return $default;
+    }
+
+    return $logo_url;
 }
 
 function wordiva_get_cta_url() {

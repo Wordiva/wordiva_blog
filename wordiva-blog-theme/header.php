@@ -88,8 +88,7 @@
                     <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="wordiva-logo-link">
                         <img src="<?php echo esc_url(wordiva_get_logo_url()); ?>" 
                              alt="<?php echo esc_attr(get_bloginfo('name')); ?> Logo" 
-                             class="wordiva-logo-img"
-                             onerror="this.src='<?php echo esc_url(get_template_directory_uri() . '/assets/images/icon.png'); ?>'">
+                             class="wordiva-logo-img">
                     </a>
                 </div>
                 

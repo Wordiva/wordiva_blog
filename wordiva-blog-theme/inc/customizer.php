@@ -87,7 +87,7 @@ function wordiva_enhanced_customize_register($wp_customize) {
     
     // Logo URL
     $wp_customize->add_setting('wordiva_logo_url', array(
-        'default'           => 'https://wordiva.ai/wordiva-logo-light.png',
+        'default'           => get_template_directory_uri() . '/assets/images/icon.png',
         'sanitize_callback' => 'esc_url_raw',
         'transport'         => 'postMessage',
     ));

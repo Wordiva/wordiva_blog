@@ -17,7 +17,7 @@
                     <!-- Logo and Social Links -->
                     <div class="footer-brand-section">
                         <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="footer-logo" rel="home">
-                            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/transparent.png'); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" class="footer-logo-img">
+                            <img src="<?php echo esc_url(wordiva_get_logo_url()); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" class="footer-logo-img">
                         </a>
                         <div class="social-links">
                             <a href="<?php echo esc_url(get_theme_mod('wordiva_facebook_url', 'https://www.facebook.com/wordivaai/')); ?>" 
