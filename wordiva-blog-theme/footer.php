@@ -5,6 +5,8 @@
  * @package Wordiva_Theme
  * @since 1.0.0
  */
+
+$is_blog_context = is_home() || is_singular('post') || is_archive() || is_search();
 ?>
 
     </div><!-- .site-content -->
@@ -16,9 +18,7 @@
                     
                     <!-- Logo and Social Links -->
                     <div class="footer-brand-section">
-                        <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="footer-logo" rel="home">
-                            <img src="<?php echo esc_url(wordiva_get_logo_url()); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" class="footer-logo-img">
-                        </a>
+                        <?php wordiva_render_logo('footer-logo'); ?>
                         <div class="social-links">
                             <a href="<?php echo esc_url(get_theme_mod('wordiva_facebook_url', 'https://www.facebook.com/wordivaai/')); ?>" 
                                target="_blank" 
@@ -51,22 +51,32 @@
                     </div>
                     
                     <!-- Navigation Links -->
-                    <nav class="footer-nav" aria-label="<?php esc_attr_e('Footer Navigation', 'wordiva-blog-theme'); ?>">
-                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('features')); ?>" class="footer-nav-link">
+                    <nav class="footer-nav wordiva-footer-nav" aria-label="<?php esc_attr_e('Footer Navigation', 'wordiva-blog-theme'); ?>">
+                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('features')); ?>" class="wordiva-nav-link">
                             <?php esc_html_e('Features', 'wordiva-blog-theme'); ?>
                         </a>
-                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('workflow')); ?>" class="footer-nav-link">
+                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('workflow')); ?>" class="wordiva-nav-link">
                             <?php esc_html_e('How it works', 'wordiva-blog-theme'); ?>
                         </a>
-                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('pricing')); ?>" class="footer-nav-link">
+                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('pricing')); ?>" class="wordiva-nav-link">
                             <?php esc_html_e('Pricing', 'wordiva-blog-theme'); ?>
                         </a>
-                        <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="footer-nav-link">
+                        <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="wordiva-nav-link <?php echo $is_blog_context ? 'active' : ''; ?>">
                             <?php esc_html_e('Blog', 'wordiva-blog-theme'); ?>
                         </a>
-                        <a href="<?php echo esc_url(wordiva_get_cta_url()); ?>" class="footer-cta-button">
-                            <?php esc_html_e('Get Started', 'wordiva-blog-theme'); ?>
-                        </a>
+                        <div class="wordiva-nav-actions wordiva-footer-actions">
+                            <a href="<?php echo esc_url(wordiva_get_sign_in_url()); ?>" class="wordiva-sign-in-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                    <path d="m10 17 5-5-5-5"></path>
+                                    <path d="M15 12H3"></path>
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                </svg>
+                                <?php esc_html_e('Sign In', 'wordiva-blog-theme'); ?>
+                            </a>
+                            <a href="<?php echo esc_url(wordiva_get_cta_url()); ?>" class="wordiva-cta-button">
+                                <?php esc_html_e('Get Started', 'wordiva-blog-theme'); ?>
+                            </a>
+                        </div>
                     </nav>
                     
                 </div>

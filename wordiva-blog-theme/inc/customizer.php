@@ -101,21 +101,21 @@ function wordiva_enhanced_customize_register($wp_customize) {
     
     // CTA Button URL
     $wp_customize->add_setting('wordiva_cta_url', array(
-        'default'           => 'https://app.wordiva.ai/register',
+        'default'           => 'https://wordiva.ai/register',
         'sanitize_callback' => 'esc_url_raw',
         'transport'         => 'postMessage',
     ));
     
     $wp_customize->add_control('wordiva_cta_url', array(
         'label'       => __('Get Started Button URL', 'wordiva-blog-theme'),
-        'description' => __('URL for the "Get Started" button in navigation (registration page)', 'wordiva-blog-theme'),
+        'description' => __('URL for the "Get Started" button in navigation', 'wordiva-blog-theme'),
         'section'     => 'wordiva_navigation',
         'type'        => 'url',
     ));
 
     // Sign In URL
     $wp_customize->add_setting('wordiva_sign_in_url', array(
-        'default'           => 'https://app.wordiva.ai/login',
+        'default'           => 'https://wordiva.ai/login',
         'sanitize_callback' => 'esc_url_raw',
         'transport'         => 'postMessage',
     ));

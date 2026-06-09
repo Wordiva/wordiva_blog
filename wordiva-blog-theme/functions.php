@@ -236,11 +236,23 @@ function wordiva_get_logo_url() {
 }
 
 function wordiva_get_sign_in_url() {
-    return get_theme_mod('wordiva_sign_in_url', 'https://app.wordiva.ai/login');
+    $url = get_theme_mod('wordiva_sign_in_url', 'https://wordiva.ai/login');
+
+    if (strpos($url, 'app.wordiva.ai') !== false) {
+        $url = str_replace('app.wordiva.ai', 'wordiva.ai', $url);
+    }
+
+    return $url;
 }
 
 function wordiva_get_cta_url() {
-    return get_theme_mod('wordiva_cta_url', 'https://app.wordiva.ai/register');
+    $url = get_theme_mod('wordiva_cta_url', 'https://wordiva.ai/register');
+
+    if (strpos($url, 'app.wordiva.ai') !== false) {
+        $url = str_replace('app.wordiva.ai', 'wordiva.ai', $url);
+    }
+
+    return $url;
 }
 
 function wordiva_get_main_site_anchor($anchor) {

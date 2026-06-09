@@ -2096,68 +2096,45 @@ textarea {
   gap: var(--wordiva-spacing-xl);
 }
 
-.footer-brand-section .footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: var(--wordiva-white);
-}
-
-.footer-brand-section .footer-logo img {
-  max-height: 50px;
-  width: auto;
-  display: block;
-}
-
-
-.footer-brand-section .footer-logo-text {
-  font-size: 24px;
-  font-weight: var(--wordiva-font-weight-semibold);
-}
-
-/* Footer Navigation */
-.footer-nav {
-  display: flex;
-  align-items: center;
-  gap: var(--wordiva-spacing-lg);
-}
-
-.footer-nav-link {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: var(--wordiva-font-weight-medium);
-  transition: all var(--wordiva-transition-fast);
-  padding: var(--wordiva-spacing-xs) var(--wordiva-spacing-sm);
-  border-radius: var(--wordiva-border-radius-sm);
-}
-
-.footer-nav-link:hover {
-  color: var(--wordiva-electric-blue);
-  background-color: rgba(47, 128, 255, 0.1);
-}
-
-.footer-cta-button {
+.footer-brand-section .footer-logo,
+.footer-brand-section .wordiva-logo-link.footer-logo {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px 24px;
-  background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple));
-  color: var(--wordiva-white);
+  gap: 0.625rem;
   text-decoration: none;
-  font-weight: var(--wordiva-font-weight-semibold);
-  font-size: 0.95rem;
-  border-radius: 8px;
-  transition: all var(--wordiva-transition-fast);
-  box-shadow: 0 4px 12px rgba(47, 128, 255, 0.3);
 }
 
-.footer-cta-button:hover {
-  background: linear-gradient(135deg, var(--wordiva-royal-purple), var(--wordiva-neon-pink));
-  color: var(--wordiva-white);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(123, 77, 255, 0.4);
+/* Footer Navigation - matches header nav styling */
+.footer-nav,
+.wordiva-footer-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
+.wordiva-footer-nav .wordiva-nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.wordiva-footer-nav .wordiva-nav-link:hover,
+.wordiva-footer-nav .wordiva-nav-link:focus {
+  color: var(--wordiva-electric-blue);
+}
+
+.wordiva-footer-nav .wordiva-nav-link.active {
+  color: var(--wordiva-electric-blue);
+}
+
+.wordiva-footer-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .footer-bottom-content {
@@ -2550,20 +2527,26 @@ textarea {
     width: 100%;
   }
 
-  .footer-nav {
-    flex-direction: row;
+  .footer-nav,
+  .wordiva-footer-nav {
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--wordiva-spacing-xl);
+    gap: var(--wordiva-spacing-lg);
     width: 100%;
     margin-bottom: var(--wordiva-spacing-xl);
   }
 
-  .footer-cta-button {
-    width: auto;
-    min-width: 200px;
-    text-align: center;
-    margin-bottom: var(--wordiva-spacing-lg);
+  .wordiva-footer-actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .wordiva-footer-nav .wordiva-sign-in-button,
+  .wordiva-footer-nav .wordiva-cta-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .social-links {
@@ -2584,17 +2567,18 @@ textarea {
     padding-bottom: 2px;
   }
 
-  .footer-brand-section .footer-logo img {
-    height: 2.5rem;
+  .footer-brand-section .wordiva-logo-text {
+    font-size: 1rem;
   }
 
-  .footer-nav {
+  .footer-nav,
+  .wordiva-footer-nav {
     flex-direction: column;
     gap: var(--wordiva-spacing-lg);
     margin-bottom: 2px;
   }
 
-  .footer-nav-link {
+  .wordiva-footer-nav .wordiva-nav-link {
     font-size: 1rem;
     padding: var(--wordiva-spacing-md);
     text-align: center;
@@ -2604,12 +2588,13 @@ textarea {
     justify-content: center;
   }
 
-  .footer-cta-button {
+  .wordiva-footer-nav .wordiva-sign-in-button,
+  .wordiva-footer-nav .wordiva-cta-button {
     width: 100%;
     max-width: 280px;
-    padding: 16px 24px;
-    font-size: 1rem;
-    margin-bottom: var(--wordiva-spacing-xl);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: var(--wordiva-spacing-md);
   }
 
   .social-link {
@@ -4781,7 +4766,8 @@ a.read-more-featured:hover {
     gap: var(--wordiva-spacing-lg);
   }
 
-  .footer-nav {
+  .footer-nav,
+  .wordiva-footer-nav {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
@@ -4789,10 +4775,8 @@ a.read-more-featured:hover {
     margin-bottom: var(--wordiva-spacing-xl);
   }
 
-  .footer-cta-button {
-    width: auto;
-    min-width: 200px;
-    margin-bottom: var(--wordiva-spacing-lg);
+  .wordiva-footer-actions {
+    justify-content: center;
   }
 }
 
@@ -4801,13 +4785,14 @@ a.read-more-featured:hover {
     padding-bottom: 0;
   }
 
-  .footer-nav {
+  .footer-nav,
+  .wordiva-footer-nav {
     flex-direction: column;
     gap: var(--wordiva-spacing-lg);
     margin-bottom: var(--wordiva-spacing-xxl);
   }
 
-  .footer-nav-link {
+  .wordiva-footer-nav .wordiva-nav-link {
     padding: var(--wordiva-spacing-md);
     text-align: center;
     font-size: 1rem;
@@ -4817,11 +4802,11 @@ a.read-more-featured:hover {
     justify-content: center;
   }
 
-  .footer-cta-button {
+  .wordiva-footer-nav .wordiva-sign-in-button,
+  .wordiva-footer-nav .wordiva-cta-button {
     width: 100%;
     max-width: 280px;
-    /* padding: 16px 24px; */
-    font-size: 1rem;
+    font-size: 0.875rem;
     margin-bottom: var(--wordiva-spacing-xl);
   }
 
@@ -4962,9 +4947,11 @@ body,
   }
 
   /* Navigation links */
-  .footer-nav {
+  .footer-nav,
+  .wordiva-footer-nav {
     display: flex !important;
     flex-direction: row !important;
+    flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: center !important;
     gap: 2rem !important;
@@ -4972,38 +4959,27 @@ body,
     margin: 1rem 0 !important;
   }
 
-  .footer-nav-link {
-    color: rgba(255, 255, 255, 0.8) !important;
+  .wordiva-footer-nav .wordiva-nav-link {
+    color: #94a3b8 !important;
     text-decoration: none !important;
-    font-size: 1rem !important;
-    padding: 0.5rem 1rem !important;
-    border-radius: 4px !important;
-    transition: all 0.3s ease !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+    transition: color 0.2s ease !important;
   }
 
-  .footer-nav-link:hover {
+  .wordiva-footer-nav .wordiva-nav-link:hover,
+  .wordiva-footer-nav .wordiva-nav-link:focus,
+  .wordiva-footer-nav .wordiva-nav-link.active {
     color: var(--wordiva-electric-blue) !important;
-    background-color: rgba(47, 128, 255, 0.1) !important;
+    background: none !important;
   }
 
-  /* CTA Button */
-  .footer-cta-button {
+  .wordiva-footer-actions {
     display: inline-flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    padding: 0.75rem 2rem !important;
-    background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple)) !important;
-    color: var(--wordiva-white) !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    border-radius: 8px !important;
-    transition: all 0.3s ease !important;
+    gap: 0.75rem !important;
     margin: 1rem 0 !important;
-  }
-
-  .footer-cta-button:hover {
-    background: linear-gradient(135deg, var(--wordiva-royal-purple), var(--wordiva-neon-pink)) !important;
-    transform: translateY(-2px) !important;
   }
 
   /* Social links */
@@ -5093,9 +5069,11 @@ body,
     width: 100% !important;
   }
 
-  .footer-nav {
+  .footer-nav,
+  .wordiva-footer-nav {
     display: flex !important;
     flex-direction: row !important;
+    flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: center !important;
     gap: 2.5rem !important;
@@ -5103,38 +5081,27 @@ body,
     margin: 1.5rem 0 !important;
   }
 
-  .footer-nav-link {
-    color: rgba(255, 255, 255, 0.8) !important;
+  .wordiva-footer-nav .wordiva-nav-link {
+    color: #94a3b8 !important;
     text-decoration: none !important;
-    font-size: 1.1rem !important;
-    padding: 0.75rem 1.25rem !important;
-    border-radius: 6px !important;
-    transition: all 0.3s ease !important;
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+    transition: color 0.2s ease !important;
   }
 
-  .footer-nav-link:hover {
+  .wordiva-footer-nav .wordiva-nav-link:hover,
+  .wordiva-footer-nav .wordiva-nav-link:focus,
+  .wordiva-footer-nav .wordiva-nav-link.active {
     color: var(--wordiva-electric-blue) !important;
-    background-color: rgba(47, 128, 255, 0.1) !important;
+    background: none !important;
   }
 
-  .footer-cta-button {
+  .wordiva-footer-actions {
     display: inline-flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    padding: 1rem 2.5rem !important;
-    background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple)) !important;
-    color: var(--wordiva-white) !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    font-size: 1.1rem !important;
-    border-radius: 10px !important;
-    transition: all 0.3s ease !important;
+    gap: 0.75rem !important;
     margin: 1.5rem 0 !important;
-  }
-
-  .footer-cta-button:hover {
-    background: linear-gradient(135deg, var(--wordiva-royal-purple), var(--wordiva-neon-pink)) !important;
-    transform: translateY(-2px) !important;
   }
 
   .social-links {
@@ -5192,7 +5159,7 @@ body,
     margin: 1rem 0 !important;
   }
 
-  .footer-cta-button {
+  .wordiva-footer-actions {
     margin: 1rem 0 !important;
   }
 
@@ -5295,7 +5262,7 @@ body,
     margin-bottom: 1 rem !important;
   }
 
-  .footer-cta-button {
+  .wordiva-footer-actions {
     margin-bottom: 1 rem !important;
   }
 
@@ -5362,8 +5329,8 @@ body,
     margin-bottom: 0 !important;
   }
 
-  .footer-cta-button,
-  .footer-cta-button-mobile {
+  .wordiva-footer-nav .wordiva-sign-in-button,
+  .wordiva-footer-nav .wordiva-cta-button {
     margin-bottom: var(--wordiva-spacing-xl) !important;
   }
 

@@ -510,3 +510,20 @@ body {
     white-space: nowrap;
   }
 }
+
+/* ==========================================================================
+   Footer navigation - reuses header link/button styles
+   ========================================================================== */
+
+.wordiva-footer-nav .wordiva-sign-in-button,
+.wordiva-footer-nav .wordiva-cta-button {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .wordiva-footer-nav .wordiva-sign-in-button,
+  .wordiva-footer-nav .wordiva-cta-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
