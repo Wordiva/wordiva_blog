@@ -1,0 +1,427 @@
+/*! 
+ * Wordiva Theme - Additional Component Styles
+ * Version: 1.0.0
+ * Description: Supplementary styles for Slack-inspired card grid and archive-specific components
+ * Author: Wordiva Team
+ * License: GPL v2 or later
+ */
+
+/* ==========================================================================
+   Slack-Inspired Card Grid System - Unique styles only
+   ========================================================================== */
+
+.slack-card-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 32px;
+    padding: var(--wordiva-spacing-xxl) 0;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .slack-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1100px) {
+    .slack-card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1400px) {
+    .slack-card-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.slack-card-grid .blog-card {
+    background: var(--wordiva-white);
+    border: 1px solid #E8E8E8;
+    border-radius: 12px;
+    box-shadow: none;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    contain: layout style paint;
+}
+
+.slack-card-grid .blog-card:hover {
+    border-color: var(--wordiva-royal-purple);
+    box-shadow: 0 12px 24px rgba(123, 77, 255, 0.1);
+    transform: translateY(-4px);
+}
+
+/* Featured card spans full width */
+.slack-card-grid .featured-card {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 0;
+    height: 100%;
+    background: var(--wordiva-white);
+    border: 2px solid var(--wordiva-electric-blue);
+    border-radius: 16px;
+    color: var(--wordiva-charcoal-dark);
+}
+
+.slack-card-grid .featured-card .card-content {
+    padding: var(--wordiva-spacing-xxl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slack-card-grid .featured-card .card-title a {
+    color: var(--wordiva-charcoal-dark);
+    font-size: 1.75rem;
+}
+
+.slack-card-grid .featured-card .card-excerpt {
+    color: var(--wordiva-charcoal-light);
+    font-size: 1.125rem;
+}
+
+.slack-card-grid .featured-card .card-category {
+    background: var(--wordiva-electric-blue);
+    color: var(--wordiva-white);
+}
+
+.slack-card-grid .featured-card .card-read-more {
+    color: var(--wordiva-electric-blue);
+    border-bottom: 2px solid var(--wordiva-electric-blue);
+    padding-bottom: 4px;
+    align-self: flex-start;
+}
+
+/* ==========================================================================
+   Archive and No Posts States - Consolidated
+   ========================================================================== */
+
+.archive-header,
+.no-posts-found {
+    text-align: center;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--wordiva-gray-medium);
+}
+
+.archive-title,
+.no-posts-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--wordiva-charcoal-dark);
+    margin-bottom: 1rem;
+}
+
+.no-posts-found {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+    border-radius: 16px;
+    margin: 2rem 0;
+    border-bottom: none;
+}
+
+.no-posts-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.no-posts-message {
+    font-size: 1.125rem;
+    color: var(--wordiva-charcoal-light);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.archive-post-grid,
+.index-post-grid,
+.search-post-grid,
+.related-post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    padding: 2rem 0;
+}
+
+/* Homepage specific post grid layout optimization */
+@media (min-width: 1024px) {
+    .index-post-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1200px;
+        gap: 32px;
+        margin: 0 auto;
+    }
+
+    .index-post-grid .blog-card {
+        max-width: 380px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .index-post-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 800px;
+        gap: 24px;
+        margin: 0 auto;
+    }
+}
+
+/* ==========================================================================
+   Mobile Responsive Optimizations
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .slack-card-grid {
+        grid-template-columns: 1fr;
+        gap: var(--wordiva-spacing-lg);
+    }
+
+    .slack-card-grid .featured-card {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .slack-card-grid .featured-card .card-image {
+        height: 100%;
+    }
+}
+
+/* ==========================================================================
+   Search Page Styles - Slack-inspired Design
+   ========================================================================== */
+
+.search-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: var(--wordiva-white);
+    min-height: 100vh;
+}
+
+.search-page-header {
+    text-align: center;
+    padding: 80px 0 0;
+    background-color: var(--wordiva-white);
+}
+
+.search-page-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--wordiva-charcoal-dark);
+    line-height: 1.2;
+}
+
+.search-results-text {
+    color: var(--wordiva-royal-purple);
+}
+
+.search-subtitle {
+    font-size: 1.25rem;
+    color: var(--wordiva-charcoal-dark);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.search-subtitle strong {
+    color: var(--wordiva-royal-purple);
+}
+
+.search-description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 40px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-description .contact-link {
+    color: var(--wordiva-royal-purple);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.search-description .contact-link:hover {
+    text-decoration: underline;
+}
+
+.search-page-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--wordiva-white);
+    border: 2px solid #E8E8E8;
+    border-radius: 12px;
+    padding: 0 20px;
+    transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--wordiva-royal-purple);
+    box-shadow: 0 0 0 3px rgba(123, 77, 255, 0.1);
+}
+
+.search-icon {
+    color: #999;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.search-page-field {
+    flex: 1;
+    border: none !important;
+    background: none !important;
+    padding: 16px 0;
+    font-size: 1rem;
+    color: var(--wordiva-charcoal-dark);
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.search-page-field::placeholder {
+    color: #999;
+}
+
+.search-page-field:focus,
+.search-page-field:focus-visible {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Search Results Section */
+.search-results-section {
+    padding-bottom: 80px;
+}
+
+.search-card-grid {
+    margin-bottom: 60px;
+}
+
+/* No Results */
+.no-search-results {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.no-results-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.no-results-icon {
+    margin-bottom: 30px;
+    color: #ccc;
+}
+
+.no-results-text h2 {
+    font-size: 2rem;
+    color: var(--wordiva-charcoal-dark);
+    margin-bottom: 16px;
+}
+
+.no-results-text p {
+    color: #666;
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+/* Search Pagination */
+.search-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+.search-pagination .nav-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-pagination .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 16px;
+    border: 2px solid #E8E8E8;
+    border-radius: 8px;
+    color: var(--wordiva-charcoal-dark);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.search-pagination .page-numbers:hover,
+.search-pagination .page-numbers.current {
+    border-color: var(--wordiva-royal-purple);
+    background-color: var(--wordiva-royal-purple);
+    color: var(--wordiva-white);
+}
+
+.search-pagination .prev,
+.search-pagination .next {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-page-title {
+        font-size: 2.5rem;
+    }
+
+    .search-page-container {
+        padding: 0 16px;
+    }
+
+    .search-page-header {
+        padding: 60px 0 40px;
+    }
+
+    .search-input-wrapper {
+        padding: 0 16px;
+    }
+
+    .search-page-field {
+        padding: 14px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-page-title {
+        font-size: 2rem;
+    }
+
+    .search-subtitle {
+        font-size: 1.125rem;
+    }
+
+    .search-pagination .page-numbers {
+        min-width: 40px;
+        height: 40px;
+        padding: 0 12px;
+    }
+}
+
+#main {
+
+    margin-top: 15px !important;
+}

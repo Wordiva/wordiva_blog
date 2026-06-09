@@ -1,0 +1,492 @@
+/**
+ * Wordiva Theme Admin Styles
+ * Enhanced styling for custom meta boxes and admin interface
+ * 
+ * @package Wordiva_Theme
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Meta Box Styling - Consolidated
+   ========================================================================== */
+
+.wordiva-meta-box .form-table {
+    background: #ffffff;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.wordiva-meta-box .form-table th {
+    width: 180px;
+    font-weight: 600;
+    color: #2B2B2B;
+    background: #f8f9fa;
+    border-right: 1px solid #e1e1e1;
+    padding: 15px 20px;
+    vertical-align: top;
+}
+
+.wordiva-meta-box .form-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.wordiva-meta-box .form-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Form Controls - Consolidated */
+.wordiva-meta-box select, .wordiva-meta-box input[type='number'], .wordiva-meta-box input[type='text'], .wordiva-meta-box textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 2px solid #e1e1e1;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wordiva-meta-box select:focus, .wordiva-meta-box input[type='number']:focus, .wordiva-meta-box input[type='text']:focus, .wordiva-meta-box textarea:focus {
+    border-color: #2F80FF;
+    box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+    outline: none;
+}
+
+.wordiva-meta-box textarea {
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* Checkboxes and Radio Buttons */
+.wordiva-meta-box input[type='checkbox'], .wordiva-meta-box input[type='radio'] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    accent-color: #2F80FF;
+}
+
+.wordiva-meta-box fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wordiva-meta-box fieldset label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.wordiva-meta-box fieldset label:hover {
+    color: #2F80FF;
+}
+
+.wordiva-meta-box .description {
+    color: #666;
+    font-style: italic;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   Featured Level and Color Indicators - Consolidated
+   ========================================================================== */
+
+.wordiva-featured-level-indicator {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 10px;
+}
+
+.wordiva-featured-level-primary {
+    background: linear-gradient(135deg, #2F80FF, #7B4DFF);
+    color: white;
+}
+
+.wordiva-featured-level-secondary {
+    background: #FF4FA3;
+    color: white;
+}
+
+.wordiva-featured-level-none {
+    background: #e1e1e1;
+    color: #666;
+}
+
+.wordiva-card-color-preview {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-left: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
+}
+
+.wordiva-card-color-preview.electric-blue { background: #2F80FF; }
+.wordiva-card-color-preview.royal-purple { background: #7B4DFF; }
+.wordiva-card-color-preview.neon-pink { background: #FF4FA3; }
+.wordiva-card-color-preview.sunrise-orange { background: #FF9F1C; }
+.wordiva-card-color-preview.golden-yellow { background: #FFD166; }
+
+/* ==========================================================================
+   Meta Box Headers - Consolidated
+   ========================================================================== */
+
+#wordiva_post_options .postbox-header h2, #wordiva_card_options .postbox-header h2 {
+    color: #2B2B2B;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+#wordiva_post_options .postbox-header h2:before {
+    content: "⭐";
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+#wordiva_card_options .postbox-header h2:before {
+    content: "🎨";
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* ==========================================================================
+   Reading Time and Layout Components - Consolidated
+   ========================================================================== */
+
+.wordiva-reading-time-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wordiva-reading-time-wrapper input[type='number'] {
+    max-width: 80px;
+}
+
+.wordiva-reading-time-wrapper .unit-label {
+    color: #666;
+    font-weight: normal;
+}
+
+.wordiva-card-layout-preview {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.wordiva-layout-option {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.wordiva-layout-option:hover {
+    transform: translateY(-2px);
+}
+
+.wordiva-layout-option input[type='radio'] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wordiva-layout-preview {
+    width: 80px;
+    height: 50px;
+    border: 2px solid #e1e1e1;
+    border-radius: 6px;
+    background: #f8f9fa;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wordiva-layout-option input[type='radio']:checked + .wordiva-layout-preview {
+    border-color: #2F80FF;
+    box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+}
+
+.wordiva-layout-preview:before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, #2F80FF, #7B4DFF);
+    border-radius: 2px;
+}
+
+.wordiva-layout-preview.horizontal:before {
+    width: 30px;
+    height: 42px;
+    right: auto;
+}
+
+.wordiva-layout-preview.minimal:before {
+    height: 12px;
+    background: #FF4FA3;
+}
+
+.wordiva-layout-preview.image-focus:before {
+    height: 35px;
+    background: linear-gradient(135deg, #FF9F1C, #FFD166);
+}
+
+.wordiva-layout-label {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 11px;
+    color: #666;
+    font-weight: 500;
+}
+
+.wordiva-layout-option input[type='radio']:checked + .wordiva-layout-preview + .wordiva-layout-label {
+    color: #2F80FF;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Excerpt Length and Success States - Consolidated
+   ========================================================================== */
+
+.wordiva-excerpt-length-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.wordiva-excerpt-length-wrapper input[type='range'] {
+    flex: 1;
+    max-width: 200px;
+    accent-color: #2F80FF;
+}
+
+.wordiva-excerpt-length-display {
+    background: #f8f9fa;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: #2F80FF;
+    min-width: 60px;
+    text-align: center;
+    border: 2px solid #e1e1e1;
+}
+
+.wordiva-meta-saved {
+    background: #FFD166;
+    color: #2B2B2B;
+    padding: 8px 15px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-weight: 600;
+    display: none;
+}
+
+.wordiva-meta-saved.show {
+    display: block;
+    animation: slideInDown 0.3s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   Responsive and Accessibility - Consolidated
+   ========================================================================== */
+
+@media (max-width: 782px) {
+    .wordiva-meta-box .form-table th, .wordiva-meta-box .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 15px;
+    }
+    
+    .wordiva-meta-box .form-table th {
+        border-right: none;
+        border-bottom: 1px solid #e1e1e1;
+        background: #f0f0f0;
+    }
+    
+    .wordiva-card-layout-preview {
+        justify-content: center;
+    }
+    
+    .wordiva-excerpt-length-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+}
+
+/* Dark Mode Support */
+.admin-color-midnight .wordiva-meta-box .form-table th {
+    background: #32373c;
+    color: #eee;
+}
+
+.admin-color-midnight .wordiva-meta-box .form-table {
+    background: #23282d;
+    border-color: #32373c;
+}
+
+.admin-color-midnight .wordiva-meta-box .form-table td {
+    border-color: #32373c;
+}
+
+.admin-color-midnight .wordiva-meta-box select, .admin-color-midnight .wordiva-meta-box input[type='number'], .admin-color-midnight .wordiva-meta-box input[type='text'], .admin-color-midnight .wordiva-meta-box textarea {
+    background: #32373c;
+    border-color: #555d66;
+    color: #eee;
+}
+
+/* Accessibility Enhancements */
+.wordiva-meta-box label {
+    cursor: pointer;
+}
+
+.wordiva-meta-box input:focus, .wordiva-meta-box select:focus, .wordiva-meta-box textarea:focus {
+    outline: 2px solid #2F80FF;
+    outline-offset: 2px;
+}
+
+.wordiva-meta-box .screen-reader-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+@media (prefers-contrast: high) {
+    .wordiva-meta-box .form-table, .wordiva-meta-box select, .wordiva-meta-box input[type='number'], .wordiva-meta-box input[type='text'], .wordiva-meta-box textarea {
+        border-width: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wordiva-meta-box select, .wordiva-meta-box input[type='number'], .wordiva-meta-box input[type='text'], .wordiva-meta-box textarea, .wordiva-layout-option {
+        transition: none;
+    }
+    
+    .wordiva-meta-saved {
+        animation: none;
+    }
+}
+
+/* ==========================================================================
+   Additional Admin Styles (Previously Inline)
+   ========================================================================== */
+
+/* Enhanced meta box styling */
+.wordiva-meta-box .form-table th {
+  width: 150px;
+  font-weight: 600;
+  color: #2B2B2B;
+}
+
+.wordiva-meta-box .form-table td {
+  padding: 10px 0;
+}
+
+.wordiva-meta-box select,
+.wordiva-meta-box input[type='number'],
+.wordiva-meta-box textarea {
+  width: 100%;
+  max-width: 300px;
+}
+
+.wordiva-meta-box .description {
+  color: #666;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+/* Featured level indicators */
+.wordiva-featured-level-primary {
+  background: linear-gradient(135deg, #2F80FF, #7B4DFF);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.wordiva-featured-level-secondary {
+  background: #FF4FA3;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+/* Admin notice enhancements */
+.wordiva-admin-notice.notice {
+  border-left: 4px solid #2F80FF;
+  background: linear-gradient(135deg, rgba(47, 128, 255, 0.05) 0%, rgba(123, 77, 255, 0.05) 100%);
+  padding: 15px;
+}
+
+.wordiva-admin-notice h3 {
+  color: #7B4DFF;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.wordiva-feature-list {
+  margin: 10px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.wordiva-feature-list li {
+  margin-bottom: 5px;
+  color: #2B2B2B;
+  font-size: 14px;
+}
+
+/* Performance notice styling */
+.wordiva-performance-notice {
+  border-left: 4px solid #FF9F1C;
+  background: rgba(255, 159, 28, 0.05);
+}
+
+.wordiva-performance-notice ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.wordiva-performance-notice li {
+  margin-bottom: 5px;
+  color: #2B2B2B;
+}

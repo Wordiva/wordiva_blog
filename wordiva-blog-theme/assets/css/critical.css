@@ -1,0 +1,207 @@
+/*! Critical CSS for Wordiva Theme - Above the fold content only 
+
+/* Essential CSS Variables - Critical Path Only */
+:root {
+  --wordiva-electric-blue: #2f80ff;
+  --wordiva-royal-purple: #7b4dff;
+  --wordiva-white: #ffffff;
+  --wordiva-charcoal-dark: #2b2b2b;
+  --wordiva-charcoal-light: #4a4a4a;
+  --wordiva-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --wordiva-spacing-sm: 0.5rem;
+  --wordiva-spacing-md: 1rem;
+  --wordiva-spacing-lg: 1.5rem;
+  --wordiva-spacing-xl: 2rem;
+  --wordiva-spacing-xxl: 3rem;
+  --wordiva-border-radius-md: 8px;
+  --wordiva-border-radius-lg: 12px;
+  --wordiva-shadow-md: 0 4px 6px rgba(43, 43, 43, 0.1);
+}
+
+/* Critical Reset - Above the fold only */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--wordiva-font-family);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--wordiva-charcoal-dark);
+  background-color: var(--wordiva-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Critical Layout - Above the fold */
+.site-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-content {
+  flex: 1;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--wordiva-spacing-xl);
+}
+
+/* Critical Navigation - Always visible */
+.main-navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--wordiva-white);
+  border-bottom: 1px solid #E8E8E8;
+  height: 80px;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--wordiva-spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.site-title {
+  color: var(--wordiva-charcoal-dark);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.primary-menu {
+  display: flex;
+  list-style: none;
+  gap: var(--wordiva-spacing-xl);
+}
+
+.primary-menu a {
+  color: var(--wordiva-charcoal-dark);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--wordiva-spacing-sm) var(--wordiva-spacing-md);
+  border-radius: var(--wordiva-border-radius-md);
+}
+
+/* Critical Typography - Above the fold */
+h1, h2, h3 {
+  color: var(--wordiva-charcoal-dark);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: var(--wordiva-spacing-md);
+  font-family: var(--wordiva-font-family);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+p {
+  margin-bottom: var(--wordiva-spacing-md);
+  color: var(--wordiva-charcoal-dark);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--wordiva-electric-blue);
+  text-decoration: none;
+}
+
+/* Critical Accessibility - Above the fold */
+.screen-reader-text {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  z-index: 999999;
+  background: var(--wordiva-electric-blue);
+  color: var(--wordiva-white);
+  padding: 8px 16px;
+  border-radius: 0 0 4px 4px;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  left: 6px;
+  top: 7px;
+}
+
+/* Critical Mobile - Above the fold */
+@media (max-width: 768px) {
+  .primary-menu {
+    display: none;
+  }
+
+  .nav-container {
+    padding: 0 var(--wordiva-spacing-md);
+  }
+}
+
+/* Hero Section - Critical above fold content */
+.hero-section {
+  background-color: var(--wordiva-white);
+  padding: 10px 0 60px 0;
+  text-align: center;
+  border-bottom: 1px solid #E8E8E8;
+}
+
+.hero-title {
+  font-size: 56px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  line-height: 1.1;
+  color: var(--wordiva-charcoal-dark);
+}
+
+.hero-title span {
+  color: var(--wordiva-royal-purple);
+}
+
+.hero-subtitle {
+  font-size: 22px;
+  line-height: 1.6;
+  color: var(--wordiva-charcoal-light);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 28px;
+  }
+}

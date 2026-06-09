@@ -1,0 +1,254 @@
+/**
+ * Accessibility Styles for Wordiva Theme
+ * 
+ * @package Wordiva_Theme
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Enhanced Focus Indicators
+   ========================================================================== */
+
+.focused, *:focus-visible {
+    outline: 3px solid var(--wordiva-electric-blue) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 1px var(--wordiva-white), 0 0 0 4px var(--wordiva-electric-blue);
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ==========================================================================
+   Enhanced Interactive Elements
+   ========================================================================== */
+
+button, .button, .btn, input[type="submit"], input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+button:disabled, .button:disabled, .btn:disabled, input[type="submit"]:disabled, input[type="button"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   Enhanced Form Accessibility
+   ========================================================================== */
+
+input, textarea, select {
+    font-size: 16px;
+    min-height: 44px;
+}
+
+input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"], 
+input.error, textarea.error, select.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+
+.required::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   Enhanced Navigation Accessibility
+   ========================================================================== */
+
+.main-navigation a[aria-current="page"] {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: transparent;
+    border: 2px solid var(--wordiva-white);
+    color: var(--wordiva-white);
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.mobile-menu-toggle:focus {
+    outline: 2px solid var(--wordiva-golden-yellow);
+    outline-offset: 2px;
+}
+
+.hamburger-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--wordiva-white);
+    margin: 3px 0;
+    transition: 0.3s;
+}
+
+/* ==========================================================================
+   Enhanced Search Accessibility
+   ========================================================================== */
+
+.search-field.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+
+.search-submit[aria-busy="true"] {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+/* ==========================================================================
+   Error and Success States
+   ========================================================================== */
+
+.error-message {
+    color: #dc3545;
+    font-weight: 600;
+    margin-top: 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error-message::before {
+    content: "⚠";
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.success-message {
+    color: var(--wordiva-golden-yellow);
+    font-weight: 600;
+    margin-top: 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.success-message::before {
+    content: "✓";
+    font-size: 16px;
+    flex-shrink: 0;
+    color: var(--wordiva-golden-yellow);
+}
+
+/* ==========================================================================
+   Loading States
+   ========================================================================== */
+
+[aria-busy="true"] {
+    cursor: wait;
+    opacity: 0.7;
+    position: relative;
+}
+
+.loading::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--wordiva-electric-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(47, 128, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--wordiva-electric-blue);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Media Query Optimizations
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+    a {
+        text-decoration-thickness: 2px;
+    }
+
+    button, .button, .btn, input[type="submit"], input[type="button"], input, textarea, select {
+        border-width: 3px;
+    }
+
+    .focused, *:focus-visible {
+        outline-width: 4px !important;
+        box-shadow: 0 0 0 2px var(--wordiva-white), 0 0 0 6px var(--wordiva-electric-blue);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    a, button, input, textarea, select {
+        min-height: 48px;
+        min-width: 48px;
+    }
+
+    .main-navigation a {
+        padding: 16px 20px;
+    }
+
+    .search-field {
+        min-height: 48px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .primary-menu.open {
+        display: block;
+    }
+
+    .search-field {
+        min-width: 150px;
+        font-size: 16px;
+    }
+}
+
+@media print {
+    .skip-links, .mobile-menu-toggle, .featured-navigation {
+        display: none !important;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+}

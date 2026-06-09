@@ -1,0 +1,110 @@
+{
+  "name": "Wordiva Blog - AI Content Marketing Insights",
+  "short_name": "Wordiva Blog",
+  "description": "Discover insights, strategies, and innovations in autonomous content creation with Wordiva's AI-powered content marketing system.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#2F80FF",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["business", "productivity", "education"],
+  "icons": [
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wordiva Blog Desktop View"
+    },
+    {
+      "src": "/wp-content/themes/wordiva-theme/assets/images/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Wordiva Blog Mobile View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Latest Articles",
+      "short_name": "Latest",
+      "description": "View the latest blog articles",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/wp-content/themes/wordiva-theme/assets/images/shortcut-latest.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Search Articles",
+      "short_name": "Search",
+      "description": "Search through blog articles",
+      "url": "/?s=",
+      "icons": [
+        {
+          "src": "/wp-content/themes/wordiva-theme/assets/images/shortcut-search.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+}
