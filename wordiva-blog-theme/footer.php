@@ -52,14 +52,20 @@
                     
                     <!-- Navigation Links -->
                     <nav class="footer-nav" aria-label="<?php esc_attr_e('Footer Navigation', 'wordiva-blog-theme'); ?>">
-                        <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="footer-nav-link">
-                            <?php esc_html_e('Home', 'wordiva-blog-theme'); ?>
+                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('features')); ?>" class="footer-nav-link">
+                            <?php esc_html_e('Features', 'wordiva-blog-theme'); ?>
+                        </a>
+                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('workflow')); ?>" class="footer-nav-link">
+                            <?php esc_html_e('How it works', 'wordiva-blog-theme'); ?>
+                        </a>
+                        <a href="<?php echo esc_url(wordiva_get_main_site_anchor('pricing')); ?>" class="footer-nav-link">
+                            <?php esc_html_e('Pricing', 'wordiva-blog-theme'); ?>
                         </a>
                         <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="footer-nav-link">
                             <?php esc_html_e('Blog', 'wordiva-blog-theme'); ?>
                         </a>
                         <a href="<?php echo esc_url(wordiva_get_cta_url()); ?>" class="footer-cta-button">
-                            <?php esc_html_e('Join Waitlist', 'wordiva-blog-theme'); ?>
+                            <?php esc_html_e('Get Started', 'wordiva-blog-theme'); ?>
                         </a>
                     </nav>
                     

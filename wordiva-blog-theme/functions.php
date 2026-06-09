@@ -235,8 +235,35 @@ function wordiva_get_logo_url() {
     return $logo_url;
 }
 
+function wordiva_get_sign_in_url() {
+    return get_theme_mod('wordiva_sign_in_url', 'https://app.wordiva.ai/login');
+}
+
 function wordiva_get_cta_url() {
-    return get_theme_mod('wordiva_cta_url', 'https://wordiva.ai/#waitlist');
+    return get_theme_mod('wordiva_cta_url', 'https://app.wordiva.ai/register');
+}
+
+function wordiva_get_main_site_anchor($anchor) {
+    return rtrim(wordiva_get_main_site_url(), '/') . '#' . ltrim($anchor, '#');
+}
+
+/**
+ * Render the Wordiva logo mark with icon and wordmark text.
+ */
+function wordiva_render_logo($extra_classes = '') {
+    $classes = trim('wordiva-logo-link ' . $extra_classes);
+    ?>
+    <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="<?php echo esc_attr($classes); ?>" rel="home">
+        <span class="wordiva-logo-icon-wrap" aria-hidden="true">
+            <img src="<?php echo esc_url(wordiva_get_logo_url()); ?>"
+                 alt=""
+                 class="wordiva-logo-img">
+        </span>
+        <span class="wordiva-logo-text">
+            wordiva<span class="wordiva-logo-domain">.ai</span>
+        </span>
+    </a>
+    <?php
 }
 
 /**

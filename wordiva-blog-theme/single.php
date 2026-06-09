@@ -10,7 +10,7 @@
 get_header(); ?>
 
 <main id="main" class="site-main single-post-main" role="main">
-    <div class="container">
+    <div class="container single-article-container">
 
         <?php while (have_posts()) : the_post(); ?>
 
@@ -210,7 +210,11 @@ get_header(); ?>
 
             </article>
 
-            <!-- Author Bio Section -->
+    </div>
+
+    <div class="container single-secondary-container">
+
+        <?php // Secondary sections below the article ?>
             <?php if (get_the_author_meta('description')) : ?>
                 <section class="author-bio slack-author-bio">
                     <div class="author-bio-content">
@@ -339,9 +343,10 @@ get_header(); ?>
                 </section>
             <?php endif; ?>
 
+    </div>
+
         <?php endwhile; ?>
 
-    </div>
 </main>
 
 <?php get_footer(); ?>

@@ -96,14 +96,14 @@ body {
   line-height: var(--wordiva-line-height-base);
   color: var(--wordiva-charcoal-dark);
   background-color: var(--wordiva-white);
-  padding-top: 70px;
+  padding-top: 4rem;
   margin-bottom: 0;
 }
 
 
 @media screen and (max-width: 782px) {
   body {
-    padding-top: 60px;
+    padding-top: 4rem;
   }
 }
 
@@ -979,22 +979,76 @@ textarea {
    ========================================================================== */
 
 .single-post-main {
-  padding: var(--wordiva-spacing-xl) 0;
-  margin-top: 70px;
+  padding: var(--wordiva-spacing-xl) 0 var(--wordiva-spacing-xxl);
+  margin-top: 0;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 240px);
+}
+
+.page-main {
+  padding: var(--wordiva-spacing-xl) 0 var(--wordiva-spacing-xxl);
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 240px);
+}
+
+.page-main .page-content {
+  background: var(--wordiva-white);
+  border-radius: var(--wordiva-border-radius-xl);
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  overflow: hidden;
+}
+
+.page-main .page-header {
+  padding: var(--wordiva-spacing-xxl) var(--wordiva-spacing-xl) var(--wordiva-spacing-lg);
+}
+
+.page-main .page-content.entry-content {
+  padding: 0 var(--wordiva-spacing-xl) var(--wordiva-spacing-xxl);
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.single-article-container {
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.single-secondary-container {
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.25rem 3rem;
+}
+
+.single-supplementary-container {
+  max-width: 1120px;
+  width: 100%;
+  margin: 2rem auto 0;
+  padding: 0 1.25rem;
+}
+
+.single-secondary-container {
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.25rem 3rem;
 }
 
 .single-post,
 .slack-single-post {
   background-color: var(--wordiva-white);
-  border-radius: var(--wordiva-border-radius-lg);
-  box-shadow: var(--wordiva-shadow-sm);
+  border-radius: var(--wordiva-border-radius-xl);
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
   overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.9);
 }
 
 .single-post-header,
 .slack-post-header {
-  padding: var(--wordiva-spacing-xl);
-  border-bottom: 1px solid var(--wordiva-gray-medium);
+  padding: var(--wordiva-spacing-xxl) var(--wordiva-spacing-xl) var(--wordiva-spacing-lg);
+  border-bottom: none;
 }
 
 .post-category-link,
@@ -1018,19 +1072,25 @@ textarea {
 
 .single-post-title,
 .slack-post-title {
-  font-size: 4rem;
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: var(--wordiva-font-weight-bold);
   color: var(--wordiva-charcoal-dark);
   margin-bottom: var(--wordiva-spacing-lg);
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .single-post-meta,
 .slack-post-meta {
   display: flex;
-  flex-direction: column;
-  gap: var(--wordiva-spacing-lg);
-  margin-bottom: var(--wordiva-spacing-xl);
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wordiva-spacing-md);
+  margin-bottom: var(--wordiva-spacing-lg);
+  padding-bottom: var(--wordiva-spacing-lg);
+  border-bottom: 1px solid var(--wordiva-gray-medium);
 }
 
 .author-info,
@@ -1116,9 +1176,21 @@ textarea {
 .single-post-content,
 .slack-post-content {
   padding: var(--wordiva-spacing-xl);
-  font-size: 1.375rem;
-  line-height: 1.7;
-  color: var(--wordiva-charcoal-dark);
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.single-post-content > *:first-child,
+.slack-post-content > *:first-child,
+.page-content.entry-content > *:first-child {
+  margin-top: 0;
+}
+
+.single-post-content > *:last-child,
+.slack-post-content > *:last-child,
+.page-content.entry-content > *:last-child {
+  margin-bottom: 0;
 }
 
 .single-post-content h2,
@@ -1164,22 +1236,270 @@ textarea {
   margin-bottom: var(--wordiva-spacing-sm);
 }
 
-.single-post-content blockquote {
+.single-post-content blockquote,
+.slack-post-content blockquote,
+.page-content.entry-content blockquote {
   border-left: 4px solid var(--wordiva-electric-blue);
-  padding-left: var(--wordiva-spacing-lg);
+  padding: var(--wordiva-spacing-lg);
   margin: var(--wordiva-spacing-xl) 0;
   font-style: italic;
   color: var(--wordiva-charcoal-light);
   background-color: var(--wordiva-gray-light);
+  border-radius: var(--wordiva-border-radius-md);
+}
+
+.single-post-content a,
+.slack-post-content a,
+.page-content.entry-content a {
+  color: var(--wordiva-electric-blue);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  font-weight: var(--wordiva-font-weight-medium);
+}
+
+.single-post-content a:hover,
+.slack-post-content a:hover,
+.page-content.entry-content a:hover {
+  color: var(--wordiva-royal-purple);
+}
+
+.single-post-content strong,
+.single-post-content b,
+.slack-post-content strong,
+.slack-post-content b,
+.page-content.entry-content strong,
+.page-content.entry-content b {
+  font-weight: var(--wordiva-font-weight-bold);
+  color: var(--wordiva-charcoal-dark);
+}
+
+.single-post-content em,
+.single-post-content i,
+.slack-post-content em,
+.slack-post-content i,
+.page-content.entry-content em,
+.page-content.entry-content i {
+  font-style: italic;
+}
+
+.single-post-content mark,
+.slack-post-content mark,
+.page-content.entry-content mark {
+  background-color: rgba(255, 209, 102, 0.45);
+  color: var(--wordiva-charcoal-dark);
+  padding: 0 0.2em;
+  border-radius: 2px;
+}
+
+.single-post-content hr,
+.slack-post-content hr,
+.page-content.entry-content hr {
+  border: 0;
+  border-top: 1px solid var(--wordiva-gray-medium);
+  margin: var(--wordiva-spacing-xl) 0;
+}
+
+.single-post-content img,
+.slack-post-content img,
+.page-content.entry-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--wordiva-border-radius-md);
+}
+
+.single-post-content figure,
+.slack-post-content figure,
+.page-content.entry-content figure {
+  margin: var(--wordiva-spacing-xl) 0;
+}
+
+.single-post-content figcaption,
+.slack-post-content figcaption,
+.page-content.entry-content figcaption {
+  margin-top: var(--wordiva-spacing-sm);
+  font-size: 0.9375rem;
+  color: var(--wordiva-charcoal-light);
+  text-align: center;
+}
+
+.single-post-content table,
+.slack-post-content table,
+.page-content.entry-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--wordiva-spacing-xl) 0;
+  font-size: 0.975rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.single-post-content th,
+.single-post-content td,
+.slack-post-content th,
+.slack-post-content td,
+.page-content.entry-content th,
+.page-content.entry-content td {
+  border: 1px solid var(--wordiva-gray-medium);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.single-post-content th,
+.slack-post-content th,
+.page-content.entry-content th {
+  background-color: var(--wordiva-gray-light);
+  font-weight: var(--wordiva-font-weight-semibold);
+  color: var(--wordiva-charcoal-dark);
+}
+
+.single-post-content dl,
+.slack-post-content dl,
+.page-content.entry-content dl {
+  margin: var(--wordiva-spacing-lg) 0;
+}
+
+.single-post-content dt,
+.slack-post-content dt,
+.page-content.entry-content dt {
+  font-weight: var(--wordiva-font-weight-semibold);
+  color: var(--wordiva-charcoal-dark);
+  margin-top: var(--wordiva-spacing-md);
+}
+
+.single-post-content dd,
+.slack-post-content dd,
+.page-content.entry-content dd {
+  margin-left: var(--wordiva-spacing-lg);
+  margin-bottom: var(--wordiva-spacing-sm);
+  color: #475569;
+}
+
+.single-post-content code,
+.slack-post-content code,
+.page-content.entry-content code {
+  background-color: #eef2ff;
+  color: #3730a3;
+  padding: 0.15em 0.4em;
+  border-radius: var(--wordiva-border-radius-sm);
+  font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+  font-size: 0.9em;
+}
+
+.single-post-content pre,
+.slack-post-content pre,
+.page-content.entry-content pre {
+  background-color: #0f172a;
+  color: #e2e8f0;
   padding: var(--wordiva-spacing-lg);
   border-radius: var(--wordiva-border-radius-md);
+  overflow-x: auto;
+  margin: var(--wordiva-spacing-xl) 0;
+}
+
+.single-post-content pre code,
+.slack-post-content pre code,
+.page-content.entry-content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.single-post-content kbd,
+.slack-post-content kbd,
+.page-content.entry-content kbd {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid #cbd5e1;
+  border-bottom-width: 2px;
+  border-radius: 0.375rem;
+  background: #f8fafc;
+  font-size: 0.85em;
+  font-family: inherit;
+}
+
+.single-post-content sup,
+.single-post-content sub,
+.slack-post-content sup,
+.slack-post-content sub,
+.page-content.entry-content sup,
+.page-content.entry-content sub {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+.single-post-content abbr[title],
+.slack-post-content abbr[title],
+.page-content.entry-content abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+.single-post-content iframe,
+.single-post-content video,
+.single-post-content embed,
+.slack-post-content iframe,
+.slack-post-content video,
+.slack-post-content embed,
+.page-content.entry-content iframe,
+.page-content.entry-content video,
+.page-content.entry-content embed {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  min-height: 240px;
+  border: 0;
+  border-radius: var(--wordiva-border-radius-md);
+  margin: var(--wordiva-spacing-xl) 0;
+}
+
+.single-post-content address,
+.slack-post-content address,
+.page-content.entry-content address {
+  font-style: normal;
+  margin: var(--wordiva-spacing-lg) 0;
+  padding: var(--wordiva-spacing-md);
+  background: var(--wordiva-gray-light);
+  border-radius: var(--wordiva-border-radius-md);
+}
+
+.single-post-content details,
+.slack-post-content details,
+.page-content.entry-content details {
+  margin: var(--wordiva-spacing-lg) 0;
+  padding: var(--wordiva-spacing-md) var(--wordiva-spacing-lg);
+  border: 1px solid var(--wordiva-gray-medium);
+  border-radius: var(--wordiva-border-radius-md);
+  background: #fafafa;
+}
+
+.single-post-content summary,
+.slack-post-content summary,
+.page-content.entry-content summary {
+  cursor: pointer;
+  font-weight: var(--wordiva-font-weight-semibold);
+  color: var(--wordiva-charcoal-dark);
+}
+
+.single-post-content .wp-block-image,
+.slack-post-content .wp-block-image,
+.page-content.entry-content .wp-block-image {
+  margin: var(--wordiva-spacing-xl) 0;
+}
+
+.single-post-content .wp-block-quote,
+.slack-post-content .wp-block-quote,
+.page-content.entry-content .wp-block-quote {
+  margin: var(--wordiva-spacing-xl) 0;
 }
 
 .single-post-footer,
 .slack-post-footer {
   padding: var(--wordiva-spacing-xl);
   border-top: 1px solid var(--wordiva-gray-medium);
-  background-color: var(--wordiva-gray-light);
+  background-color: #f8fafc;
 }
 
 .post-tags,
@@ -3421,16 +3741,16 @@ body.wordiva-theme {
 
 /* Fix single post layout and scrolling */
 .single .single-post-main {
-  margin-top: 10px !important;
+  margin-top: 0 !important;
   padding-top: 2rem !important;
 }
 
-/* Fix container width and scrolling issues */
+.single .single-article-container,
 .single .container {
-  max-width: 60%;
+  max-width: 760px;
   min-width: auto;
-  width: 60%;
-  padding: 0 20px;
+  width: 100%;
+  padding: 0 1.25rem;
 }
 
 /* Fix any global container issues */
@@ -3891,13 +4211,18 @@ a.read-more-featured:hover {
   /* Single Post Main Container */
   .single-post-main {
     padding: var(--wordiva-spacing-lg) 0;
-    margin-top: 60px;
+    margin-top: 0;
   }
 
+  .single .single-article-container,
   .single .container {
     max-width: 100% !important;
     width: 100% !important;
     padding: 0 var(--wordiva-spacing-md);
+  }
+
+  .single-secondary-container {
+    padding: 0 var(--wordiva-spacing-md) 2rem;
   }
 
   /* Single Post Header */

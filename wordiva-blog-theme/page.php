@@ -9,7 +9,7 @@
 get_header(); ?>
 
 <main id="main" class="site-main page-main" role="main" itemscope itemtype="https://schema.org/WebPage">
-    <div class="container">
+    <div class="container single-article-container">
         
         <?php while (have_posts()) : the_post(); ?>
             

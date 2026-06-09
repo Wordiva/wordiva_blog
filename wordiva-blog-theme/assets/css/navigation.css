@@ -1,38 +1,52 @@
 /* ==========================================================================
-   Landing Page Navigation - Matching React Component
+   Landing Page Navigation - Matching wordiva.ai homepage
    ========================================================================== */
 
-/* Fixed navigation wrapper */
+:root {
+  --wordiva-nav-bg: rgba(2, 6, 23, 0.72);
+  --wordiva-nav-border: #1e293b;
+  --wordiva-nav-text: #94a3b8;
+  --wordiva-nav-text-hover: var(--wordiva-electric-blue);
+  --wordiva-nav-wordmark: #f1f5f9;
+  --wordiva-nav-panel: #0f172a;
+}
+
 .wordiva-nav-fixed {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 9999;
-  transition: all 0.3s ease;
-  background-color: transparent;
-  padding: 0.75rem 0;
-}
-
-/* Admin bar adjustment - add margin when admin bar is present */
-body.admin-bar .wordiva-nav-fixed {
-  margin-top: 32px;
-}
-
-
-/* Scrolled state - semi-transparent with backdrop blur */
-.wordiva-nav-fixed.scrolled {
-  background-color: rgba(255, 255, 255, 0.95);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--wordiva-nav-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--wordiva-nav-border);
+  padding: 0;
 }
 
-/* Inner container - max-w-7xl (1280px) */
+body.admin-bar .wordiva-nav-fixed {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar .wordiva-nav-fixed {
+    top: 46px;
+  }
+}
+
+.wordiva-nav-fixed.scrolled {
+  background-color: rgba(2, 6, 23, 0.92);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.35);
+}
+
 .wordiva-nav-inner {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1rem;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
 }
 
 @media (min-width: 640px) {
@@ -47,47 +61,77 @@ body.admin-bar .wordiva-nav-fixed {
   }
 }
 
-/* Navigation content - flex layout */
 .wordiva-nav-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+  width: 100%;
   pointer-events: auto;
 }
 
-/* Logo section */
 .wordiva-nav-logo {
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .wordiva-logo-link {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
   background: transparent;
+  min-width: 0;
+}
+
+.wordiva-logo-link:hover,
+.wordiva-logo-link:focus {
+  text-decoration: none;
+}
+
+.wordiva-logo-icon-wrap {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #0f172a;
+  border: 1px solid var(--wordiva-nav-border);
+  box-shadow: 0 10px 15px rgba(47, 128, 255, 0.12);
 }
 
 .wordiva-logo-img {
-  max-height: 70px;
-  width: auto;
-  object-fit: contain;
-  transition: opacity 0.3s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   background: transparent !important;
-  mix-blend-mode: multiply;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
 }
 
-/* Remove any background color from logo container */
-.wordiva-nav-logo,
-.wordiva-logo-link,
-.wordiva-logo-img {
-  background-color: transparent !important;
-  background-image: none !important;
+.wordiva-logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--wordiva-nav-wordmark);
+  white-space: nowrap;
 }
 
+.wordiva-logo-domain {
+  color: var(--wordiva-electric-blue);
+  font-weight: 800;
+}
 
-/* Desktop navigation */
+@media (min-width: 768px) {
+  .wordiva-logo-text {
+    font-size: 1.25rem;
+  }
+}
+
 .wordiva-nav-desktop {
   display: none;
   align-items: center;
@@ -101,30 +145,61 @@ body.admin-bar .wordiva-nav-fixed {
 }
 
 .wordiva-nav-link {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-  /* text-gray-700 */
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--wordiva-nav-text);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.wordiva-nav-link:hover {
-  color: var(--wordiva-electric-blue);
+.wordiva-nav-link:hover,
+.wordiva-nav-link:focus {
+  color: var(--wordiva-nav-text-hover);
 }
 
 .wordiva-nav-link.active {
   color: var(--wordiva-electric-blue);
 }
 
-/* CTA Button - Desktop */
+.wordiva-nav-actions {
+  gap: 0.75rem;
+}
+
+.wordiva-sign-in-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--wordiva-nav-border);
+  background-color: rgba(15, 23, 42, 0.4);
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.wordiva-sign-in-button svg {
+  color: var(--wordiva-electric-blue);
+  flex-shrink: 0;
+}
+
+.wordiva-sign-in-button:hover,
+.wordiva-sign-in-button:focus {
+  background-color: #1e293b;
+  color: #f8fafc;
+  text-decoration: none;
+}
+
 .wordiva-cta-button {
-  padding: 0.5rem 1.5rem;
-  background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple));
-  color: white;
+  padding: 0.5rem 1rem;
+  background-color: var(--wordiva-electric-blue);
+  color: #ffffff;
   border: none;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -133,25 +208,23 @@ body.admin-bar .wordiva-nav-fixed {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: auto;
+  white-space: nowrap;
 }
 
-.wordiva-cta-button:hover {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(123, 77, 255, 0.4);
-  background: linear-gradient(135deg, var(--wordiva-royal-purple), var(--wordiva-neon-pink));
+.wordiva-cta-button:hover,
+.wordiva-cta-button:focus {
+  background-color: var(--wordiva-electric-blue-light);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(47, 128, 255, 0.35);
+  text-decoration: none;
 }
 
 .wordiva-cta-button:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.35);
 }
 
-.wordiva-cta-button:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Mobile menu toggle */
 .wordiva-nav-mobile-toggle {
   display: flex;
   align-items: center;
@@ -166,21 +239,13 @@ body.admin-bar .wordiva-nav-fixed {
   }
 }
 
-/* Align hamburger further right on small screens */
 @media (max-width: 640px) {
-  .wordiva-nav-mobile-toggle {
-    margin-right: 0;
-    padding-right: 0;
-  }
-  
   .wordiva-nav-inner {
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
   }
-}
 
-@media (max-width: 480px) {
-  .wordiva-nav-mobile-toggle {
-    margin-right: -0.25rem;
+  .wordiva-logo-text {
+    font-size: 1rem;
   }
 }
 
@@ -189,8 +254,7 @@ body.admin-bar .wordiva-nav-fixed {
   border: none;
   padding: 0.5rem;
   cursor: pointer;
-  color: #374151;
-  /* text-gray-700 */
+  color: #cbd5e1;
   transition: color 0.2s ease;
   display: flex;
   align-items: center;
@@ -202,7 +266,8 @@ body.admin-bar .wordiva-nav-fixed {
   z-index: 10002;
 }
 
-.wordiva-mobile-button:hover {
+.wordiva-mobile-button:hover,
+.wordiva-mobile-button:focus {
   color: var(--wordiva-electric-blue);
 }
 
@@ -210,10 +275,6 @@ body.admin-bar .wordiva-nav-fixed {
   outline: 2px solid var(--wordiva-electric-blue);
   outline-offset: 2px;
   border-radius: 4px;
-}
-
-.wordiva-mobile-button:active {
-  transform: scale(0.95);
 }
 
 .wordiva-hamburger-icon {
@@ -234,14 +295,13 @@ body.admin-bar .wordiva-nav-fixed {
   display: block;
 }
 
-/* Mobile navigation dropdown */
 .wordiva-nav-mobile-menu {
   max-height: 0;
   opacity: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #F3F4F6;
+  background-color: var(--wordiva-nav-panel);
+  border-bottom: 1px solid var(--wordiva-nav-border);
   position: relative;
   z-index: 10000;
 }
@@ -253,13 +313,13 @@ body.admin-bar .wordiva-nav-fixed {
 }
 
 .wordiva-nav-mobile-menu.active {
-  max-height: 400px;
+  max-height: 520px;
   opacity: 1;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 24px rgba(2, 6, 23, 0.35);
 }
 
 .wordiva-nav-mobile-inner {
-  padding: 1rem 1rem 1.5rem 1rem;
+  padding: 1rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -267,46 +327,67 @@ body.admin-bar .wordiva-nav-fixed {
 
 @media (max-width: 640px) {
   .wordiva-nav-mobile-inner {
-    padding: 0.75rem 0.75rem 1.25rem 0.75rem;
+    padding: 0.75rem 0.75rem 1.25rem;
   }
-}
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 .wordiva-nav-mobile-link {
   display: block;
   padding: 0.75rem;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  color: #374151;
-  /* text-gray-700 */
+  color: #cbd5e1;
   text-decoration: none;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
 
-.wordiva-nav-mobile-link:hover {
+.wordiva-nav-mobile-link:hover,
+.wordiva-nav-mobile-link:focus {
   color: var(--wordiva-electric-blue);
-  background-color: #F9FAFB;
-  /* hover:bg-gray-50 */
+  background-color: rgba(30, 41, 59, 0.65);
 }
 
 .wordiva-nav-mobile-link.active {
   color: var(--wordiva-electric-blue);
-  background-color: #F3F4F6;
-  /* bg-gray-100 */
+  background-color: rgba(47, 128, 255, 0.12);
 }
 
-/* CTA Button - Mobile */
+.wordiva-sign-in-button-mobile {
+  margin-top: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--wordiva-nav-border);
+  background-color: rgba(15, 23, 42, 0.4);
+  color: #cbd5e1;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.wordiva-sign-in-button-mobile svg {
+  color: var(--wordiva-electric-blue);
+}
+
+.wordiva-sign-in-button-mobile:hover,
+.wordiva-sign-in-button-mobile:focus {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
 .wordiva-cta-button-mobile {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple));
-  color: white;
+  background-color: var(--wordiva-electric-blue);
+  color: #ffffff;
   border: none;
   border-radius: 9999px;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -317,29 +398,20 @@ body.admin-bar .wordiva-nav-fixed {
   width: 100%;
 }
 
-.wordiva-cta-button-mobile:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 25px rgba(123, 77, 255, 0.4);
-  background: linear-gradient(135deg, var(--wordiva-royal-purple), var(--wordiva-neon-pink));
-}
-
+.wordiva-cta-button-mobile:hover,
 .wordiva-cta-button-mobile:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.3);
+  background-color: var(--wordiva-electric-blue-light);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
-.wordiva-cta-button-mobile:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Add padding to body for fixed nav */
 body {
-  padding-top: 70px !important;
+  padding-top: 4rem !important;
 }
 
 @media screen and (max-width: 782px) {
   body {
-    padding-top: 60px !important;
+    padding-top: 4rem !important;
   }
 }
 
@@ -351,7 +423,7 @@ body {
   background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
   border-bottom: 1px solid var(--wordiva-gray-medium);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .header-breadcrumb-nav {
@@ -365,7 +437,7 @@ body {
   gap: 8px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0.75rem 0;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -422,10 +494,9 @@ body {
   color: var(--wordiva-charcoal-dark);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .header-breadcrumb-wrapper {
-    padding: 12px 0;
+    padding: 0;
   }
 
   .header-breadcrumb {
@@ -437,25 +508,5 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .site-breadcrumb {
-    padding: var(--wordiva-spacing-sm) 0;
-    margin-top: 60px;
-  }
-
-  .site-breadcrumb .breadcrumb {
-    font-size: 0.8125rem;
-    gap: 4px;
-  }
-
-  .site-breadcrumb .breadcrumb-item:not(:last-child)::after {
-    margin: 0 6px;
-    font-size: 0.75rem;
-  }
-
-  .site-breadcrumb .breadcrumb-item a {
-    padding: 2px 6px;
-    font-size: 0.8125rem;
   }
 }

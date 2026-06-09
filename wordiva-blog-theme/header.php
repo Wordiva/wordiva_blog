@@ -5,6 +5,8 @@
  * @package Wordiva_Theme
  * @since 1.0.0
  */
+
+$is_blog_context = is_home() || is_singular('post') || is_archive() || is_search();
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?> itemscope itemtype="https://schema.org/WebPage">
@@ -19,19 +21,13 @@
     <script>
     (function(){
         window.addEventListener('DOMContentLoaded', function() {
-            console.log('🔥 INLINE FIX: Starting...');
-            
             var btn = document.getElementById('wordiva-mobile-btn');
             var menu = document.getElementById('wordiva-mobile-menu');
             
             if (!btn || !menu) {
-                console.error('🔥 INLINE FIX: Elements not found');
                 return;
             }
             
-            console.log('🔥 INLINE FIX: Elements found, attaching handler');
-            
-            // Remove any existing handlers by cloning
             var newBtn = btn.cloneNode(true);
             btn.parentNode.replaceChild(newBtn, btn);
             btn = newBtn;
@@ -41,12 +37,9 @@
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 
-                console.log('🔥 INLINE FIX: CLICKED!');
-                
                 var isOpen = menu.style.maxHeight === '500px';
                 
                 if (isOpen) {
-                    console.log('🔥 CLOSING');
                     menu.style.maxHeight = '0';
                     menu.style.opacity = '0';
                     menu.style.overflow = 'hidden';
@@ -54,7 +47,6 @@
                     menu.classList.remove('active');
                     btn.setAttribute('aria-expanded', 'false');
                 } else {
-                    console.log('🔥 OPENING');
                     menu.style.maxHeight = '500px';
                     menu.style.opacity = '1';
                     menu.style.overflow = 'visible';
@@ -64,8 +56,6 @@
                     btn.setAttribute('aria-expanded', 'true');
                 }
             }, true);
-            
-            console.log('🔥 INLINE FIX: Handler attached!');
         });
     })();
     </script>
@@ -78,36 +68,43 @@
 
 <div class="site-wrapper" itemscope itemtype="https://schema.org/WebSite">
     
-    <!-- Navigation matching landing page -->
     <nav class="wordiva-nav-fixed" id="wordiva-nav" role="navigation" aria-label="<?php esc_attr_e('Main Navigation', 'wordiva-blog-theme'); ?>">
         <div class="wordiva-nav-inner">
             <div class="wordiva-nav-content">
                 
-                <!-- Logo -->
                 <div class="wordiva-nav-logo">
-                    <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="wordiva-logo-link">
-                        <img src="<?php echo esc_url(wordiva_get_logo_url()); ?>" 
-                             alt="<?php echo esc_attr(get_bloginfo('name')); ?> Logo" 
-                             class="wordiva-logo-img">
-                    </a>
+                    <?php wordiva_render_logo(); ?>
                 </div>
                 
-                <!-- Desktop Navigation -->
                 <div class="wordiva-nav-desktop">
-                    <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="wordiva-nav-link">
-                        <?php esc_html_e('Home', 'wordiva-blog-theme'); ?>
+                    <a href="<?php echo esc_url(wordiva_get_main_site_anchor('features')); ?>" class="wordiva-nav-link">
+                        <?php esc_html_e('Features', 'wordiva-blog-theme'); ?>
                     </a>
-                    <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="wordiva-nav-link <?php echo (is_home() || is_singular('post') || is_archive()) ? 'active' : ''; ?>">
+                    <a href="<?php echo esc_url(wordiva_get_main_site_anchor('workflow')); ?>" class="wordiva-nav-link">
+                        <?php esc_html_e('How it works', 'wordiva-blog-theme'); ?>
+                    </a>
+                    <a href="<?php echo esc_url(wordiva_get_main_site_anchor('pricing')); ?>" class="wordiva-nav-link">
+                        <?php esc_html_e('Pricing', 'wordiva-blog-theme'); ?>
+                    </a>
+                    <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="wordiva-nav-link <?php echo $is_blog_context ? 'active' : ''; ?>">
                         <?php esc_html_e('Blog', 'wordiva-blog-theme'); ?>
                     </a>
-                    <button class="wordiva-cta-button" 
-                            onclick="window.location.href='<?php echo esc_url(wordiva_get_cta_url()); ?>'"
-                            aria-label="<?php esc_attr_e('Join Waitlist', 'wordiva-blog-theme'); ?>">
-                        <?php esc_html_e('Join Waitlist', 'wordiva-blog-theme'); ?>
-                    </button>
+                </div>
+
+                <div class="wordiva-nav-actions wordiva-nav-desktop">
+                    <a href="<?php echo esc_url(wordiva_get_sign_in_url()); ?>" class="wordiva-sign-in-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="m10 17 5-5-5-5"></path>
+                            <path d="M15 12H3"></path>
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        </svg>
+                        <?php esc_html_e('Sign In', 'wordiva-blog-theme'); ?>
+                    </a>
+                    <a href="<?php echo esc_url(wordiva_get_cta_url()); ?>" class="wordiva-cta-button">
+                        <?php esc_html_e('Get Started', 'wordiva-blog-theme'); ?>
+                    </a>
                 </div>
                 
-                <!-- Mobile Menu Button -->
                 <div class="wordiva-nav-mobile-toggle">
                     <button id="wordiva-mobile-btn" 
                             class="wordiva-mobile-button" 
@@ -123,25 +120,35 @@
             </div>
         </div>
         
-        <!-- Mobile Navigation Dropdown -->
         <div class="wordiva-nav-mobile-menu" id="wordiva-mobile-menu">
             <div class="wordiva-nav-mobile-inner">
-                <a href="<?php echo esc_url(wordiva_get_main_site_url()); ?>" class="wordiva-nav-mobile-link">
-                    <?php esc_html_e('Home', 'wordiva-blog-theme'); ?>
+                <a href="<?php echo esc_url(wordiva_get_main_site_anchor('features')); ?>" class="wordiva-nav-mobile-link">
+                    <?php esc_html_e('Features', 'wordiva-blog-theme'); ?>
                 </a>
-                <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="wordiva-nav-mobile-link <?php echo (is_home() || is_singular('post') || is_archive()) ? 'active' : ''; ?>">
+                <a href="<?php echo esc_url(wordiva_get_main_site_anchor('workflow')); ?>" class="wordiva-nav-mobile-link">
+                    <?php esc_html_e('How it works', 'wordiva-blog-theme'); ?>
+                </a>
+                <a href="<?php echo esc_url(wordiva_get_main_site_anchor('pricing')); ?>" class="wordiva-nav-mobile-link">
+                    <?php esc_html_e('Pricing', 'wordiva-blog-theme'); ?>
+                </a>
+                <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="wordiva-nav-mobile-link <?php echo $is_blog_context ? 'active' : ''; ?>">
                     <?php esc_html_e('Blog', 'wordiva-blog-theme'); ?>
                 </a>
-                <button class="wordiva-cta-button-mobile" 
-                        onclick="window.location.href='<?php echo esc_url(wordiva_get_cta_url()); ?>'"
-                        aria-label="<?php esc_attr_e('Join Waitlist', 'wordiva-blog-theme'); ?>">
-                    <?php esc_html_e('Join Waitlist', 'wordiva-blog-theme'); ?>
-                </button>
+                <a href="<?php echo esc_url(wordiva_get_sign_in_url()); ?>" class="wordiva-sign-in-button-mobile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="m10 17 5-5-5-5"></path>
+                        <path d="M15 12H3"></path>
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    </svg>
+                    <?php esc_html_e('Sign In', 'wordiva-blog-theme'); ?>
+                </a>
+                <a href="<?php echo esc_url(wordiva_get_cta_url()); ?>" class="wordiva-cta-button-mobile">
+                    <?php esc_html_e('Get Started', 'wordiva-blog-theme'); ?>
+                </a>
             </div>
         </div>
     </nav>
     
-    <!-- Breadcrumb Navigation (Single Posts Only) -->
     <?php if (is_single() && get_post_type() === 'post') : ?>
         <div class="header-breadcrumb-wrapper">
             <div class="wordiva-nav-inner">
