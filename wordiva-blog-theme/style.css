@@ -42,6 +42,12 @@ Major optimizations: Consolidated utility classes, merged duplicate selectors, r
   --wordiva-charcoal-light: #4a4a4a;
   --wordiva-gray-light: #f8f9fa;
   --wordiva-gray-medium: #e9ecef;
+  --wordiva-surface: #ffffff;
+  --wordiva-surface-muted: #f8fafc;
+  --wordiva-border-light: #e2e8f0;
+  --wordiva-text-primary: #0f172a;
+  --wordiva-text-secondary: #475569;
+  --wordiva-text-muted: #64748b;
 
   /* Typography System */
   --wordiva-font-family:
@@ -2017,8 +2023,9 @@ textarea {
    ========================================================================== */
 
 .site-footer {
-  background: var(--wordiva-charcoal-dark);
-  color: var(--wordiva-white);
+  background: var(--wordiva-surface);
+  color: var(--wordiva-text-primary);
+  border-top: 1px solid var(--wordiva-border-light);
   /* margin-top: 80px; */
   margin-bottom: 0;
   padding-bottom: 0;
@@ -2117,7 +2124,7 @@ textarea {
 .wordiva-footer-nav .wordiva-nav-link {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #94a3b8;
+  color: var(--wordiva-text-secondary);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -2155,7 +2162,7 @@ textarea {
   font-size: 1.125rem;
   font-weight: var(--wordiva-font-weight-semibold);
   margin: 0 0 var(--wordiva-spacing-xl) 0;
-  color: var(--wordiva-white);
+  color: var(--wordiva-text-primary);
   position: relative;
   padding-bottom: var(--wordiva-spacing-md);
 }
@@ -2207,7 +2214,7 @@ textarea {
 }
 
 .footer-section a {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--wordiva-text-muted);
   text-decoration: none;
   font-size: 0.875rem;
   transition: all var(--wordiva-transition-fast);
@@ -2254,7 +2261,7 @@ textarea {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  color: var(--wordiva-white);
+  color: var(--wordiva-text-primary);
   margin-bottom: 24px;
 }
 
@@ -2274,7 +2281,7 @@ textarea {
 }
 
 .footer-site-title a {
-  color: var(--wordiva-white);
+  color: var(--wordiva-text-primary);
   text-decoration: none;
   font-size: 1.75rem;
   font-weight: var(--wordiva-font-weight-bold);
@@ -2299,14 +2306,14 @@ textarea {
 .footer-description {
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--wordiva-text-muted);
   margin: 0 0 48px 0;
   max-width: 320px;
 }
 
 .footer-tagline {
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--wordiva-text-secondary);
   line-height: 1.6;
   margin-bottom: 0;
 }
@@ -2324,9 +2331,10 @@ textarea {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--wordiva-surface-muted);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--wordiva-text-muted);
+  border: 1px solid var(--wordiva-border-light);
   transition: all 0.2s ease;
   text-decoration: none;
   padding: var(--wordiva-spacing-sm);
@@ -2375,9 +2383,9 @@ textarea {
 
 /* Footer Bottom */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--wordiva-border-light);
   padding: 12px 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--wordiva-surface-muted);
   position: relative;
   max-width: 1280px !important;
   width: 100% !important;
@@ -2411,7 +2419,7 @@ textarea {
 }
 
 .copyright {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--wordiva-text-muted);
   font-size: 0.9rem;
   margin: 0;
   flex-grow: 1;
@@ -2429,7 +2437,7 @@ textarea {
 }
 
 .footer-credits {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--wordiva-text-muted);
   font-size: 0.85rem;
   font-style: italic;
   margin: var(--wordiva-spacing-xs) 0 0 0;
@@ -2442,7 +2450,7 @@ textarea {
 }
 
 .footer-legal a {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--wordiva-text-muted);
   text-decoration: none;
   transition: all var(--wordiva-transition-fast);
   padding: var(--wordiva-spacing-xs) var(--wordiva-spacing-sm);
@@ -2459,7 +2467,7 @@ textarea {
   content: "•";
   position: absolute;
   right: calc(-1 * var(--wordiva-spacing-lg) / 2);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--wordiva-border-light);
   pointer-events: none;
 }
 
@@ -4908,8 +4916,8 @@ body,
     clear: both !important;
     margin-top: 0 !important;
     padding: 0 !important;
-    background: var(--wordiva-charcoal-dark) !important;
-    color: var(--wordiva-white) !important;
+    background: var(--wordiva-surface) !important;
+    color: var(--wordiva-text-primary) !important;
   }
 
   /* Fix footer container */
@@ -4960,7 +4968,7 @@ body,
   }
 
   .wordiva-footer-nav .wordiva-nav-link {
-    color: #94a3b8 !important;
+    color: var(--wordiva-text-secondary) !important;
     text-decoration: none !important;
     font-size: 0.875rem !important;
     font-weight: 500 !important;
@@ -4996,9 +5004,10 @@ body,
     justify-content: center !important;
     width: 44px !important;
     height: 44px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: var(--wordiva-surface-muted) !important;
     border-radius: 8px !important;
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: var(--wordiva-text-muted) !important;
+    border: 1px solid var(--wordiva-border-light) !important;
     transition: all 0.3s ease !important;
   }
 
@@ -5010,7 +5019,7 @@ body,
   /* Footer bottom */
   .footer-bottom {
     width: 100% !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 1px solid var(--wordiva-border-light) !important;
     padding: 1rem 0 !important;
     margin-top: 2rem !important;
   }
@@ -5035,8 +5044,8 @@ body,
     clear: both !important;
     margin-top: 0 !important;
     padding: 0 !important;
-    background: var(--wordiva-charcoal-dark) !important;
-    color: var(--wordiva-white) !important;
+    background: var(--wordiva-surface) !important;
+    color: var(--wordiva-text-primary) !important;
   }
 
   .site-footer .container {
@@ -5082,7 +5091,7 @@ body,
   }
 
   .wordiva-footer-nav .wordiva-nav-link {
-    color: #94a3b8 !important;
+    color: var(--wordiva-text-secondary) !important;
     text-decoration: none !important;
     font-size: 0.9375rem !important;
     font-weight: 500 !important;
@@ -5117,9 +5126,10 @@ body,
     justify-content: center !important;
     width: 48px !important;
     height: 48px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: var(--wordiva-surface-muted) !important;
     border-radius: 10px !important;
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: var(--wordiva-text-muted) !important;
+    border: 1px solid var(--wordiva-border-light) !important;
     transition: all 0.3s ease !important;
   }
 
@@ -5130,7 +5140,7 @@ body,
 
   .footer-bottom {
     width: 100% !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 1px solid var(--wordiva-border-light) !important;
     padding: 1.5rem 0 !important;
     margin-top: 2.5rem !important;
   }
