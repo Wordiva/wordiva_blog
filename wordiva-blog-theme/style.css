@@ -1576,6 +1576,25 @@ textarea {
   margin: var(--wordiva-spacing-xl) 0;
 }
 
+.wordiva-product-cta {
+  padding: 0 var(--wordiva-spacing-xl) var(--wordiva-spacing-xl);
+  margin-top: var(--wordiva-spacing-xl);
+}
+
+.wordiva-product-cta h3 {
+  margin: 0 0 var(--wordiva-spacing-sm);
+  font-size: 1.75rem;
+  font-weight: var(--wordiva-font-weight-bold);
+  color: var(--wordiva-charcoal-dark);
+}
+
+.wordiva-product-cta p {
+  margin: 0 0 var(--wordiva-spacing-md);
+  color: #334155;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
 .single-post-footer,
 .slack-post-footer {
   padding: var(--wordiva-spacing-xl);
@@ -4344,6 +4363,11 @@ a.read-more-featured:hover {
     line-height: 1.6;
   }
 
+  .wordiva-product-cta {
+    padding: 0 var(--wordiva-spacing-lg) var(--wordiva-spacing-lg);
+    margin-top: var(--wordiva-spacing-lg);
+  }
+
   .single-post-content h2 {
     font-size: 1.75rem;
     margin-top: var(--wordiva-spacing-lg);
@@ -4533,6 +4557,11 @@ a.read-more-featured:hover {
   .single-post-footer,
   .slack-post-footer {
     padding: var(--wordiva-spacing-md);
+  }
+
+  .wordiva-product-cta {
+    padding: 0 var(--wordiva-spacing-md) var(--wordiva-spacing-md);
+    margin-top: var(--wordiva-spacing-md);
   }
 
   .single-post-title,
