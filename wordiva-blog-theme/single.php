@@ -51,7 +51,7 @@ get_header(); ?>
                             <div class="author-details">
                                 <span class="author-name">
                                     <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>" class="author-link" itemprop="url">
-                                        <span itemprop="name"><?php echo esc_html(get_the_author()); ?></span>
+                                        <span itemprop="name"><?php echo esc_html(wordiva_get_author_display_name(get_the_author_meta('ID'))); ?></span>
                                     </a>
                                 </span>
                             </div>
@@ -111,7 +111,7 @@ get_header(); ?>
                 </header>
 
                 <!-- Post Content -->
-                <div class="single-post-content slack-post-content entry-content" itemprop="articleBody">
+                <div class="single-post-content slack-post-content entry-content wordiva-speakable" itemprop="articleBody">
                     <?php
                     the_content();
 
@@ -123,6 +123,31 @@ get_header(); ?>
                     ));
                     ?>
                 </div>
+
+                <?php if (has_category()) :
+                    $categories = get_the_category();
+                    $primary_category = $categories[0];
+                    ?>
+                    <section class="wordiva-topic-block" aria-labelledby="wordiva-topic-heading">
+                        <h3 id="wordiva-topic-heading"><?php esc_html_e('Explore this topic', 'wordiva-blog-theme'); ?></h3>
+                        <p>
+                            <?php esc_html_e('Read more articles in', 'wordiva-blog-theme'); ?>
+                            <a href="<?php echo esc_url(get_category_link($primary_category->term_id)); ?>">
+                                <?php echo esc_html($primary_category->name); ?>
+                            </a>
+                        </p>
+                    </section>
+                <?php endif; ?>
+
+                <?php get_template_part('template-parts/product-links'); ?>
+
+                <section class="wordiva-product-cta" aria-labelledby="wordiva-product-cta-heading">
+                    <h3 id="wordiva-product-cta-heading"><?php esc_html_e('Try Wordiva free', 'wordiva-blog-theme'); ?></h3>
+                    <p><?php esc_html_e('Automate your WordPress blog with agentic AI content marketing.', 'wordiva-blog-theme'); ?></p>
+                    <a class="wordiva-cta-button" href="<?php echo esc_url(wordiva_get_blog_cta_url()); ?>">
+                        <?php esc_html_e('Get started', 'wordiva-blog-theme'); ?>
+                    </a>
+                </section>
 
                 <!-- Hidden structured data -->
                 <div class="structured-data-hidden" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
@@ -167,7 +192,7 @@ get_header(); ?>
                         <div class="sharing-buttons">
 
                             <!-- Twitter/X Share -->
-                            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(get_permalink()); ?>&text=<?php echo urlencode(get_the_title()); ?>&via=wordiva"
+                            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(get_permalink()); ?>&text=<?php echo urlencode(get_the_title()); ?>&via=wordivaai"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="share-button share-twitter"
@@ -224,7 +249,7 @@ get_header(); ?>
                         <div class="author-bio-info">
                             <h3 class="author-bio-name">
                                 <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>">
-                                    <?php echo esc_html(get_the_author()); ?>
+                                    <?php echo esc_html(wordiva_get_author_display_name(get_the_author_meta('ID'))); ?>
                                 </a>
                             </h3>
                             <p class="author-bio-description">
@@ -302,7 +327,8 @@ get_header(); ?>
                 'posts_per_page' => 3,
                 'post__not_in' => array(get_the_ID()),
                 'category__in' => wp_get_post_categories(get_the_ID()),
-                'orderby' => 'rand'
+                'orderby' => 'date',
+                'order' => 'DESC',
             ));
 
             // Fallback: If no related posts found by category, get recent posts
@@ -349,4 +375,6 @@ get_header(); ?>
 
 </main>
 
-<?php get_footer(); ?>
+<?php
+get_template_part('template-parts/sticky-cta');
+get_footer();

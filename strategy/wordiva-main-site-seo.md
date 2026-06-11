@@ -233,19 +233,21 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   '@id': 'https://wordiva.ai/#organization',
-  name: 'Wordiva',
+  name: 'Wordiva.ai',
   url: 'https://wordiva.ai',
   logo: {
     '@type': 'ImageObject',
-    url: 'https://wordiva.ai/icon.png',
+    url: 'https://wordiva.ai/wordiva_ai.png',
     width: 632,
     height: 545,
   },
   description:
-    'Agentic AI content marketing engine that automates strategy, drafting, SEO, and publishing.',
+    'Agentic AI content marketing engine for automated blogging and WordPress publishing.',
   sameAs: [
-    'https://twitter.com/wordiva',
-    'https://linkedin.com/company/wordiva',
+    'https://www.linkedin.com/company/wordiva-ai/',
+    'https://www.facebook.com/wordivaai/',
+    'https://www.instagram.com/wordivaai/',
+    'https://twitter.com/wordivaai',
   ],
   knowsAbout: [
     'AI content marketing',
@@ -269,7 +271,9 @@ Also add `WebSite` schema with `publisher: { '@id': 'https://wordiva.ai/#organiz
 | Field | Main site (`wordiva.ai`) | Blog (`/blog`) |
 |-------|--------------------------|----------------|
 | Organization `@id` | `https://wordiva.ai/#organization` | Same `@id` via reference |
-| Organization `name` | `Wordiva` | Publisher references `@id`, not "Wordiva Blog" |
+| Organization `name` | `Wordiva.ai` | Publisher references `@id`, not "Wordiva Blog" |
+| Organization `logo` | `https://wordiva.ai/wordiva_ai.png` | Same logo URL in BlogPosting fallback OG |
+| Organization `sameAs` | Four URLs (LinkedIn, Facebook, Instagram, Twitter `/wordivaai`) | Must match blog theme Customizer defaults |
 | Blog `@id` | — | `https://wordiva.ai/blog/#blog` with `isPartOf` → org |
 
 ---
@@ -293,7 +297,7 @@ export const siteConfig = {
     'Automate your entire blog content lifecycle—brand intelligence, strategy, ideation, drafting, high-fidelity AI images, SEO, and auto-publishing to WordPress.',
   url: 'https://wordiva.ai',
   ogImage: 'https://wordiva.ai/og-image.png', // create 1200x630 asset
-  twitter: '@wordiva',
+  twitter: '@wordivaai',
 };
 
 // app/layout.tsx

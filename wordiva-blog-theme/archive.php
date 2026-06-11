@@ -21,16 +21,32 @@ get_header(); ?>
                 
                 if (is_category()) {
                     $category = get_queried_object();
-                    $archive_title = 'Category: ' . $category->name;
-                    $archive_description = $category->description ? $category->description : 'Browse articles in the ' . $category->name . ' category.';
+                    $archive_title = $category->name;
+                    $archive_description = $category->description
+                        ? $category->description
+                        : wordiva_get_category_fallback_description($category->slug);
+                    if (empty($archive_description)) {
+                        $archive_description = sprintf(
+                            /* translators: %s: category name */
+                            __('Browse articles in the %s category.', 'wordiva-blog-theme'),
+                            $category->name
+                        );
+                    }
                 } elseif (is_tag()) {
                     $tag = get_queried_object();
                     $archive_title = 'Tag: ' . $tag->name;
                     $archive_description = $tag->description ? $tag->description : 'Browse articles tagged with ' . $tag->name . '.';
                 } elseif (is_author()) {
                     $author = get_queried_object();
-                    $archive_title = 'Author: ' . $author->display_name;
-                    $archive_description = $author->description ? $author->description : 'Articles by ' . $author->display_name . '.';
+                    $author_name = wordiva_get_author_display_name($author->ID);
+                    $archive_title = $author_name;
+                    $archive_description = $author->description
+                        ? $author->description
+                        : sprintf(
+                            /* translators: %s: author name */
+                            __('Articles by %s.', 'wordiva-blog-theme'),
+                            $author_name
+                        );
                 } elseif (is_date()) {
                     if (is_year()) {
                         $archive_title = 'Year: ' . get_the_date('Y');
@@ -272,4 +288,6 @@ get_header(); ?>
     </div>
 </main>
 
-<?php get_footer(); ?>
+<?php
+get_template_part('template-parts/sticky-cta');
+get_footer();

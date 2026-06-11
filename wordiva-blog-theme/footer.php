@@ -61,8 +61,17 @@ $is_blog_context = is_home() || is_singular('post') || is_archive() || is_search
                         <a href="<?php echo esc_url(wordiva_get_main_site_anchor('pricing')); ?>" class="wordiva-nav-link">
                             <?php esc_html_e('Pricing', 'wordiva-blog-theme'); ?>
                         </a>
+                        <a href="<?php echo esc_url(get_theme_mod('wordiva_compare_url', rtrim(wordiva_get_main_site_url(), '/') . '/compare')); ?>" class="wordiva-nav-link">
+                            <?php esc_html_e('Compare', 'wordiva-blog-theme'); ?>
+                        </a>
+                        <a href="<?php echo esc_url(get_theme_mod('wordiva_integrations_url', rtrim(wordiva_get_main_site_url(), '/') . '/integrations/wordpress')); ?>" class="wordiva-nav-link">
+                            <?php esc_html_e('Integrations', 'wordiva-blog-theme'); ?>
+                        </a>
                         <a href="<?php echo esc_url(wordiva_get_blog_url()); ?>" class="wordiva-nav-link <?php echo $is_blog_context ? 'active' : ''; ?>">
                             <?php esc_html_e('Blog', 'wordiva-blog-theme'); ?>
+                        </a>
+                        <a href="<?php echo esc_url(trailingslashit(wordiva_get_blog_url()) . 'feed/'); ?>" class="wordiva-nav-link" rel="alternate" type="application/rss+xml">
+                            <?php esc_html_e('RSS', 'wordiva-blog-theme'); ?>
                         </a>
                         <div class="wordiva-nav-actions wordiva-footer-actions">
                             <a href="<?php echo esc_url(wordiva_get_sign_in_url()); ?>" class="wordiva-sign-in-button">
@@ -96,6 +105,20 @@ $is_blog_context = is_home() || is_singular('post') || is_archive() || is_search
     
 </div><!-- .site-wrapper -->
 
-<?php wp_footer(); ?>
+<?php
+$ga4_id = get_theme_mod('wordiva_ga4_measurement_id', '');
+if (!empty($ga4_id)) :
+    ?>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga4_id); ?>"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '<?php echo esc_js($ga4_id); ?>');
+    </script>
+    <?php
+endif;
+
+wp_footer(); ?>
 </body>
 </html>

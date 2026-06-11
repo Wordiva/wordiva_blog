@@ -87,6 +87,14 @@ main() {
   preflight
   deploy_theme
   verify_site
+
+  if [[ "${1:-}" == "--verify" ]]; then
+    shift
+    local phase="${1:-all}"
+    log "Running SEO verification phase: ${phase}"
+    "${SCRIPT_DIR}/verify-phase.sh" "${phase}"
+  fi
+
   log "All done."
 }
 

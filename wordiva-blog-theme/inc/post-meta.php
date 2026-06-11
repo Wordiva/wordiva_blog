@@ -32,8 +32,43 @@ function wordiva_add_post_meta_boxes() {
         'normal',
         'default'
     );
+
+    add_meta_box(
+        'wordiva_seo_checklist',
+        __('SEO Checklist', 'wordiva-blog-theme'),
+        'wordiva_seo_checklist_callback',
+        'post',
+        'side',
+        'high'
+    );
 }
 add_action('add_meta_boxes', 'wordiva_add_post_meta_boxes');
+
+function wordiva_seo_checklist_callback($post) {
+    $faq = get_post_meta($post->ID, '_wordiva_enable_faq_schema', true);
+    $schema_type = get_post_meta($post->ID, '_wordiva_schema_type', true);
+    ?>
+    <ul style="margin-left:1em;list-style:disc;">
+        <li><?php esc_html_e('Keyword in slug and H1', 'wordiva-blog-theme'); ?></li>
+        <li><?php esc_html_e('1200×630 featured image', 'wordiva-blog-theme'); ?></li>
+        <li><?php esc_html_e('3–5 internal links (blog + product)', 'wordiva-blog-theme'); ?></li>
+        <li><?php esc_html_e('Question-format H2s with answer capsules', 'wordiva-blog-theme'); ?></li>
+    </ul>
+    <p>
+        <label>
+            <input type="checkbox" name="wordiva_enable_faq_schema" value="1" <?php checked($faq, '1'); ?>>
+            <?php esc_html_e('Enable FAQPage schema', 'wordiva-blog-theme'); ?>
+        </label>
+    </p>
+    <p>
+        <label for="wordiva_schema_type"><?php esc_html_e('Schema type', 'wordiva-blog-theme'); ?></label><br>
+        <select name="wordiva_schema_type" id="wordiva_schema_type">
+            <option value="" <?php selected($schema_type, ''); ?>><?php esc_html_e('Default (BlogPosting)', 'wordiva-blog-theme'); ?></option>
+            <option value="howto" <?php selected($schema_type, 'howto'); ?>><?php esc_html_e('HowTo', 'wordiva-blog-theme'); ?></option>
+        </select>
+    </p>
+    <?php
+}
 
 /**
  * Enhanced post options meta box callback
@@ -220,5 +255,10 @@ function wordiva_save_post_meta($post_id) {
     
     $hide_date = isset($_POST['wordiva_hide_date']) ? 1 : 0;
     update_post_meta($post_id, '_wordiva_hide_date', $hide_date);
+
+    update_post_meta($post_id, '_wordiva_enable_faq_schema', isset($_POST['wordiva_enable_faq_schema']) ? '1' : '');
+    if (isset($_POST['wordiva_schema_type'])) {
+        update_post_meta($post_id, '_wordiva_schema_type', sanitize_text_field($_POST['wordiva_schema_type']));
+    }
 }
 add_action('save_post', 'wordiva_save_post_meta');

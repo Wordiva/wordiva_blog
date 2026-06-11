@@ -4,40 +4,40 @@ overview: Implement all 10 technical SEO strategies from [strategy/technical-seo
 todos:
   - id: phase0-crawl
     content: "Phase 0: Fix robots.txt (+ OAI-SearchBot, wp-json/xmlrpc disallow), WP sitemap, 404 noindex/nofollow, blog meta copy, remove ?sitemap=xml"
-    status: pending
+    status: completed
   - id: phase1-entity
     content: "Phase 1: Schema graph per blog-updates.md (Wordiva.ai org, wordiva_ai.png logo, canonical sameAs URLs, BlogPosting, breadcrumbs)"
-    status: pending
+    status: completed
   - id: phase2-authors
     content: "Phase 2: Add inc/author-profile.php, author.php, Person schema, publish validation"
-    status: pending
+    status: completed
   - id: phase3-performance
     content: "Phase 3: Consolidate JS/CSS, conditional script loading, image width/height + LCP priority"
-    status: pending
+    status: completed
   - id: phase4-hubs
     content: "Phase 4: Live category slugs (agentic-ai, ai-content-marketing, etc.), 100-200w archive intros, category chips, CollectionPage"
-    status: pending
+    status: completed
   - id: phase5-blog-schema
     content: "Phase 5: Blog index blogPost[] + ItemList JSON-LD, homepage meta fallbacks"
-    status: pending
+    status: completed
   - id: phase6-geo
     content: "Phase 6: Dynamic /blog/llms.txt endpoint, FAQ schema helper, post meta toggles"
-    status: pending
+    status: completed
   - id: phase7-linking
     content: "Phase 7: breadcrumbs, sticky CTA+UTM, footer Compare/Integrations/RSS, product-links block, page-sitemap"
-    status: pending
+    status: completed
   - id: align-main-site-doc
     content: Update wordiva-main-site-seo.md Organization sameAs/logo to match blog-updates canonical values
-    status: pending
+    status: completed
   - id: phase8-rich-results
     content: "Phase 8: wordiva-og-default.jpg, og:image MIME/alt, HowTo schema, newsletter CTA"
-    status: pending
+    status: completed
   - id: phase9-ops
     content: "Phase 9: GA4 customizer hook, deploy SEO verification curls, strategy/manual-ops-checklist.md"
-    status: pending
+    status: completed
   - id: testing-infra
-    content: "Add deploy/verify-phase.sh + deploy/visual-checklist.md; extend deploy.sh to accept --phase N"
-    status: pending
+    content: Add deploy/verify-phase.sh + deploy/visual-checklist.md; extend deploy.sh to accept --phase N
+    status: completed
   - id: main-site-doc
     content: "Main site guide: strategy/wordiva-main-site-seo.md (Next.js repo — robots, sitemap, llms.txt, JSON-LD)"
     status: completed
@@ -505,10 +505,10 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **3. Visual QA** — browser pass on live site (Playwright MCP or manual):
 
-| Viewport | Width | Pages |
-| -------- | ----- | ----- |
-| Mobile | 375×812 | All URLs below |
-| Desktop | 1280×800 | All URLs below |
+| Viewport | Width    | Pages          |
+| -------- | -------- | -------------- |
+| Mobile   | 375×812  | All URLs below |
+| Desktop  | 1280×800 | All URLs below |
 
 **URLs to open every phase** (baseline smoke):
 
@@ -551,18 +551,18 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 0`):**
 
-| Check | Command / assertion |
-| ----- | ------------------- |
-| Blog home 200 | `curl -sI -L https://wordiva.ai/blog/ \| head -1` |
-| Meta description populated | `curl -sL .../blog/ \| grep 'meta name="description"'` not empty |
-| robots.txt 200 + plain text | not HTML 404 page |
-| No `/*?*` disallow | robots body must not contain `Disallow: /*?` |
-| `OAI-SearchBot` present | robots contains `OAI-SearchBot` |
-| `Disallow: /wp-json/` | robots contains wp-json disallow |
-| wp-sitemap.xml 200 | `curl -sI .../blog/wp-sitemap.xml` |
-| Old sitemap gone | `?sitemap=xml` returns 404 or redirects to wp-sitemap |
-| 404 noindex | fake URL has `noindex, nofollow`; no `<link rel="canonical" href=".../blog/">` |
-| Search noindex | `?s=test` has `noindex` in robots meta |
+| Check                       | Command / assertion                                                            |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| Blog home 200               | `curl -sI -L https://wordiva.ai/blog/ \| head -1`                              |
+| Meta description populated  | `curl -sL .../blog/ \| grep 'meta name="description"'` not empty               |
+| robots.txt 200 + plain text | not HTML 404 page                                                              |
+| No `/*?*` disallow          | robots body must not contain `Disallow: /*?`                                   |
+| `OAI-SearchBot` present     | robots contains `OAI-SearchBot`                                                |
+| `Disallow: /wp-json/`       | robots contains wp-json disallow                                               |
+| wp-sitemap.xml 200          | `curl -sI .../blog/wp-sitemap.xml`                                             |
+| Old sitemap gone            | `?sitemap=xml` returns 404 or redirects to wp-sitemap                          |
+| 404 noindex                 | fake URL has `noindex, nofollow`; no `<link rel="canonical" href=".../blog/">` |
+| Search noindex              | `?s=test` has `noindex` in robots meta                                         |
 
 **Visual:** Blog index loads; hero title visible; post cards render; no white flash or broken layout after deploy.
 
@@ -572,15 +572,15 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 1`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| Organization name | JSON-LD contains `"Wordiva.ai"` |
-| Logo URL | JSON-LD contains `wordiva_ai.png` |
-| sameAs count | Four social URLs from blog-updates |
-| No `/blog/blog/` | BreadcrumbList JSON-LD must not contain `blog/blog` |
-| BlogPosting type | Single post JSON-LD `@type":"BlogPosting"` |
-| Single canonical | Exactly one `<link rel="canonical">` on post |
-| Publisher @id | `"@id":"https://wordiva.ai/#organization"` |
+| Check             | Assertion                                           |
+| ----------------- | --------------------------------------------------- |
+| Organization name | JSON-LD contains `"Wordiva.ai"`                     |
+| Logo URL          | JSON-LD contains `wordiva_ai.png`                   |
+| sameAs count      | Four social URLs from blog-updates                  |
+| No `/blog/blog/`  | BreadcrumbList JSON-LD must not contain `blog/blog` |
+| BlogPosting type  | Single post JSON-LD `@type":"BlogPosting"`          |
+| Single canonical  | Exactly one `<link rel="canonical">` on post        |
+| Publisher @id     | `"@id":"https://wordiva.ai/#organization"`          |
 
 **Visual:** Breadcrumbs on single post show Home → category → title; no duplicate breadcrumb bars; JSON-LD changes did not break `wp_head` layout.
 
@@ -592,11 +592,11 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 2`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| Author in schema | `"author":{"@type":"Person","name":` not empty on sample post |
-| Author archive 200 | `/blog/author/rubia` returns 200 |
-| ProfilePage schema | author page has ProfilePage or Person JSON-LD |
+| Check              | Assertion                                                     |
+| ------------------ | ------------------------------------------------------------- |
+| Author in schema   | `"author":{"@type":"Person","name":` not empty on sample post |
+| Author archive 200 | `/blog/author/rubia` returns 200                              |
+| ProfilePage schema | author page has ProfilePage or Person JSON-LD                 |
 
 **Visual:**
 
@@ -611,11 +611,11 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 3`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| Script count reduced | Fewer `<script src=` tags vs pre-phase baseline (record count) |
-| social-sharing absent on index | homepage HTML should not load social-sharing.js |
-| No 404 JS/CSS | all enqueued asset URLs return 200 |
+| Check                          | Assertion                                                      |
+| ------------------------------ | -------------------------------------------------------------- |
+| Script count reduced           | Fewer `<script src=` tags vs pre-phase baseline (record count) |
+| social-sharing absent on index | homepage HTML should not load social-sharing.js                |
+| No 404 JS/CSS                  | all enqueued asset URLs return 200                             |
 
 **Visual:**
 
@@ -632,11 +632,11 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 4`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| Category archives 200 | `/blog/category/agentic-ai`, `ai-content-marketing`, `content-marketing`, `wordiva-story` |
-| CollectionPage schema | category page JSON-LD contains `CollectionPage` |
-| Category chips on index | homepage contains links to category archives |
+| Check                   | Assertion                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| Category archives 200   | `/blog/category/agentic-ai`, `ai-content-marketing`, `content-marketing`, `wordiva-story` |
+| CollectionPage schema   | category page JSON-LD contains `CollectionPage`                                           |
+| Category chips on index | homepage contains links to category archives                                              |
 
 **Visual:**
 
@@ -651,12 +651,12 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 5`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| Blog schema description | JSON-LD Blog node has non-empty `description` |
-| blogPost array | homepage JSON-LD contains `blogPost` with ≥1 entry |
-| ItemList | homepage JSON-LD contains `ItemList` |
-| OG description | `og:description` not empty on `/blog/` |
+| Check                   | Assertion                                          |
+| ----------------------- | -------------------------------------------------- |
+| Blog schema description | JSON-LD Blog node has non-empty `description`      |
+| blogPost array          | homepage JSON-LD contains `blogPost` with ≥1 entry |
+| ItemList                | homepage JSON-LD contains `ItemList`               |
+| OG description          | `og:description` not empty on `/blog/`             |
 
 **Visual:** Homepage hero subtitle and meta-aligned copy visible; featured post section unchanged visually.
 
@@ -666,11 +666,11 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 6`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| llms.txt 200 | `curl -sL .../blog/llms.txt` starts with `# Wordiva` |
-| Valid markdown structure | H1, blockquote or H2 sections present |
-| FAQ schema on FAQ post | test post with FAQ block emits `FAQPage` when enabled |
+| Check                    | Assertion                                             |
+| ------------------------ | ----------------------------------------------------- |
+| llms.txt 200             | `curl -sL .../blog/llms.txt` starts with `# Wordiva`  |
+| Valid markdown structure | H1, blockquote or H2 sections present                 |
+| FAQ schema on FAQ post   | test post with FAQ block emits `FAQPage` when enabled |
 
 **Visual:** No layout change on posts from FAQ schema injection (JSON-LD only in head).
 
@@ -680,12 +680,12 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 7`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| Sticky CTA URL | contains `utm_source=blog&utm_medium=organic` |
-| Footer Compare link | `href` contains `/compare` |
-| Footer Integrations | `href` contains `/integrations/wordpress` |
-| Footer RSS | `href` contains `/blog/feed` |
+| Check               | Assertion                                                  |
+| ------------------- | ---------------------------------------------------------- |
+| Sticky CTA URL      | contains `utm_source=blog&utm_medium=organic`              |
+| Footer Compare link | `href` contains `/compare`                                 |
+| Footer Integrations | `href` contains `/integrations/wordpress`                  |
+| Footer RSS          | `href` contains `/blog/feed`                               |
 | Product links block | single post HTML contains learn/integrations/compare links |
 
 **Visual (high regression risk):**
@@ -702,12 +702,12 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 **Automated (`verify-phase.sh 8`):**
 
-| Check | Assertion |
-| ----- | --------- |
-| OG default image 200 | page without featured image returns 200 for og:image URL |
-| og:image:type correct | PNG posts use `image/png` not `image/jpeg` |
-| og:image:alt present | single post has `og:image:alt` |
-| Newsletter block | index contains newsletter section when enabled |
+| Check                 | Assertion                                                |
+| --------------------- | -------------------------------------------------------- |
+| OG default image 200  | page without featured image returns 200 for og:image URL |
+| og:image:type correct | PNG posts use `image/png` not `image/jpeg`               |
+| og:image:alt present  | single post has `og:image:alt`                           |
+| Newsletter block      | index contains newsletter section when enabled           |
 
 **Visual:**
 
@@ -739,12 +739,12 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 ### New deploy/testing files (implementation)
 
-| File | Purpose |
-| ---- | ------- |
-| [deploy/verify-phase.sh](deploy/verify-phase.sh) | Phase-scoped curl/grep assertions; exit 1 on fail |
-| [deploy/visual-checklist.md](deploy/visual-checklist.md) | Printable visual QA steps per viewport |
-| [deploy/deploy.sh](deploy/deploy.sh) | Add optional `--verify <phase>` flag post-deploy |
-| `deploy/screenshots/` | gitignored; store phase gate screenshots |
+| File                                                     | Purpose                                           |
+| -------------------------------------------------------- | ------------------------------------------------- |
+| [deploy/verify-phase.sh](deploy/verify-phase.sh)         | Phase-scoped curl/grep assertions; exit 1 on fail |
+| [deploy/visual-checklist.md](deploy/visual-checklist.md) | Printable visual QA steps per viewport            |
+| [deploy/deploy.sh](deploy/deploy.sh)                     | Add optional `--verify <phase>` flag post-deploy  |
+| `deploy/screenshots/`                                    | gitignored; store phase gate screenshots          |
 
 ---
 
@@ -767,14 +767,14 @@ Confirm output: `Site check passed (HTTP 200)` and theme branding detected.
 
 ## Estimated Effort
 
-| Phase                                | Dev days | Test gate |
-| ------------------------------------ | -------- | --------- |
-| Phase 0–1 (crawl + entity + authors) | 3–4      | +0.5 day  |
-| Phase 2 (performance)                | 2        | +0.5 day  |
-| Phase 3–5 (hubs, schema, GEO)        | 3–4      | +1 day    |
-| Phase 6–7 (linking, rich results)    | 2–3      | +0.5 day  |
-| Phase 8 (measurement + deploy)       | 1        | +0.5 day  |
-| Testing infra (`verify-phase.sh`)    | —        | 0.5 day   |
-| **Total**                            | **13–17 days** | |
+| Phase                                | Dev days       | Test gate |
+| ------------------------------------ | -------------- | --------- |
+| Phase 0–1 (crawl + entity + authors) | 3–4            | +0.5 day  |
+| Phase 2 (performance)                | 2              | +0.5 day  |
+| Phase 3–5 (hubs, schema, GEO)        | 3–4            | +1 day    |
+| Phase 6–7 (linking, rich results)    | 2–3            | +0.5 day  |
+| Phase 8 (measurement + deploy)       | 1              | +0.5 day  |
+| Testing infra (`verify-phase.sh`)    | —              | 0.5 day   |
+| **Total**                            | **13–17 days** |           |
 
 Implement in order above. **Each phase ends with:** `./deploy/deploy.sh` → `./deploy/verify-phase.sh N` → visual QA on live site → fix regressions → then proceed to next phase.

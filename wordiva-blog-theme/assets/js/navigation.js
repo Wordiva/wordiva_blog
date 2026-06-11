@@ -14,6 +14,7 @@
         initFeaturedNavigation();
         initNavigationAccessibility();
         initMobileMenu();
+        initNavScroll();
         initKeyboardNavigation();
     });
     
@@ -216,11 +217,57 @@
             }
         });
         
-        console.log('Wordiva Navigation: Mobile menu initialized successfully');
     }
 
+    /**
+     * Close mobile menu when a nav link is clicked.
+     */
+    function closeMobileMenu(mobileToggle, mobileMenu) {
+        mobileMenu.classList.remove('active');
+        mobileToggle.classList.remove('active');
+        mobileToggle.setAttribute('aria-expanded', 'false');
     }
-    
+
+    /**
+     * Header scroll state and mobile link close handlers.
+     */
+    function initNavScroll() {
+        const nav = document.getElementById('wordiva-nav');
+        if (nav) {
+            let ticking = false;
+            const updateNavOnScroll = function() {
+                if (window.scrollY > 10) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            };
+
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        updateNavOnScroll();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            updateNavOnScroll();
+        }
+
+        const mobileToggle = document.querySelector('#wordiva-mobile-btn');
+        const mobileMenu = document.querySelector('#wordiva-mobile-menu');
+        if (mobileToggle && mobileMenu) {
+            const mobileLinks = mobileMenu.querySelectorAll('.wordiva-nav-mobile-link');
+            mobileLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    closeMobileMenu(mobileToggle, mobileMenu);
+                });
+            });
+        }
+    }
+
     /**
      * Initialize keyboard navigation
      */

@@ -13,7 +13,7 @@ $post_title = get_the_title();
 $post_excerpt = get_the_excerpt();
 $post_permalink = get_the_permalink();
 $post_date = get_the_date();
-$post_author = get_the_author();
+$post_author = wordiva_get_author_display_name(get_the_author_meta('ID'));
 $post_author_url = get_author_posts_url(get_the_author_meta('ID'));
 $categories = get_the_category();
 $featured_image_url = get_the_post_thumbnail_url($post_id, 'medium');
@@ -29,45 +29,13 @@ $is_featured = get_post_meta($post_id, '_wordiva_featured_post', true);
 $is_homepage = is_home() || is_front_page();
 $should_show_featured = $is_featured && $is_homepage;
 $card_class = $should_show_featured ? 'blog-card featured-card' : 'blog-card';
-
-// Generate structured data
-$structured_data = array(
-    '@context' => 'https://schema.org',
-    '@type' => 'BlogPosting',
-    'headline' => $post_title,
-    'description' => $post_excerpt,
-    'url' => $post_permalink,
-    'datePublished' => get_the_date('c'),
-    'dateModified' => get_the_modified_date('c'),
-    'author' => array(
-        '@type' => 'Person',
-        'name' => $post_author,
-        'url' => $post_author_url
-    ),
-    'publisher' => array(
-        '@type' => 'Organization',
-        'name' => get_bloginfo('name'),
-        'url' => home_url()
-    )
-);
-
-if ($featured_image_url) {
-    $structured_data['image'] = $featured_image_url;
-}
 ?>
 
 <article id="post-<?php echo esc_attr($post_id); ?>" 
          <?php post_class($card_class); ?>
-         itemscope 
-         itemtype="https://schema.org/BlogPosting"
          role="article"
          aria-labelledby="card-title-<?php echo esc_attr($post_id); ?>"
          aria-describedby="card-excerpt-<?php echo esc_attr($post_id); ?>">
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-        <?php echo wp_json_encode($structured_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>
-    </script>
     
     <!-- Card Image -->
     <div class="card-image" role="img" aria-label="<?php echo esc_attr($post_title); ?> featured image">
@@ -77,15 +45,19 @@ if ($featured_image_url) {
            class="card-image-link">
             <?php 
             if (has_post_thumbnail()) {
+                $thumb_id = get_post_thumbnail_id($post_id);
+                $thumb_meta = wp_get_attachment_metadata($thumb_id);
+                $width = !empty($thumb_meta['width']) ? (int) $thumb_meta['width'] : 600;
+                $height = !empty($thumb_meta['height']) ? (int) $thumb_meta['height'] : 400;
                 the_post_thumbnail('medium', array(
                     'class' => 'card-image-img',
                     'alt' => get_the_title(),
-                    'loading' => 'lazy',
-                    'itemprop' => 'image'
+                    'loading' => $should_show_featured ? 'eager' : 'lazy',
+                    'width' => $width,
+                    'height' => $height,
                 )); 
             } else {
-                // Use fallback image
-                echo '<img src="' . esc_url($featured_image_url) . '" alt="' . esc_attr(get_the_title()) . '" class="card-image-img fallback-image" loading="lazy" itemprop="image">';
+                echo '<img src="' . esc_url($featured_image_url) . '" alt="' . esc_attr(get_the_title()) . '" class="card-image-img fallback-image" loading="lazy" width="600" height="400">';
             }
             ?>
         </a>

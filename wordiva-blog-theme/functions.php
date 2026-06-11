@@ -27,6 +27,7 @@ $wordiva_includes = array(
     'inc/customizer.php',           // WordPress Customizer settings
     'inc/accessibility.php',        // Accessibility enhancements
     'inc/seo.php',                  // SEO and structured data
+    'inc/author-profile.php',       // Author E-E-A-T fields
     'inc/post-meta.php',           // Custom post meta boxes
     'inc/helper-functions.php',     // Helper functions and utilities
     'inc/theme-activation.php',     // Theme activation/deactivation

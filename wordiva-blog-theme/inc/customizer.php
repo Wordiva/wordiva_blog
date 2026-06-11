@@ -266,7 +266,7 @@ function wordiva_enhanced_customize_register($wp_customize) {
     
     // Twitter URL
     $wp_customize->add_setting('wordiva_twitter_url', array(
-        'default'           => 'https://twitter.com/wordiva',
+        'default'           => 'https://twitter.com/wordivaai',
         'sanitize_callback' => 'esc_url_raw',
     ));
     
@@ -310,6 +310,106 @@ function wordiva_enhanced_customize_register($wp_customize) {
         'label'   => __('Instagram URL', 'wordiva-blog-theme'),
         'section' => 'wordiva_social_media',
         'type'    => 'url',
+    ));
+
+    // SEO & Marketing Section
+    $wp_customize->add_section('wordiva_seo_marketing', array(
+        'title'    => __('SEO & Marketing', 'wordiva-blog-theme'),
+        'priority' => 15,
+    ));
+
+    $wp_customize->add_setting('wordiva_blog_seo_description', array(
+        'default'           => 'Insights on agentic AI content marketing, WordPress blog automation, SEO, and GEO from the Wordiva team.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('wordiva_blog_seo_description', array(
+        'label'       => __('Blog SEO Description', 'wordiva-blog-theme'),
+        'description' => __('Fallback meta description when WordPress tagline is empty.', 'wordiva-blog-theme'),
+        'section'     => 'wordiva_seo_marketing',
+        'type'        => 'textarea',
+    ));
+
+    $wp_customize->add_setting('wordiva_ga4_measurement_id', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('wordiva_ga4_measurement_id', array(
+        'label'       => __('GA4 Measurement ID', 'wordiva-blog-theme'),
+        'description' => __('Example: G-XXXXXXXXXX. Leave empty to disable.', 'wordiva-blog-theme'),
+        'section'     => 'wordiva_seo_marketing',
+        'type'        => 'text',
+    ));
+
+    $wp_customize->add_setting('wordiva_newsletter_heading', array(
+        'default'           => __('Stay ahead with AI content marketing insights', 'wordiva-blog-theme'),
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('wordiva_newsletter_heading', array(
+        'label'   => __('Newsletter Heading', 'wordiva-blog-theme'),
+        'section' => 'wordiva_seo_marketing',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('wordiva_newsletter_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('wordiva_newsletter_url', array(
+        'label'       => __('Newsletter Sign-up URL', 'wordiva-blog-theme'),
+        'description' => __('External form URL. Leave empty to hide the newsletter block.', 'wordiva-blog-theme'),
+        'section'     => 'wordiva_seo_marketing',
+        'type'        => 'url',
+    ));
+
+    $wp_customize->add_setting('wordiva_newsletter_button', array(
+        'default'           => __('Subscribe', 'wordiva-blog-theme'),
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('wordiva_newsletter_button', array(
+        'label'   => __('Newsletter Button Label', 'wordiva-blog-theme'),
+        'section' => 'wordiva_seo_marketing',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('wordiva_compare_url', array(
+        'default'           => 'https://wordiva.ai/compare',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('wordiva_compare_url', array(
+        'label'   => __('Compare Page URL', 'wordiva-blog-theme'),
+        'section' => 'wordiva_seo_marketing',
+        'type'    => 'url',
+    ));
+
+    $wp_customize->add_setting('wordiva_integrations_url', array(
+        'default'           => 'https://wordiva.ai/integrations/wordpress',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('wordiva_integrations_url', array(
+        'label'   => __('Integrations Page URL', 'wordiva-blog-theme'),
+        'section' => 'wordiva_seo_marketing',
+        'type'    => 'url',
+    ));
+
+    $wp_customize->add_setting('wordiva_sticky_cta_label', array(
+        'default'           => __('Try Wordiva free', 'wordiva-blog-theme'),
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('wordiva_sticky_cta_label', array(
+        'label'   => __('Sticky CTA Label', 'wordiva-blog-theme'),
+        'section' => 'wordiva_seo_marketing',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('wordiva_sticky_cta_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('wordiva_sticky_cta_url', array(
+        'label'       => __('Sticky CTA URL', 'wordiva-blog-theme'),
+        'description' => __('Leave empty to use register URL with blog UTM params.', 'wordiva-blog-theme'),
+        'section'     => 'wordiva_seo_marketing',
+        'type'        => 'url',
     ));
 }
 add_action('customize_register', 'wordiva_enhanced_customize_register');

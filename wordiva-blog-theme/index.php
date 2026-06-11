@@ -15,8 +15,25 @@ get_header(); ?>
     <section class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">Welcome to Wordiva <span>Blog</span></h1>
-                <p class="hero-subtitle">Discover the latest updates, insights, and innovations in AI-powered content marketing.</p>
+                <h1 class="hero-title"><?php echo esc_html(get_theme_mod('wordiva_header_message', 'Welcome to Wordiva Blog')); ?></h1>
+                <p class="hero-subtitle"><?php echo esc_html(get_theme_mod('wordiva_header_subtitle', wordiva_get_default_blog_description())); ?></p>
+                <p class="hero-rss">
+                    <a href="<?php echo esc_url(trailingslashit(wordiva_get_blog_url()) . 'feed/'); ?>" rel="alternate" type="application/rss+xml">
+                        <?php esc_html_e('Subscribe via RSS', 'wordiva-blog-theme'); ?>
+                    </a>
+                </p>
+                <?php
+                $categories = get_categories(array('hide_empty' => false, 'parent' => 0));
+                if (!empty($categories)) :
+                    ?>
+                    <nav class="wordiva-category-chips" aria-label="<?php esc_attr_e('Browse by category', 'wordiva-blog-theme'); ?>">
+                        <?php foreach ($categories as $cat) : ?>
+                            <a class="wordiva-category-chip" href="<?php echo esc_url(get_category_link($cat->term_id)); ?>">
+                                <?php echo esc_html($cat->name); ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </nav>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -153,6 +170,19 @@ get_header(); ?>
                     endif;
                     ?>
                 </section>
+
+                <?php
+                $newsletter_url = get_theme_mod('wordiva_newsletter_url', '');
+                if (!empty($newsletter_url)) :
+                    ?>
+                    <section class="wordiva-newsletter-cta" aria-labelledby="newsletter-heading">
+                        <h2 id="newsletter-heading"><?php echo esc_html(get_theme_mod('wordiva_newsletter_heading', __('Stay ahead with Wordiva insights', 'wordiva-blog-theme'))); ?></h2>
+                        <p><?php esc_html_e('Get the latest on agentic AI content marketing in your inbox.', 'wordiva-blog-theme'); ?></p>
+                        <a class="wordiva-cta-button" href="<?php echo esc_url($newsletter_url); ?>">
+                            <?php echo esc_html(get_theme_mod('wordiva_newsletter_button', __('Subscribe', 'wordiva-blog-theme'))); ?>
+                        </a>
+                    </section>
+                <?php endif; ?>
                 
             <?php else : ?>
                 

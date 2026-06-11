@@ -1,111 +1,162 @@
 <?php
 /**
  * SEO Meta Tags and Structured Data
- * Implements comprehensive SEO markup for search engine optimization
  *
  * @package Wordiva_Theme
  * @since 1.0.0
  */
 
-// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once get_template_directory() . '/inc/seo-helpers.php';
+
+remove_action('wp_head', 'rel_canonical');
+
 /**
- * Add SEO meta tags to head
+ * Register llms.txt rewrite rule.
+ */
+function wordiva_register_llms_rewrite() {
+    add_rewrite_rule('^llms\.txt$', 'index.php?wordiva_llms_txt=1', 'top');
+}
+add_action('init', 'wordiva_register_llms_rewrite');
+
+function wordiva_llms_query_vars($vars) {
+    $vars[] = 'wordiva_llms_txt';
+    return $vars;
+}
+add_filter('query_vars', 'wordiva_llms_query_vars');
+
+function wordiva_serve_llms_txt() {
+    if (!get_query_var('wordiva_llms_txt')) {
+        return;
+    }
+    header('Content-Type: text/plain; charset=utf-8');
+    echo wordiva_get_llms_txt_content();
+    exit;
+}
+add_action('template_redirect', 'wordiva_serve_llms_txt');
+
+/**
+ * Exclude authors without posts from user sitemap.
+ */
+function wordiva_filter_user_sitemap($users) {
+    return array_filter($users, function ($user) {
+        return count_user_posts($user->ID, 'post', true) > 0;
+    });
+}
+add_filter('wp_sitemaps_users_pre_url_list', function ($url_list) {
+    return $url_list;
+});
+
+/**
+ * SEO meta tags.
  */
 function wordiva_seo_meta_tags() {
     global $post;
-    
-    // Get site information
+
     $site_name = get_bloginfo('name');
-    $site_description = get_bloginfo('description');
-    $site_url = home_url('/');
-    
-    // Default values
+    $site_description = wordiva_get_default_blog_description();
+    $site_url = wordiva_get_blog_index_url();
     $title = '';
     $description = '';
     $canonical_url = '';
     $image_url = '';
+    $image_alt = '';
     $article_type = 'website';
-    
+    $robots = wordiva_get_robots_directive();
+
     if (is_singular()) {
-        // Single post/page
         $title = get_the_title() . ' | ' . $site_name;
-        $description = get_the_excerpt() ? wp_trim_words(get_the_excerpt(), 25, '...') : wp_trim_words(get_the_content(), 25, '...');
+        $description = has_excerpt()
+            ? wp_trim_words(get_the_excerpt(), 25, '...')
+            : wp_trim_words(get_the_content(), 25, '...');
         $canonical_url = get_permalink();
-        
         if (has_post_thumbnail()) {
             $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+            $image_alt = get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true);
         }
-        
         if (is_single()) {
             $article_type = 'article';
         }
     } elseif (is_home() || is_front_page()) {
-        // Homepage
-        $title = $site_name . ' | ' . $site_description;
+        $title = $site_name;
+        if (!empty($site_description)) {
+            $title .= ' | ' . $site_description;
+        }
         $description = $site_description;
         $canonical_url = $site_url;
     } elseif (is_category()) {
-        // Category archive
         $category = get_queried_object();
-        $title = 'Category: ' . $category->name . ' | ' . $site_name;
-        $description = $category->description ? $category->description : 'Browse articles in ' . $category->name . ' category.';
+        $title = $category->name . ' | ' . $site_name;
+        $description = $category->description
+            ? $category->description
+            : wordiva_get_category_fallback_description($category->slug);
+        if (empty($description)) {
+            $description = 'Browse articles in ' . $category->name . '.';
+        }
         $canonical_url = get_category_link($category->term_id);
     } elseif (is_tag()) {
-        // Tag archive
         $tag = get_queried_object();
-        $title = 'Tag: ' . $tag->name . ' | ' . $site_name;
+        $title = $tag->name . ' | ' . $site_name;
         $description = $tag->description ? $tag->description : 'Browse articles tagged with ' . $tag->name . '.';
         $canonical_url = get_tag_link($tag->term_id);
+    } elseif (is_author()) {
+        $author = get_queried_object();
+        $title = wordiva_get_author_display_name($author->ID) . ' | ' . $site_name;
+        $description = $author->description ? $author->description : 'Articles by ' . wordiva_get_author_display_name($author->ID) . '.';
+        $canonical_url = get_author_posts_url($author->ID);
     } elseif (is_search()) {
-        // Search results
         $search_query = get_search_query();
         $title = 'Search Results for "' . $search_query . '" | ' . $site_name;
         $description = 'Search results for "' . $search_query . '" on ' . $site_name . '.';
         $canonical_url = get_search_link($search_query);
     } elseif (is_404()) {
-        // 404 page
         $title = 'Page Not Found | ' . $site_name;
         $description = 'The page you are looking for could not be found.';
-        $canonical_url = $site_url;
     }
-    
-    // Fallback image
+
     if (empty($image_url)) {
-        $image_url = get_template_directory_uri() . '/assets/images/wordiva-og-default.jpg';
+        $image_url = wordiva_get_default_og_image_url();
     }
-    
-    // Clean description
+    if (empty($image_alt)) {
+        $image_alt = is_singular() ? get_the_title() : $site_name;
+    }
+
     $description = wp_strip_all_tags($description);
-    $description = str_replace(array("\r", "\n", "\t"), ' ', $description);
-    $description = preg_replace('/\s+/', ' ', trim($description));
-    
+    $description = preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), ' ', $description)));
+    $og_image_type = wordiva_get_og_image_type($image_url);
     ?>
     <!-- SEO Meta Tags -->
     <meta name="description" content="<?php echo esc_attr($description); ?>">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="robots" content="<?php echo esc_attr($robots); ?>">
+    <?php if (wordiva_should_output_canonical() && !empty($canonical_url)) : ?>
     <link rel="canonical" href="<?php echo esc_url($canonical_url); ?>">
-    
-    <!-- Open Graph Meta Tags -->
+    <?php endif; ?>
+
     <meta property="og:locale" content="<?php echo esc_attr(get_locale()); ?>">
     <meta property="og:type" content="<?php echo esc_attr($article_type); ?>">
     <meta property="og:title" content="<?php echo esc_attr($title); ?>">
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
+    <?php if (!empty($canonical_url)) : ?>
     <meta property="og:url" content="<?php echo esc_url($canonical_url); ?>">
+    <?php endif; ?>
     <meta property="og:site_name" content="<?php echo esc_attr($site_name); ?>">
     <meta property="og:image" content="<?php echo esc_url($image_url); ?>">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/jpeg">
-    
-    <?php if (is_single() && get_post_type() === 'post') : ?>
-        <!-- Article-specific Open Graph tags -->
+    <meta property="og:image:type" content="<?php echo esc_attr($og_image_type); ?>">
+    <meta property="og:image:alt" content="<?php echo esc_attr($image_alt); ?>">
+
+    <?php if (is_single() && get_post_type() === 'post') :
+        $author_name = wordiva_get_author_display_name();
+        ?>
         <meta property="article:published_time" content="<?php echo esc_attr(get_the_date('c')); ?>">
         <meta property="article:modified_time" content="<?php echo esc_attr(get_the_modified_date('c')); ?>">
-        <meta property="article:author" content="<?php echo esc_attr(get_the_author()); ?>">
+        <?php if (!empty($author_name)) : ?>
+        <meta property="article:author" content="<?php echo esc_attr($author_name); ?>">
+        <?php endif; ?>
         <meta property="article:section" content="<?php echo esc_attr(wp_strip_all_tags(get_the_category_list(', '))); ?>">
         <?php
         $tags = get_the_tags();
@@ -116,363 +167,178 @@ function wordiva_seo_meta_tags() {
         }
         ?>
     <?php endif; ?>
-    
-    <!-- Twitter Card Meta Tags -->
+
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@wordiva">
-    <meta name="twitter:creator" content="@wordiva">
+    <meta name="twitter:site" content="@wordivaai">
+    <meta name="twitter:creator" content="@wordivaai">
     <meta name="twitter:title" content="<?php echo esc_attr($title); ?>">
     <meta name="twitter:description" content="<?php echo esc_attr($description); ?>">
     <meta name="twitter:image" content="<?php echo esc_url($image_url); ?>">
-    
-    <!-- Additional SEO Meta Tags -->
-    <meta name="author" content="<?php echo is_single() ? esc_attr(get_the_author()) : esc_attr($site_name); ?>">
-    <meta name="generator" content="WordPress <?php echo esc_attr(get_bloginfo('version')); ?>">
-    
-    <?php if (is_single()) : ?>
-        <!-- Article-specific meta tags -->
-        <meta name="article:published_time" content="<?php echo esc_attr(get_the_date('c')); ?>">
-        <meta name="article:modified_time" content="<?php echo esc_attr(get_the_modified_date('c')); ?>">
-    <?php endif; ?>
-    
+    <meta name="twitter:image:alt" content="<?php echo esc_attr($image_alt); ?>">
+
+    <meta name="author" content="<?php echo is_single() ? esc_attr(wordiva_get_author_display_name()) : esc_attr($site_name); ?>">
     <?php
 }
 add_action('wp_head', 'wordiva_seo_meta_tags', 1);
 
 /**
- * Add JSON-LD Structured Data
+ * JSON-LD structured data.
  */
 function wordiva_structured_data() {
-    global $post;
-    
-    $site_name = get_bloginfo('name');
-    $site_url = home_url('/');
-    $logo_url = get_template_directory_uri() . '/assets/images/icon.png';
-    
-    // Organization Schema (always present)
-    $organization_schema = array(
-        '@context' => 'https://schema.org',
-        '@type' => 'Organization',
-        'name' => $site_name,
-        'url' => $site_url,
-        'logo' => array(
-            '@type' => 'ImageObject',
-            'url' => $logo_url,
-            'width' => 200,
-            'height' => 200
-        ),
-        'description' => get_bloginfo('description'),
-        'sameAs' => array(
-            get_theme_mod('wordiva_twitter_url', 'https://twitter.com/wordiva'),
-            get_theme_mod('wordiva_linkedin_url', 'https://linkedin.com/company/wordiva')
-        )
-    );
-    
-    // Website Schema (always present)
-    $website_schema = array(
-        '@context' => 'https://schema.org',
-        '@type' => 'WebSite',
-        'name' => $site_name,
-        'url' => $site_url,
-        'description' => get_bloginfo('description'),
-        'publisher' => array(
-            '@type' => 'Organization',
-            'name' => $site_name,
-            'logo' => array(
-                '@type' => 'ImageObject',
-                'url' => $logo_url
-            )
-        ),
-        'potentialAction' => array(
-            '@type' => 'SearchAction',
-            'target' => array(
-                '@type' => 'EntryPoint',
-                'urlTemplate' => $site_url . '?s={search_term_string}'
-            ),
-            'query-input' => 'required name=search_term_string'
-        )
-    );
-    
-    // Output Organization and Website schemas
-    echo '<script type="application/ld+json">' . wp_json_encode($organization_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
-    echo '<script type="application/ld+json">' . wp_json_encode($website_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
-    
-    // Article Schema for single posts
+    wordiva_output_json_ld(wordiva_get_organization_schema());
+    wordiva_output_json_ld(wordiva_get_website_schema());
+
     if (is_single() && get_post_type() === 'post') {
-        $author_name = get_the_author();
-        $author_url = get_author_posts_url(get_the_author_meta('ID'));
-        $featured_image = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : $logo_url;
-        
-        $article_schema = array(
+        $post_id = get_the_ID();
+        wordiva_output_json_ld(wordiva_get_blog_posting_schema($post_id));
+        wordiva_output_json_ld(array(
             '@context' => 'https://schema.org',
-            '@type' => 'Article',
-            'headline' => get_the_title(),
-            'description' => get_the_excerpt() ? wp_trim_words(get_the_excerpt(), 25, '...') : wp_trim_words(get_the_content(), 25, '...'),
-            'image' => array(
-                '@type' => 'ImageObject',
-                'url' => $featured_image,
-                'width' => 1200,
-                'height' => 630
-            ),
-            'author' => array(
-                '@type' => 'Person',
-                'name' => $author_name,
-                'url' => $author_url
-            ),
-            'publisher' => array(
-                '@type' => 'Organization',
-                'name' => $site_name,
-                'logo' => array(
-                    '@type' => 'ImageObject',
-                    'url' => $logo_url,
-                    'width' => 200,
-                    'height' => 200
-                )
-            ),
-            'datePublished' => get_the_date('c'),
-            'dateModified' => get_the_modified_date('c'),
-            'mainEntityOfPage' => array(
-                '@type' => 'WebPage',
-                '@id' => get_permalink()
-            ),
-            'url' => get_permalink(),
-            'wordCount' => str_word_count(wp_strip_all_tags(get_the_content())),
-            'articleSection' => wp_strip_all_tags(get_the_category_list(', ')),
-            'inLanguage' => get_locale()
-        );
-        
-        // Add keywords if tags exist
-        $tags = get_the_tags();
-        if ($tags) {
-            $keywords = array();
-            foreach ($tags as $tag) {
-                $keywords[] = $tag->name;
-            }
-            $article_schema['keywords'] = implode(', ', $keywords);
+            '@type' => 'WebPage',
+            '@id' => get_permalink($post_id),
+            'url' => get_permalink($post_id),
+            'name' => get_the_title($post_id),
+            'mainEntity' => array('@id' => get_permalink($post_id) . '#blogposting'),
+        ));
+
+        if (get_post_meta($post_id, '_wordiva_enable_faq_schema', true)) {
+            wordiva_output_json_ld(wordiva_faq_schema_from_content(get_post_field('post_content', $post_id)));
         }
-        
-        echo '<script type="application/ld+json">' . wp_json_encode($article_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+        wordiva_output_json_ld(wordiva_get_howto_schema($post_id));
     }
-    
-    // Breadcrumb Schema for single posts and pages
+
     if (is_singular() && !is_front_page()) {
-        $breadcrumb_items = array();
-        
-        // Home
-        $breadcrumb_items[] = array(
-            '@type' => 'ListItem',
-            'position' => 1,
-            'name' => 'Home',
-            'item' => $site_url
-        );
-        
-        $position = 2;
-        
-        // Blog page (if not homepage)
-        if (is_single() && get_post_type() === 'post') {
-            $blog_page_id = get_option('page_for_posts');
-            if ($blog_page_id) {
-                $breadcrumb_items[] = array(
-                    '@type' => 'ListItem',
-                    'position' => $position,
-                    'name' => get_the_title($blog_page_id),
-                    'item' => get_permalink($blog_page_id)
-                );
-                $position++;
-            } else {
-                $breadcrumb_items[] = array(
-                    '@type' => 'ListItem',
-                    'position' => $position,
-                    'name' => 'Blog',
-                    'item' => $site_url . 'blog/'
-                );
-                $position++;
-            }
-            
-            // Category (if exists)
-            $categories = get_the_category();
-            if (!empty($categories)) {
-                $category = $categories[0];
-                $breadcrumb_items[] = array(
-                    '@type' => 'ListItem',
-                    'position' => $position,
-                    'name' => $category->name,
-                    'item' => get_category_link($category->term_id)
-                );
-                $position++;
-            }
+        $items = wordiva_get_breadcrumb_items();
+        if (!empty($items)) {
+            wordiva_output_json_ld(array(
+                '@context' => 'https://schema.org',
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => $items,
+            ));
         }
-        
-        // Current page
-        $breadcrumb_items[] = array(
-            '@type' => 'ListItem',
-            'position' => $position,
-            'name' => get_the_title(),
-            'item' => get_permalink()
-        );
-        
-        $breadcrumb_schema = array(
-            '@context' => 'https://schema.org',
-            '@type' => 'BreadcrumbList',
-            'itemListElement' => $breadcrumb_items
-        );
-        
-        echo '<script type="application/ld+json">' . wp_json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
     }
-    
-    // Blog Schema for blog listing pages
-    if (is_home() || is_category() || is_tag()) {
-        $blog_schema = array(
+
+    if (is_home()) {
+        $posts = wordiva_get_latest_posts_for_schema(10);
+        $blog_posts = array();
+        foreach ($posts as $p) {
+            $entry = array(
+                '@type' => 'BlogPosting',
+                'headline' => get_the_title($p->ID),
+                'url' => get_permalink($p->ID),
+                'datePublished' => get_the_date('c', $p->ID),
+            );
+            if (has_post_thumbnail($p->ID)) {
+                $entry['image'] = get_the_post_thumbnail_url($p->ID, 'large');
+            }
+            $author = wordiva_get_author_display_name($p->post_author);
+            if (!empty($author)) {
+                $entry['author'] = array('@type' => 'Person', 'name' => $author);
+            }
+            $blog_posts[] = $entry;
+        }
+        wordiva_output_json_ld(wordiva_get_blog_schema(array('blogPost' => $blog_posts)));
+
+        $list_items = array();
+        $pos = 1;
+        foreach ($posts as $p) {
+            $list_items[] = array(
+                '@type' => 'ListItem',
+                'position' => $pos++,
+                'url' => get_permalink($p->ID),
+                'name' => get_the_title($p->ID),
+            );
+        }
+        wordiva_output_json_ld(array(
             '@context' => 'https://schema.org',
-            '@type' => 'Blog',
-            'name' => is_home() ? $site_name . ' Blog' : (is_category() ? 'Category: ' . single_cat_title('', false) : 'Tag: ' . single_tag_title('', false)),
-            'description' => is_home() ? get_bloginfo('description') : (is_category() ? category_description() : tag_description()),
-            'url' => is_home() ? $site_url : (is_category() ? get_category_link(get_queried_object_id()) : get_tag_link(get_queried_object_id())),
-            'publisher' => array(
-                '@type' => 'Organization',
-                'name' => $site_name,
-                'logo' => array(
-                    '@type' => 'ImageObject',
-                    'url' => $logo_url
-                )
-            ),
-            'inLanguage' => get_locale()
-        );
-        
-        echo '<script type="application/ld+json">' . wp_json_encode($blog_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+            '@type' => 'ItemList',
+            'itemListOrder' => 'https://schema.org/ItemListOrderDescending',
+            'numberOfItems' => count($list_items),
+            'itemListElement' => $list_items,
+        ));
+    }
+
+    if (is_category()) {
+        wordiva_output_json_ld(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => single_cat_title('', false),
+            'description' => category_description() ?: wordiva_get_category_fallback_description(get_queried_object()->slug),
+            'url' => get_category_link(get_queried_object_id()),
+            'isPartOf' => array('@id' => wordiva_get_blog_index_url() . '#blog'),
+        ));
+    }
+
+    if (is_author()) {
+        $author_id = get_queried_object_id();
+        wordiva_output_json_ld(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'ProfilePage',
+            'name' => wordiva_get_author_display_name($author_id),
+            'url' => get_author_posts_url($author_id),
+            'mainEntity' => wordiva_get_person_schema($author_id),
+        ));
     }
 }
 add_action('wp_head', 'wordiva_structured_data', 2);
 
 /**
- * Add additional SEO-related head tags
+ * Additional SEO head tags.
  */
 function wordiva_additional_seo_tags() {
     ?>
-    <!-- DNS Prefetch for performance -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//www.google-analytics.com">
-    
-    <!-- Preconnect for critical resources -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Theme color for mobile browsers -->
     <meta name="theme-color" content="#2F80FF">
-    <meta name="msapplication-TileColor" content="#2F80FF">
-    
-    <!-- Apple touch icon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url(get_template_directory_uri() . '/assets/images/apple-touch-icon.png'); ?>">
-    
-    <!-- Note: Favicons are handled by WordPress Site Icon setting since version 4.3 -->
-    
-    <!-- Manifest for PWA -->
     <link rel="manifest" href="<?php echo esc_url(get_template_directory_uri() . '/manifest.json'); ?>">
-    
-    <?php if (is_singular()) : ?>
-        <!-- Prevent duplicate content -->
-        <link rel="shortlink" href="<?php echo esc_url(wp_get_shortlink()); ?>">
-        
-        <!-- RSS feed for comments -->
-        <link rel="alternate" type="application/rss+xml" title="<?php echo esc_attr(get_the_title()); ?> Comments Feed" href="<?php echo esc_url(get_post_comments_feed_link()); ?>">
-    <?php endif; ?>
-    
-    <!-- RSS feeds -->
     <link rel="alternate" type="application/rss+xml" title="<?php echo esc_attr(get_bloginfo('name')); ?> Feed" href="<?php echo esc_url(get_feed_link()); ?>">
-    <link rel="alternate" type="application/atom+xml" title="<?php echo esc_attr(get_bloginfo('name')); ?> Atom Feed" href="<?php echo esc_url(get_feed_link('atom')); ?>">
-    
     <?php
 }
 add_action('wp_head', 'wordiva_additional_seo_tags', 3);
 
 /**
- * Generate XML sitemap (basic implementation)
- */
-function wordiva_generate_sitemap() {
-    if (isset($_GET['sitemap']) && $_GET['sitemap'] === 'xml') {
-        header('Content-Type: application/xml; charset=utf-8');
-        
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        
-        // Homepage
-        echo '<url>' . "\n";
-        echo '<loc>' . esc_url(home_url('/')) . '</loc>' . "\n";
-        echo '<lastmod>' . date('c') . '</lastmod>' . "\n";
-        echo '<changefreq>daily</changefreq>' . "\n";
-        echo '<priority>1.0</priority>' . "\n";
-        echo '</url>' . "\n";
-        
-        // Posts
-        $posts = get_posts(array(
-            'numberposts' => -1,
-            'post_status' => 'publish',
-            'post_type' => 'post'
-        ));
-        
-        foreach ($posts as $post) {
-            echo '<url>' . "\n";
-            echo '<loc>' . esc_url(get_permalink($post->ID)) . '</loc>' . "\n";
-            echo '<lastmod>' . date('c', strtotime($post->post_modified)) . '</lastmod>' . "\n";
-            echo '<changefreq>weekly</changefreq>' . "\n";
-            echo '<priority>0.8</priority>' . "\n";
-            echo '</url>' . "\n";
-        }
-        
-        // Pages
-        $pages = get_pages(array(
-            'post_status' => 'publish'
-        ));
-        
-        foreach ($pages as $page) {
-            echo '<url>' . "\n";
-            echo '<loc>' . esc_url(get_permalink($page->ID)) . '</loc>' . "\n";
-            echo '<lastmod>' . date('c', strtotime($page->post_modified)) . '</lastmod>' . "\n";
-            echo '<changefreq>monthly</changefreq>' . "\n";
-            echo '<priority>0.6</priority>' . "\n";
-            echo '</url>' . "\n";
-        }
-        
-        // Categories
-        $categories = get_categories();
-        foreach ($categories as $category) {
-            echo '<url>' . "\n";
-            echo '<loc>' . esc_url(get_category_link($category->term_id)) . '</loc>' . "\n";
-            echo '<lastmod>' . date('c') . '</lastmod>' . "\n";
-            echo '<changefreq>weekly</changefreq>' . "\n";
-            echo '<priority>0.5</priority>' . "\n";
-            echo '</url>' . "\n";
-        }
-        
-        echo '</urlset>' . "\n";
-        exit;
-    }
-}
-add_action('init', 'wordiva_generate_sitemap');
-
-/**
- * Add robots.txt improvements
+ * robots.txt.
  */
 function wordiva_robots_txt($output, $public) {
-    if ($public) {
-        $output .= "Sitemap: " . home_url('/') . "?sitemap=xml\n";
-        $output .= "User-agent: *\n";
-        $output .= "Disallow: /wp-admin/\n";
-        $output .= "Disallow: /wp-includes/\n";
-        $output .= "Disallow: /wp-content/plugins/\n";
-        $output .= "Disallow: /wp-content/themes/\n";
-        $output .= "Disallow: /trackback/\n";
-        $output .= "Disallow: /feed/\n";
-        $output .= "Disallow: /comments/\n";
-        $output .= "Disallow: /category/*/*\n";
-        $output .= "Disallow: */trackback/\n";
-        $output .= "Disallow: */feed/\n";
-        $output .= "Disallow: */comments/\n";
-        $output .= "Disallow: /*?*\n";
-        $output .= "Disallow: /*?\n";
-        $output .= "Allow: /wp-content/uploads/\n";
-        $output .= "Allow: /wp-content/themes/*/assets/\n";
+    if (!$public) {
+        return $output;
     }
-    
-    return $output;
+
+    $sitemap = home_url('/wp-sitemap.xml');
+    $lines = array(
+        'Sitemap: ' . $sitemap,
+        '',
+        'User-agent: *',
+        'Disallow: /wp-admin/',
+        'Allow: /wp-admin/admin-ajax.php',
+        'Disallow: /wp-includes/',
+        'Disallow: /wp-content/plugins/',
+        'Disallow: /wp-content/themes/',
+        'Disallow: /wp-json/',
+        'Disallow: /xmlrpc.php',
+        'Allow: /wp-content/uploads/',
+        'Allow: /wp-content/themes/*/assets/',
+        '',
+    );
+
+    $ai_bots = array('GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'OAI-SearchBot', 'Google-Extended', 'CCBot');
+    foreach ($ai_bots as $bot) {
+        $lines[] = 'User-agent: ' . $bot;
+        $lines[] = 'Allow: /';
+        $lines[] = '';
+    }
+
+    return implode("\n", $lines);
 }
 add_filter('robots_txt', 'wordiva_robots_txt', 10, 2);
+
+/**
+ * Flush rewrite rules when theme updates llms.txt route.
+ */
+function wordiva_maybe_flush_rewrites() {
+    if (get_option('wordiva_llms_rewrite_flushed') !== WORDIVA_THEME_VERSION) {
+        wordiva_register_llms_rewrite();
+        flush_rewrite_rules(false);
+        update_option('wordiva_llms_rewrite_flushed', WORDIVA_THEME_VERSION);
+    }
+}
+add_action('init', 'wordiva_maybe_flush_rewrites', 20);

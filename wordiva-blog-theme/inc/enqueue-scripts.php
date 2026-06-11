@@ -6,7 +6,6 @@
  * @since 1.0.0
  */
 
-// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -17,22 +16,19 @@ if (!defined('ABSPATH')) {
 function wordiva_theme_scripts() {
     $theme_version = wp_get_theme()->get('Version');
     $is_production = !WP_DEBUG;
-    
-    // Enqueue main theme stylesheet (consolidated - contains all base styles)
+
     wp_enqueue_style(
         'wordiva-blog-theme-style',
-        get_stylesheet_uri(), // Uses the main style.css file
+        get_stylesheet_uri(),
         array(),
         $theme_version . ($is_production ? '' : '-' . time())
     );
-    
-    // Enqueue critical CSS inline for above-the-fold content
+
     $critical_css = file_get_contents(get_template_directory() . '/assets/css/critical.css');
     if ($critical_css) {
         wp_add_inline_style('wordiva-blog-theme-style', $critical_css);
     }
-    
-    // Enqueue additional component styles (Slack-inspired grid, etc.)
+
     wp_enqueue_style(
         'wordiva-components',
         get_template_directory_uri() . '/assets/css/style.css',
@@ -40,8 +36,7 @@ function wordiva_theme_scripts() {
         $theme_version,
         'all'
     );
-    
-    // Enqueue accessibility enhancements
+
     wp_enqueue_style(
         'wordiva-accessibility',
         get_template_directory_uri() . '/assets/css/accessibility.css',
@@ -49,8 +44,7 @@ function wordiva_theme_scripts() {
         $theme_version,
         'all'
     );
-    
-    // Enqueue landing page navigation styles
+
     wp_enqueue_style(
         'wordiva-navigation',
         get_template_directory_uri() . '/assets/css/navigation.css',
@@ -58,17 +52,7 @@ function wordiva_theme_scripts() {
         $theme_version,
         'all'
     );
-    
-    // Enqueue mobile navigation fix (high priority)
-    wp_enqueue_style(
-        'wordiva-navigation-mobile-fix',
-        get_template_directory_uri() . '/assets/css/navigation-mobile-fix.css',
-        array('wordiva-navigation'),
-        $theme_version,
-        'all'
-    );
-    
-    // Enqueue main JavaScript
+
     wp_enqueue_script(
         'wordiva-blog-theme-script',
         get_template_directory_uri() . '/assets/js/main.js',
@@ -76,17 +60,17 @@ function wordiva_theme_scripts() {
         $theme_version . ($is_production ? '' : '-' . time()),
         true
     );
-    
-    // Enqueue social sharing script
-    wp_enqueue_script(
-        'wordiva-social-sharing',
-        get_template_directory_uri() . '/assets/js/social-sharing.js',
-        array(),
-        $theme_version . ($is_production ? '' : '-' . time()),
-        true
-    );
-    
-    // Enqueue navigation script
+
+    if (is_singular('post')) {
+        wp_enqueue_script(
+            'wordiva-social-sharing',
+            get_template_directory_uri() . '/assets/js/social-sharing.js',
+            array(),
+            $theme_version . ($is_production ? '' : '-' . time()),
+            true
+        );
+    }
+
     wp_enqueue_script(
         'wordiva-navigation',
         get_template_directory_uri() . '/assets/js/navigation.js',
@@ -94,57 +78,20 @@ function wordiva_theme_scripts() {
         $theme_version . ($is_production ? '' : '-' . time()),
         true
     );
-    
-    // Enqueue simple navigation script (backup/override)
-    wp_enqueue_script(
-        'wordiva-navigation-simple',
-        get_template_directory_uri() . '/assets/js/navigation-simple.js',
-        array(),
-        $theme_version . ($is_production ? '' : '-' . time()),
-        true
-    );
-    
-    // Enqueue absolute mobile menu fix (highest priority)
-    wp_enqueue_script(
-        'wordiva-mobile-menu-fix',
-        get_template_directory_uri() . '/assets/js/mobile-menu-fix.js',
-        array(),
-        $theme_version . ($is_production ? '' : '-' . time()),
-        true
-    );
-    
-    // Enqueue navigation scroll script
-    wp_enqueue_script(
-        'wordiva-navigation-scroll',
-        get_template_directory_uri() . '/assets/js/navigation-scroll.js',
-        array(),
-        $theme_version . ($is_production ? '' : '-' . time()),
-        true
-    );
-    
-    // Add resource hints for performance
-    add_action('wp_head', function() use ($theme_version, $is_production) {
-        // Preload critical fonts
+
+    wp_script_add_data('wordiva-navigation', 'defer', true);
+    wp_script_add_data('wordiva-blog-theme-script', 'defer', true);
+    if (is_singular('post')) {
+        wp_script_add_data('wordiva-social-sharing', 'defer', true);
+    }
+
+    add_action('wp_head', function() {
         echo '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>' . "\n";
         echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
-        
-        // DNS prefetch for external resources
         echo '<link rel="dns-prefetch" href="//fonts.googleapis.com">' . "\n";
         echo '<link rel="dns-prefetch" href="//fonts.gstatic.com">' . "\n";
-        
-        // Preload critical images
-        $fallback_images = [
-            'fallback-card.svg',
-            'fallback-featured.svg',
-            'fallback-large.svg'
-        ];
-        
-        foreach ($fallback_images as $image) {
-            echo '<link rel="preload" href="' . esc_url(get_template_directory_uri() . '/assets/images/' . $image) . '" as="image">' . "\n";
-        }
     }, 1);
-    
-    // Add inline styles for dynamic colors and ensure white background
+
     $custom_css = "
         :root {
             --wordiva-electric-blue: #2F80FF;
@@ -155,60 +102,49 @@ function wordiva_theme_scripts() {
             --wordiva-charcoal-dark: #2B2B2B;
             --wordiva-white: #FFFFFF;
         }
-        
-        /* Ensure white background - override any conflicts */
-        body, html {
-            background-color: #FFFFFF !important;
-            background: #FFFFFF !important;
+        body, html, .site-wrapper { background-color: #FFFFFF !important; }
+        .wordiva-sticky-cta {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 999;
         }
-        
-        .site-wrapper {
-            background-color: #FFFFFF !important;
+        .wordiva-sticky-cta-link {
+            display: inline-block;
+            padding: 0.75rem 1.25rem;
+            background: var(--wordiva-electric-blue);
+            color: #fff;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(47, 128, 255, 0.35);
         }
-        
-        /* Performance optimizations */
-        img {
-            loading: lazy;
+        .wordiva-category-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .wordiva-category-chip {
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            font-size: 0.875rem;
         }
-        
-        .blog-card img,
-        .featured-card img {
-            loading: eager;
-        }
+        .wordiva-newsletter-cta { margin: 2rem 0; padding: 1.5rem; border-radius: 0.75rem; background: #f8fafc; }
+        .wordiva-product-links { margin: 2rem 0; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; }
+        .wordiva-product-links-list { list-style: none; margin: 0; padding: 0; }
+        .wordiva-product-links-list li + li { margin-top: 0.5rem; }
+        .wordiva-topic-block { margin: 2rem 0; padding: 1.25rem; background: #f8fafc; border-radius: 0.75rem; }
     ";
     wp_add_inline_style('wordiva-blog-theme-style', $custom_css);
 }
 add_action('wp_enqueue_scripts', 'wordiva_theme_scripts');
 
 /**
- * Fix any background color conflicts and ensure white background
- * Note: Styles moved to main stylesheet for better performance
- */
-function wordiva_fix_background_color() {
-    // This function now only adds necessary body classes
-    // All styles have been moved to the main stylesheet
-}
-add_action('wp_head', 'wordiva_fix_background_color', 999);
-
-/**
- * Register additional JavaScript files
+ * Localize main script and comment reply when needed.
  */
 function wordiva_additional_scripts() {
-    // Social sharing functionality
-    wp_enqueue_script(
-        'wordiva-social-sharing',
-        get_template_directory_uri() . '/assets/js/social-sharing.js',
-        array(),
-        wp_get_theme()->get('Version'),
-        true
-    );
-    
-    // Enqueue comment reply script if needed
     if (is_singular() && comments_open() && get_option('thread_comments')) {
         wp_enqueue_script('comment-reply');
     }
-    
-    // Localize script for AJAX
+
     wp_localize_script('wordiva-blog-theme-script', 'wordiva_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce'    => wp_create_nonce('wordiva_nonce'),
@@ -222,35 +158,22 @@ add_action('wp_enqueue_scripts', 'wordiva_additional_scripts');
 function wordiva_admin_scripts($hook) {
     if ('post.php' === $hook || 'post-new.php' === $hook) {
         $theme_version = wp_get_theme()->get('Version');
-        $is_production = !WP_DEBUG;
-        
+
         wp_enqueue_style(
             'wordiva-admin-style',
             get_template_directory_uri() . '/assets/css/admin.css',
             array(),
             $theme_version
         );
-        
-        // All admin styles are now in the admin.css file for better performance
-        
-        // Add JavaScript for meta box interactions (minified in production)
-        if ($is_production && file_exists(get_template_directory() . '/assets/js/admin.min.js')) {
-            wp_enqueue_script(
-                'wordiva-admin-script',
-                get_template_directory_uri() . '/assets/js/admin.min.js',
-                array('jquery'),
-                $theme_version,
-                true
-            );
-        } else {
-            wp_enqueue_script(
-                'wordiva-admin-script',
-                get_template_directory_uri() . '/assets/js/admin.js',
-                array('jquery'),
-                $theme_version,
-                true
-            );
-        }
+
+        $admin_js = get_template_directory() . '/assets/js/admin.min.js';
+        wp_enqueue_script(
+            'wordiva-admin-script',
+            get_template_directory_uri() . '/assets/js/' . (WP_DEBUG || !file_exists($admin_js) ? 'admin.js' : 'admin.min.js'),
+            array('jquery'),
+            $theme_version,
+            true
+        );
     }
 }
 add_action('admin_enqueue_scripts', 'wordiva_admin_scripts');
