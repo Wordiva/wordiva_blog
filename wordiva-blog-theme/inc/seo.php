@@ -15,6 +15,38 @@ require_once get_template_directory() . '/inc/seo-helpers.php';
 remove_action('wp_head', 'rel_canonical');
 
 /**
+ * Get the GA4 measurement ID (Customizer override, theme default fallback).
+ */
+function wordiva_get_ga4_measurement_id() {
+    return sanitize_text_field(get_theme_mod('wordiva_ga4_measurement_id', 'G-QNTZ96XNJE'));
+}
+
+/**
+ * Output Google Analytics (gtag.js) site-wide.
+ */
+function wordiva_output_google_analytics() {
+    if (is_admin()) {
+        return;
+    }
+
+    $ga4_id = wordiva_get_ga4_measurement_id();
+    if ($ga4_id === '') {
+        return;
+    }
+    ?>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga4_id); ?>"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '<?php echo esc_js($ga4_id); ?>');
+    </script>
+    <?php
+}
+add_action('wp_head', 'wordiva_output_google_analytics', 0);
+
+/**
  * Register llms.txt rewrite rule.
  */
 function wordiva_register_llms_rewrite() {
@@ -286,6 +318,7 @@ add_action('wp_head', 'wordiva_structured_data', 2);
  */
 function wordiva_additional_seo_tags() {
     ?>
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="theme-color" content="#2F80FF">

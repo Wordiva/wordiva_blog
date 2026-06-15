@@ -342,7 +342,7 @@ function wordiva_enhanced_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('wordiva_ga4_measurement_id', array(
-        'default'           => '',
+        'default'           => 'G-QNTZ96XNJE',
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('wordiva_ga4_measurement_id', array(

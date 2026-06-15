@@ -114,20 +114,6 @@ $is_blog_context = is_home() || is_singular('post') || is_archive() || is_search
     
 </div><!-- .site-wrapper -->
 
-<?php
-$ga4_id = get_theme_mod('wordiva_ga4_measurement_id', '');
-if (!empty($ga4_id)) :
-    ?>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga4_id); ?>"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '<?php echo esc_js($ga4_id); ?>');
-    </script>
-    <?php
-endif;
-
-wp_footer(); ?>
+<?php wp_footer(); ?>
 </body>
 </html>
