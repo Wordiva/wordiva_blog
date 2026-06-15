@@ -124,10 +124,11 @@ get_header(); ?>
                     
                     <!-- Empty State Icon -->
                     <div class="no-posts-icon" aria-hidden="true">
-                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8.5 8.5L15.5 15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M15.5 8.5L8.5 15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 13H15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                            <path d="M9 17H13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
                         </svg>
                     </div>
                     
@@ -229,46 +230,49 @@ get_header(); ?>
                     
                     <!-- Alternative Actions -->
                     <div class="no-posts-actions">
-                        
-                        <!-- Search Form -->
-                        <div class="action-group">
-                            <h3 class="action-title"><?php esc_html_e('Search for Content', 'wordiva-blog-theme'); ?></h3>
-                            <p class="action-description"><?php esc_html_e('Try searching for specific topics or keywords.', 'wordiva-blog-theme'); ?></p>
-                            <div class="search-form-wrapper">
-                                <?php get_search_form(); ?>
+                        <div class="no-posts-actions-grid">
+                            
+                            <!-- Search Form -->
+                            <div class="action-group action-group--search">
+                                <h3 class="action-title"><?php esc_html_e('Search for Content', 'wordiva-blog-theme'); ?></h3>
+                                <p class="action-description"><?php esc_html_e('Try searching for specific topics or keywords.', 'wordiva-blog-theme'); ?></p>
+                                <div class="search-form-wrapper">
+                                    <?php get_search_form(); ?>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <!-- Browse All Categories -->
-                        <div class="action-group">
-                            <h3 class="action-title"><?php esc_html_e('Browse All Categories', 'wordiva-blog-theme'); ?></h3>
-                            <p class="action-description"><?php esc_html_e('Explore our full range of topics and categories.', 'wordiva-blog-theme'); ?></p>
-                            <div class="category-links">
-                                <?php
-                                $popular_categories = get_categories(array(
-                                    'number' => 6,
-                                    'orderby' => 'count',
-                                    'order' => 'DESC'
-                                ));
-                                
-                                if (!empty($popular_categories)) :
-                                    foreach ($popular_categories as $cat) :
-                                ?>
-                                    <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" 
-                                       class="category-link"
-                                       aria-label="<?php echo esc_attr(sprintf(__('Browse %s category', 'wordiva-blog-theme'), $cat->name)); ?>">
-                                        <?php echo esc_html($cat->name); ?>
-                                        <span class="category-count"><?php echo esc_html($cat->count); ?></span>
-                                    </a>
-                                <?php
-                                    endforeach;
-                                endif;
-                                ?>
+                            
+                            <!-- Browse All Categories -->
+                            <div class="action-group action-group--categories">
+                                <h3 class="action-title"><?php esc_html_e('Browse All Categories', 'wordiva-blog-theme'); ?></h3>
+                                <p class="action-description"><?php esc_html_e('Explore our full range of topics and categories.', 'wordiva-blog-theme'); ?></p>
+                                <div class="category-links">
+                                    <?php
+                                    $popular_categories = get_categories(array(
+                                        'number' => 6,
+                                        'orderby' => 'count',
+                                        'order' => 'DESC'
+                                    ));
+                                    
+                                    if (!empty($popular_categories)) :
+                                        foreach ($popular_categories as $cat) :
+                                    ?>
+                                        <a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>" 
+                                           class="category-link"
+                                           aria-label="<?php echo esc_attr(sprintf(__('Browse %s category', 'wordiva-blog-theme'), $cat->name)); ?>">
+                                            <?php echo esc_html($cat->name); ?>
+                                            <span class="category-count"><?php echo esc_html($cat->count); ?></span>
+                                        </a>
+                                    <?php
+                                        endforeach;
+                                    endif;
+                                    ?>
+                                </div>
                             </div>
+                            
                         </div>
                         
                         <!-- Back to Homepage -->
-                        <div class="action-group">
+                        <div class="no-posts-footer">
                             <a href="<?php echo esc_url(home_url('/')); ?>" class="btn-home">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -277,7 +281,6 @@ get_header(); ?>
                                 <?php esc_html_e('Back to Homepage', 'wordiva-blog-theme'); ?>
                             </a>
                         </div>
-                        
                     </div>
                     
                 </div>
