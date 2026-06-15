@@ -312,6 +312,18 @@ function wordiva_enhanced_customize_register($wp_customize) {
         'type'    => 'url',
     ));
 
+    // YouTube URL
+    $wp_customize->add_setting('wordiva_youtube_url', array(
+        'default'           => 'https://www.youtube.com/@wordivaai',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+
+    $wp_customize->add_control('wordiva_youtube_url', array(
+        'label'   => __('YouTube URL', 'wordiva-blog-theme'),
+        'section' => 'wordiva_social_media',
+        'type'    => 'url',
+    ));
+
     // SEO & Marketing Section
     $wp_customize->add_section('wordiva_seo_marketing', array(
         'title'    => __('SEO & Marketing', 'wordiva-blog-theme'),
