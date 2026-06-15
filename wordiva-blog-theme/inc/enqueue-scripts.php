@@ -132,6 +132,26 @@ function wordiva_theme_scripts() {
         .wordiva-product-links-list { list-style: none; margin: 0; padding: 0; }
         .wordiva-product-links-list li + li { margin-top: 0.5rem; }
         .wordiva-topic-block { margin: 2rem 0; padding: 1.25rem; background: #f8fafc; border-radius: 0.75rem; }
+        .wordiva-product-cta {
+            margin: 0;
+            padding: 0 2rem 2rem;
+        }
+        .wordiva-product-cta h3 {
+            margin: 0 0 0.5rem;
+        }
+        .wordiva-product-cta p {
+            margin: 0 0 1rem;
+        }
+        @media (max-width: 768px) {
+            .wordiva-product-cta {
+                padding: 0 1.5rem 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .wordiva-product-cta {
+                padding: 0 1rem 1.5rem;
+            }
+        }
     ";
     wp_add_inline_style('wordiva-blog-theme-style', $custom_css);
 }
