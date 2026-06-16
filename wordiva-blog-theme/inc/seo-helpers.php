@@ -43,7 +43,7 @@ function wordiva_get_organization_same_as() {
         get_theme_mod('wordiva_facebook_url', 'https://www.facebook.com/wordivaai/'),
         get_theme_mod('wordiva_instagram_url', 'https://www.instagram.com/wordivaai/'),
         get_theme_mod('wordiva_youtube_url', 'https://www.youtube.com/@wordivaai'),
-        get_theme_mod('wordiva_twitter_url', 'https://twitter.com/wordivaai'),
+        get_theme_mod('wordiva_twitter_url', 'https://x.com/wordivaai'),
     );
 }
 

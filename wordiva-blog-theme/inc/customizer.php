@@ -264,14 +264,14 @@ function wordiva_enhanced_customize_register($wp_customize) {
         'priority' => 45,
     ));
     
-    // Twitter URL
+    // X (Twitter) URL
     $wp_customize->add_setting('wordiva_twitter_url', array(
-        'default'           => 'https://twitter.com/wordivaai',
+        'default'           => 'https://x.com/wordivaai',
         'sanitize_callback' => 'esc_url_raw',
     ));
     
     $wp_customize->add_control('wordiva_twitter_url', array(
-        'label'   => __('Twitter URL', 'wordiva-blog-theme'),
+        'label'   => __('X (Twitter) URL', 'wordiva-blog-theme'),
         'section' => 'wordiva_social_media',
         'type'    => 'url',
     ));
