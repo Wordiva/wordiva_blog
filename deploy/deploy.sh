@@ -8,9 +8,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Server configuration
-SSH_USER="azureuser"
-SSH_HOST="20.174.8.223"
-SSH_KEY="/Users/lijeesh/Documents/lijeesh/summit/projects/getevcars.com/evcar.pem"
+SSH_USER="ubuntu"
+SSH_HOST="18.207.51.120"
+SSH_KEY="/Users/lijeesh/Documents/lijeesh/summit/projects/getevcars.com/evcar-aws-ed25519"
 REMOTE_THEMES_DIR="/var/www/html/wordivablog/wp-content/themes"
 THEME_NAME="wordiva-blog-theme"
 REMOTE_THEME_PATH="${REMOTE_THEMES_DIR}/${THEME_NAME}"
@@ -18,8 +18,7 @@ LOCAL_THEME_PATH="${PROJECT_ROOT}/${THEME_NAME}"
 SITE_URL="https://wordiva.ai/blog/"
 
 SSH_OPTS=(
-  -o PubkeyAcceptedKeyTypes=+ssh-rsa
-  -o HostKeyAlgorithms=+ssh-rsa
+  -o IdentitiesOnly=yes
   -o StrictHostKeyChecking=no
   -i "${SSH_KEY}"
 )
