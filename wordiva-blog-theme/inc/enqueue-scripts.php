@@ -119,7 +119,8 @@ function wordiva_theme_scripts() {
             font-weight: 600;
             box-shadow: 0 8px 24px rgba(47, 128, 255, 0.35);
         }
-        .wordiva-category-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .wordiva-browse-section { margin: 2.5rem 0; text-align: center; }
+        .wordiva-category-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; justify-content: center; }
         .wordiva-category-chip {
             padding: 0.35rem 0.85rem;
             border-radius: 999px;

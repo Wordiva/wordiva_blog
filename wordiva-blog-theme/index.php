@@ -17,23 +17,6 @@ get_header(); ?>
             <div class="hero-content">
                 <h1 class="hero-title"><?php echo esc_html(get_theme_mod('wordiva_header_message', 'Welcome to Wordiva Blog')); ?></h1>
                 <p class="hero-subtitle"><?php echo esc_html(get_theme_mod('wordiva_header_subtitle', wordiva_get_default_blog_description())); ?></p>
-                <p class="hero-rss">
-                    <a href="<?php echo esc_url(trailingslashit(wordiva_get_blog_url()) . 'feed/'); ?>" rel="alternate" type="application/rss+xml">
-                        <?php esc_html_e('Subscribe via RSS', 'wordiva-blog-theme'); ?>
-                    </a>
-                </p>
-                <?php
-                $categories = get_categories(array('hide_empty' => false, 'parent' => 0));
-                if (!empty($categories)) :
-                    ?>
-                    <nav class="wordiva-category-chips" aria-label="<?php esc_attr_e('Browse by category', 'wordiva-blog-theme'); ?>">
-                        <?php foreach ($categories as $cat) : ?>
-                            <a class="wordiva-category-chip" href="<?php echo esc_url(get_category_link($cat->term_id)); ?>">
-                                <?php echo esc_html($cat->name); ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </nav>
-                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -169,6 +152,27 @@ get_header(); ?>
                         <?php
                     endif;
                     ?>
+                </section>
+
+                <!-- Browse Section: RSS + Category Links -->
+                <section class="wordiva-browse-section" aria-label="<?php esc_attr_e('Browse the blog', 'wordiva-blog-theme'); ?>">
+                    <p class="hero-rss">
+                        <a href="<?php echo esc_url(trailingslashit(wordiva_get_blog_url()) . 'feed/'); ?>" rel="alternate" type="application/rss+xml">
+                            <?php esc_html_e('Subscribe via RSS', 'wordiva-blog-theme'); ?>
+                        </a>
+                    </p>
+                    <?php
+                    $categories = get_categories(array('hide_empty' => false, 'parent' => 0));
+                    if (!empty($categories)) :
+                        ?>
+                        <nav class="wordiva-category-chips" aria-label="<?php esc_attr_e('Browse by category', 'wordiva-blog-theme'); ?>">
+                            <?php foreach ($categories as $cat) : ?>
+                                <a class="wordiva-category-chip" href="<?php echo esc_url(get_category_link($cat->term_id)); ?>">
+                                    <?php echo esc_html($cat->name); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </nav>
+                    <?php endif; ?>
                 </section>
 
                 <?php
