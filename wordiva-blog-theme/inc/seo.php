@@ -314,6 +314,22 @@ function wordiva_structured_data() {
 add_action('wp_head', 'wordiva_structured_data', 2);
 
 /**
+ * Favicon matching https://wordiva.ai (falls back when no Customizer site icon is set).
+ */
+function wordiva_output_favicon() {
+    if (function_exists('has_site_icon') && has_site_icon()) {
+        return;
+    }
+
+    $icon_url = get_template_directory_uri() . '/assets/images/icon.png';
+    ?>
+    <link rel="icon" href="<?php echo esc_url($icon_url); ?>" sizes="632x545" type="image/png">
+    <link rel="apple-touch-icon" href="<?php echo esc_url($icon_url); ?>">
+    <?php
+}
+add_action('wp_head', 'wordiva_output_favicon', 1);
+
+/**
  * Additional SEO head tags.
  */
 function wordiva_additional_seo_tags() {
