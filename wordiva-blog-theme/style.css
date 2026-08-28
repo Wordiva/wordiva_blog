@@ -1,10 +1,10 @@
 /*
 Theme Name: Wordiva Blog Theme
-Description: Custom WordPress theme for Wordiva AI Content Marketing System blog. Features modern design with Wordiva's brand colors and desktop-optimized layout for content marketing.
+Description: Custom WordPress theme for the Wordiva AI content marketing blog. Premium dark-first design matching wordiva.ai — dual dark/light themes, two-layer mega navigation, and Space Grotesk display type.
 Author: Wordiva Team
-Author URI: https://wordiva.com
-Theme URI: https://wordiva.com/theme
-Version: 1.0.0
+Author URI: https://wordiva.ai
+Theme URI: https://wordiva.ai
+Version: 2.0.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: wordiva-blog-theme
@@ -25,34 +25,59 @@ Major optimizations: Consolidated utility classes, merged duplicate selectors, r
    ========================================================================== */
 
 :root {
-  /* Primary Brand Colors - Wordiva Style Guide */
-  --wordiva-electric-blue: #2f80ff;
-  --wordiva-royal-purple: #7b4dff;
+  /* ---- Semantic theme tokens (dark = default) ---- */
+  --w-bg: #020617;
+  --w-bg-soft: #0f172a;
+  --w-surface: #0f172a;
+  --w-surface-2: #1e293b;
+  --w-border: #1e293b;
+  --w-border-strong: #334155;
+  --w-text: #f1f5f9;
+  --w-text-2: #94a3b8;
+  --w-text-3: #64748b;
+  --w-brand: #6366f1;
+  --w-brand-hover: #818cf8;
+  --w-brand-strong: #4f46e5;
+  --w-brand-soft: rgba(99, 102, 241, 0.12);
+  --w-accent: #d946ef;
+  --w-glass-bg: rgba(15, 23, 42, 0.7);
+  --w-aurora-a: rgba(79, 70, 229, 0.18);
+  --w-aurora-b: rgba(217, 70, 239, 0.1);
+  --w-shadow-color: rgba(2, 6, 23, 0.5);
+  --w-ring: rgba(129, 140, 248, 0.6);
+
+  /* ---- Legacy aliases (recolor existing rules through tokens) ---- */
+  --wordiva-electric-blue: var(--w-brand);
+  --wordiva-royal-purple: var(--w-accent);
   --wordiva-neon-pink: #ff4fa3;
   --wordiva-sunrise-orange: #ff9f1c;
   --wordiva-golden-yellow: #ffd166;
-  --wordiva-charcoal-dark: #2b2b2b;
-  --wordiva-white: #ffffff;
+  --wordiva-charcoal-dark: var(--w-text);
+  /* Legacy name, surface semantics: it was only ever used for panel/card fills.
+     On-brand text uses a literal #ffffff so it survives the light theme. */
+  --wordiva-white: var(--w-surface);
 
-  /* Color Variations */
-  --wordiva-electric-blue-light: #5a9aff;
-  --wordiva-electric-blue-dark: #1a5fcc;
-  --wordiva-royal-purple-light: #9b6fff;
-  --wordiva-royal-purple-dark: #5a2bcc;
-  --wordiva-charcoal-light: #4a4a4a;
-  --wordiva-gray-light: #f8f9fa;
-  --wordiva-gray-medium: #e9ecef;
-  --wordiva-surface: #ffffff;
-  --wordiva-surface-muted: #f8fafc;
-  --wordiva-border-light: #e2e8f0;
-  --wordiva-text-primary: #0f172a;
-  --wordiva-text-secondary: #475569;
-  --wordiva-text-muted: #64748b;
+  --wordiva-electric-blue-light: var(--w-brand-hover);
+  --wordiva-electric-blue-dark: var(--w-brand-strong);
+  --wordiva-royal-purple-light: #e879f9;
+  --wordiva-royal-purple-dark: #a21caf;
+  --wordiva-charcoal-light: var(--w-text-2);
+  --wordiva-gray-light: var(--w-surface-2);
+  --wordiva-gray-medium: var(--w-border-strong);
+  --wordiva-surface: var(--w-surface);
+  --wordiva-surface-muted: var(--w-bg-soft);
+  --wordiva-border-light: var(--w-border);
+  --wordiva-text-primary: var(--w-text);
+  --wordiva-text-secondary: var(--w-text-2);
+  --wordiva-text-muted: var(--w-text-3);
 
   /* Typography System */
   --wordiva-font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
     Cantarell, sans-serif;
+  --wordiva-font-display:
+    "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   --wordiva-font-size-base: 18px;
   --wordiva-line-height-base: 1.6;
   --wordiva-font-weight-normal: 400;
@@ -69,21 +94,44 @@ Major optimizations: Consolidated utility classes, merged duplicate selectors, r
   --wordiva-spacing-xxl: 3rem;
 
   /* Border Radius */
-  --wordiva-border-radius-sm: 4px;
-  --wordiva-border-radius-md: 8px;
-  --wordiva-border-radius-lg: 12px;
-  --wordiva-border-radius-xl: 16px;
+  --wordiva-border-radius-sm: 6px;
+  --wordiva-border-radius-md: 10px;
+  --wordiva-border-radius-lg: 14px;
+  --wordiva-border-radius-xl: 18px;
 
   /* Shadows */
-  --wordiva-shadow-sm: 0 1px 3px rgba(43, 43, 43, 0.1);
-  --wordiva-shadow-md: 0 4px 6px rgba(43, 43, 43, 0.1);
-  --wordiva-shadow-lg: 0 10px 15px rgba(43, 43, 43, 0.1);
-  --wordiva-shadow-xl: 0 20px 25px rgba(43, 43, 43, 0.15);
+  --wordiva-shadow-sm: 0 1px 3px var(--w-shadow-color);
+  --wordiva-shadow-md: 0 4px 10px var(--w-shadow-color);
+  --wordiva-shadow-lg: 0 10px 24px var(--w-shadow-color);
+  --wordiva-shadow-xl: 0 20px 40px var(--w-shadow-color);
 
   /* Transitions */
   --wordiva-transition-fast: 0.15s ease;
   --wordiva-transition-normal: 0.3s ease;
   --wordiva-transition-slow: 0.5s ease;
+}
+
+/* ---- Light theme overrides ---- */
+[data-theme="light"] {
+  --w-bg: #ffffff;
+  --w-bg-soft: #f8fafc;
+  --w-surface: #ffffff;
+  --w-surface-2: #f1f5f9;
+  --w-border: #e2e8f0;
+  --w-border-strong: #cbd5e1;
+  --w-text: #0f172a;
+  --w-text-2: #475569;
+  --w-text-3: #64748b;
+  --w-brand: #4f46e5;
+  --w-brand-hover: #6366f1;
+  --w-brand-strong: #4338ca;
+  --w-brand-soft: rgba(79, 70, 229, 0.08);
+  --w-accent: #c026d3;
+  --w-glass-bg: rgba(255, 255, 255, 0.75);
+  --w-aurora-a: rgba(79, 70, 229, 0.08);
+  --w-aurora-b: rgba(217, 70, 239, 0.05);
+  --w-shadow-color: rgba(15, 23, 42, 0.08);
+  --w-ring: rgba(79, 70, 229, 0.45);
 }
 
 /* ==========================================================================
@@ -100,10 +148,15 @@ body {
   font-family: var(--wordiva-font-family);
   font-size: var(--wordiva-font-size-base);
   line-height: var(--wordiva-line-height-base);
-  color: var(--wordiva-charcoal-dark);
-  background-color: var(--wordiva-white);
+  color: var(--w-text);
+  background-color: var(--w-bg);
+  background-image:
+    radial-gradient(60rem 30rem at 15% -5%, var(--w-aurora-a), transparent 60%),
+    radial-gradient(50rem 26rem at 90% 0%, var(--w-aurora-b), transparent 55%);
+  background-repeat: no-repeat;
   padding-top: 4rem;
   margin-bottom: 0;
+  transition: background-color var(--wordiva-transition-normal), color var(--wordiva-transition-normal);
 }
 
 
@@ -123,11 +176,12 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--wordiva-charcoal-dark);
+  color: var(--w-text);
   font-weight: var(--wordiva-font-weight-semibold);
   line-height: 1.3;
   margin-bottom: var(--wordiva-spacing-md);
-  font-family: var(--wordiva-font-family);
+  font-family: var(--wordiva-font-display);
+  letter-spacing: -0.01em;
 }
 
 h1 {
@@ -273,26 +327,26 @@ input[type="button"] {
 .cta-button,
 input[type="submit"] {
   background-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .btn-primary:hover,
 .cta-button:hover,
 input[type="submit"]:hover {
   background-color: var(--wordiva-electric-blue-dark);
-  color: var(--wordiva-white);
+  color: #ffffff;
   transform: translateY(-1px);
   box-shadow: var(--wordiva-shadow-md);
 }
 
 .btn-secondary {
   background-color: var(--wordiva-royal-purple);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .btn-secondary:hover {
   background-color: var(--wordiva-royal-purple-dark);
-  color: var(--wordiva-white);
+  color: #ffffff;
   transform: translateY(-1px);
   box-shadow: var(--wordiva-shadow-md);
 }
@@ -305,7 +359,7 @@ input[type="submit"]:hover {
 
 .btn-outline:hover {
   background-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .btn:focus,
@@ -336,7 +390,7 @@ select {
   font-family: var(--wordiva-font-family);
   font-size: var(--wordiva-font-size-base);
   color: var(--wordiva-charcoal-dark);
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   transition: border-color var(--wordiva-transition-fast);
 }
 
@@ -350,7 +404,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--wordiva-electric-blue);
-  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+  box-shadow: 0 0 0 3px var(--w-brand-soft);
 }
 
 textarea {
@@ -371,7 +425,7 @@ textarea {
 }
 
 .screen-reader-text:focus {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border-radius: var(--wordiva-border-radius-sm);
   box-shadow: var(--wordiva-shadow-lg);
   color: var(--wordiva-charcoal-dark);
@@ -399,7 +453,7 @@ textarea {
   left: 0 !important;
   right: 0 !important;
   z-index: 1000 !important;
-  background-color: var(--wordiva-white) !important;
+  background-color: var(--w-bg) !important;
   border-bottom: 1px solid var(--wordiva-gray-medium) !important;
   transition: all var(--wordiva-transition-normal) !important;
   height: 80px !important;
@@ -483,7 +537,7 @@ textarea {
 .primary-menu a:hover,
 .primary-menu a:focus {
   color: var(--wordiva-electric-blue) !important;
-  background-color: rgba(47, 128, 255, 0.1);
+  background-color: var(--w-brand-soft);
 }
 
 .primary-menu .current-menu-item a,
@@ -511,9 +565,9 @@ textarea {
 }
 
 .search-form:focus-within {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border-color: var(--wordiva-electric-blue);
-  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+  box-shadow: 0 0 0 3px var(--w-brand-soft);
 }
 
 .search-form label {
@@ -555,7 +609,7 @@ textarea {
 
 .search-submit:hover {
   color: var(--wordiva-electric-blue) !important;
-  background-color: rgba(47, 128, 255, 0.05) !important;
+  background-color: var(--w-brand-soft) !important;
 }
 
 .search-submit svg {
@@ -575,7 +629,7 @@ textarea {
   left: -9999px;
   top: 0;
   z-index: 999999;
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   color: var(--wordiva-electric-blue);
   padding: var(--wordiva-spacing-sm) var(--wordiva-spacing-md);
   text-decoration: none;
@@ -592,7 +646,7 @@ textarea {
    ========================================================================== */
 
 .site-header {
-  background: var(--wordiva-white);
+  background: var(--w-surface);
   padding: 0;
   margin: 0;
   position: relative;
@@ -606,7 +660,7 @@ textarea {
    ========================================================================== */
 
 .hero-section {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   color: var(--wordiva-charcoal-dark);
   padding: 40px 0 80px 0;
   text-align: center;
@@ -675,9 +729,9 @@ textarea {
 }
 
 .blog-card {
-  background: var(--wordiva-white);
-  border: 1px solid var(--wordiva-gray-medium);
-  border-radius: 12px;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  border-radius: 16px;
   overflow: hidden;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -685,7 +739,8 @@ textarea {
 
 .blog-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--w-brand);
+  box-shadow: 0 12px 32px var(--w-shadow-color), 0 0 0 1px var(--w-brand-soft);
 }
 
 .blog-card.featured-card {
@@ -697,7 +752,7 @@ textarea {
   width: 100%;
   /* Ensure it fills the 1200px wrapper */
   min-height: 380px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 15px 35px var(--w-shadow-color);
 }
 
 .featured-card .card-content {
@@ -762,7 +817,7 @@ textarea {
   background: linear-gradient(135deg,
       var(--wordiva-neon-pink),
       var(--wordiva-sunrise-orange));
-  color: var(--wordiva-white);
+  color: #ffffff;
   padding: var(--wordiva-spacing-xs) var(--wordiva-spacing-md);
   border-radius: var(--wordiva-border-radius-lg);
   font-size: 1rem;
@@ -782,7 +837,7 @@ textarea {
 
 .card-category {
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 14px;
@@ -918,10 +973,38 @@ textarea {
   margin-top: var(--wordiva-spacing-xl);
 }
 
-.page-numbers {
+/* paginate_links( 'type' => 'list' ) puts .page-numbers on the <ul> as well as
+   on each link, so the chip styles below are scoped to a/span. The list itself
+   is the flex row and must drop its markers. */
+ul.page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wordiva-spacing-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.page-numbers li {
+  display: flex;
+  list-style: none;
+  margin: 0;
+}
+
+ul.page-numbers li > .page-numbers {
+  margin: 0;
+}
+
+a.page-numbers,
+span.page-numbers {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* inline-flex drops the whitespace between the label and the prev/next
+     arrow span, so restore it with a gap. */
+  gap: 0.35em;
   min-width: 48px;
   height: 48px;
   padding: var(--wordiva-spacing-sm);
@@ -931,11 +1014,11 @@ textarea {
   text-decoration: none;
   font-weight: var(--wordiva-font-weight-semibold);
   transition: all var(--wordiva-transition-fast);
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   margin: 0 var(--wordiva-spacing-xs);
 }
 
-.page-numbers:hover {
+a.page-numbers:hover {
   border-color: var(--wordiva-electric-blue);
   color: var(--wordiva-electric-blue);
   transform: translateY(-2px);
@@ -947,7 +1030,7 @@ textarea {
       var(--wordiva-electric-blue),
       var(--wordiva-royal-purple));
   border-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
   box-shadow: var(--wordiva-shadow-md);
 }
 
@@ -962,7 +1045,7 @@ textarea {
   background: linear-gradient(135deg,
       var(--wordiva-royal-purple),
       var(--wordiva-electric-blue));
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .page-numbers.dots {
@@ -987,19 +1070,19 @@ textarea {
 .single-post-main {
   padding: var(--wordiva-spacing-xl) 0 var(--wordiva-spacing-xxl);
   margin-top: 0;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 240px);
+  background: linear-gradient(180deg, var(--w-bg-soft) 0%, var(--w-bg) 240px);
 }
 
 .page-main {
   padding: var(--wordiva-spacing-xl) 0 var(--wordiva-spacing-xxl);
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 240px);
+  background: linear-gradient(180deg, var(--w-bg-soft) 0%, var(--w-bg) 240px);
 }
 
 .page-main .page-content {
-  background: var(--wordiva-white);
+  background: var(--w-surface);
   border-radius: var(--wordiva-border-radius-xl);
   box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid var(--w-border);
   overflow: hidden;
 }
 
@@ -1011,7 +1094,7 @@ textarea {
   padding: 0 var(--wordiva-spacing-xl) var(--wordiva-spacing-xxl);
   font-size: 1.125rem;
   line-height: 1.8;
-  color: #334155;
+  color: var(--w-text-2);
 }
 
 .single-article-container {
@@ -1044,11 +1127,11 @@ textarea {
 
 .single-post,
 .slack-single-post {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border-radius: var(--wordiva-border-radius-xl);
   box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
   overflow: hidden;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid var(--w-border);
 }
 
 .single-post-header,
@@ -1184,7 +1267,7 @@ textarea {
   padding: var(--wordiva-spacing-xl);
   font-size: 1.125rem;
   line-height: 1.8;
-  color: #334155;
+  color: var(--w-text-2);
 }
 
 .single-post-content > *:first-child,
@@ -1385,8 +1468,8 @@ textarea {
 .single-post-content code,
 .slack-post-content code,
 .page-content.entry-content code {
-  background-color: #eef2ff;
-  color: #3730a3;
+  background-color: var(--w-brand-soft);
+  color: var(--w-brand-hover);
   padding: 0.15em 0.4em;
   border-radius: var(--wordiva-border-radius-sm);
   font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
@@ -1418,10 +1501,10 @@ textarea {
 .page-content.entry-content kbd {
   display: inline-block;
   padding: 0.15rem 0.45rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--w-border-strong);
   border-bottom-width: 2px;
   border-radius: 0.375rem;
-  background: #f8fafc;
+  background: var(--w-bg-soft);
   font-size: 0.85em;
   font-family: inherit;
 }
@@ -1553,7 +1636,7 @@ textarea {
   padding: var(--wordiva-spacing-md) var(--wordiva-spacing-lg);
   border: 1px solid var(--wordiva-gray-medium);
   border-radius: var(--wordiva-border-radius-md);
-  background: #fafafa;
+  background: var(--w-bg-soft);
 }
 
 .single-post-content summary,
@@ -1590,7 +1673,7 @@ textarea {
 
 .wordiva-product-cta p {
   margin: 0 0 var(--wordiva-spacing-md);
-  color: #334155;
+  color: var(--w-text-2);
   font-size: 1.125rem;
   line-height: 1.6;
 }
@@ -1599,7 +1682,7 @@ textarea {
 .slack-post-footer {
   padding: var(--wordiva-spacing-xl);
   border-top: 1px solid var(--wordiva-gray-medium);
-  background-color: #f8fafc;
+  background-color: var(--w-bg-soft);
 }
 
 .post-tags,
@@ -1624,7 +1707,7 @@ textarea {
 .slack-tag-list a {
   display: inline-block;
   padding: var(--wordiva-spacing-xs) var(--wordiva-spacing-md);
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   color: var(--wordiva-electric-blue);
   text-decoration: none;
   border-radius: var(--wordiva-border-radius-lg);
@@ -1638,7 +1721,7 @@ textarea {
 .tag-list a:hover,
 .slack-tag-list a:hover {
   background-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .social-sharing,
@@ -1681,32 +1764,32 @@ textarea {
 
 .share-twitter {
   background-color: #1da1f2;
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .share-twitter:hover {
   background-color: #0d8bd9;
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .share-linkedin {
   background-color: #0077b5;
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .share-linkedin:hover {
   background-color: #005885;
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .share-facebook {
   background-color: #1877f2;
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .share-facebook:hover {
   background-color: #166fe5;
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .share-copy {
@@ -1716,7 +1799,7 @@ textarea {
 
 .share-copy:hover {
   background-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -1725,7 +1808,7 @@ textarea {
 
 .author-bio,
 .slack-author-bio {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border-radius: var(--wordiva-border-radius-lg);
   box-shadow: var(--wordiva-shadow-sm);
   margin-bottom: var(--wordiva-spacing-xl);
@@ -1786,7 +1869,7 @@ textarea {
 .post-navigation,
 .slack-post-nav {
   background: linear-gradient(135deg,
-      var(--wordiva-white) 0%,
+      var(--w-surface) 0%,
       var(--wordiva-gray-light) 100%);
   border-radius: var(--wordiva-border-radius-lg);
   box-shadow: var(--wordiva-shadow-md);
@@ -1847,7 +1930,7 @@ textarea {
   text-decoration: none;
   padding: var(--wordiva-spacing-lg);
   border-radius: var(--wordiva-border-radius-md);
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border: 2px solid var(--wordiva-gray-medium);
   transition: all var(--wordiva-transition-normal);
   position: relative;
@@ -1885,14 +1968,14 @@ textarea {
   box-shadow: var(--wordiva-shadow-lg);
   transform: translateY(-4px);
   background: linear-gradient(135deg,
-      var(--wordiva-white) 0%,
-      rgba(47, 128, 255, 0.05) 100%);
+      var(--w-surface) 0%,
+      var(--w-brand-soft) 100%);
 }
 
 .nav-link:focus {
   outline: none;
   border-color: var(--wordiva-royal-purple);
-  box-shadow: 0 0 0 3px rgba(123, 77, 255, 0.2);
+  box-shadow: 0 0 0 3px var(--w-ring);
 }
 
 .nav-direction {
@@ -1948,7 +2031,7 @@ textarea {
 
 .related-posts,
 .slack-related-posts {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border-radius: var(--wordiva-border-radius-lg);
   box-shadow: var(--wordiva-shadow-sm);
   padding: var(--wordiva-spacing-xl);
@@ -2058,13 +2141,13 @@ textarea {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 2px;
   background: linear-gradient(90deg,
-      var(--wordiva-electric-blue),
-      var(--wordiva-royal-purple),
-      var(--wordiva-neon-pink),
-      var(--wordiva-sunrise-orange),
-      var(--wordiva-golden-yellow));
+      transparent,
+      var(--w-brand),
+      var(--w-accent),
+      transparent);
+  opacity: 0.7;
 }
 
 .site-footer .container {
@@ -2093,7 +2176,8 @@ textarea {
 }
 
 .footer-content {
-  padding-top: 60px;
+  padding-top: 48px;
+  padding-bottom: 40px;
   position: relative;
   width: 100% !important;
 }
@@ -2117,9 +2201,7 @@ textarea {
 }
 
 .footer-brand-section {
-  display: flex;
-  align-items: center;
-  gap: var(--wordiva-spacing-xl);
+  display: block;
 }
 
 .footer-brand-section .footer-logo,
@@ -2164,7 +2246,19 @@ textarea {
 }
 
 .footer-bottom-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   text-align: center;
+}
+
+@media (min-width: 640px) {
+  .footer-bottom-content {
+    flex-direction: row;
+    text-align: left;
+  }
 }
 
 .footer-section {
@@ -2361,7 +2455,7 @@ textarea {
 
 .social-link:hover {
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -2397,7 +2491,7 @@ textarea {
 }
 
 .social-github:hover {
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 /* Footer Bottom */
@@ -2479,7 +2573,7 @@ textarea {
 
 .footer-legal a:hover {
   color: var(--wordiva-electric-blue);
-  background-color: rgba(47, 128, 255, 0.1);
+  background-color: var(--w-brand-soft);
 }
 
 .footer-legal a:not(:last-child)::after {
@@ -2524,7 +2618,7 @@ textarea {
 
 .footer-menu a:hover {
   color: var(--wordiva-electric-blue);
-  background-color: rgba(47, 128, 255, 0.1);
+  background-color: var(--w-brand-soft);
 }
 
 .footer-menu a:focus {
@@ -2822,7 +2916,7 @@ textarea {
 
 /* WordPress Post Author Comment Styling */
 .bypostauthor>.comment-body {
-  background: rgba(47, 128, 255, 0.05);
+  background: var(--w-brand-soft);
   border: 2px solid var(--wordiva-electric-blue);
   position: relative;
 }
@@ -2833,7 +2927,7 @@ textarea {
   top: var(--wordiva-spacing-sm);
   right: var(--wordiva-spacing-sm);
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
   padding: var(--wordiva-spacing-xs) var(--wordiva-spacing-sm);
   border-radius: var(--wordiva-border-radius-sm);
   font-size: 0.75rem;
@@ -2882,7 +2976,7 @@ textarea {
 .page-links>span,
 .slack-page-links a,
 .slack-page-links>span {
-  background: var(--wordiva-white);
+  background: var(--w-surface);
   border: 1px solid var(--wordiva-gray-medium);
   border-radius: var(--wordiva-border-radius-sm);
   color: var(--wordiva-charcoal-dark);
@@ -2897,14 +2991,14 @@ textarea {
 .slack-page-links a:hover {
   background: var(--wordiva-electric-blue);
   border-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .page-links>span,
 .slack-page-links>span {
   background: var(--wordiva-electric-blue);
   border-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 .page-number {
@@ -2913,12 +3007,12 @@ textarea {
 
 /* WordPress Post Format Classes */
 .format-aside {
-  background: rgba(47, 128, 255, 0.05);
+  background: var(--w-brand-soft);
   border-left: 4px solid var(--wordiva-electric-blue);
 }
 
 .format-quote {
-  background: rgba(123, 77, 255, 0.05);
+  background: rgba(217, 70, 239, 0.06);
   border-left: 4px solid var(--wordiva-royal-purple);
 }
 
@@ -3016,7 +3110,7 @@ textarea {
 /* WordPress Tag Cloud Widget */
 .tagcloud a,
 .wp_widget_tag_cloud a {
-  background: rgba(47, 128, 255, 0.1);
+  background: var(--w-brand-soft);
   border-radius: var(--wordiva-border-radius-sm);
   color: var(--wordiva-electric-blue);
   display: inline-block;
@@ -3030,7 +3124,7 @@ textarea {
 .tagcloud a:hover,
 .wp_widget_tag_cloud a:hover {
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 /* WordPress Text Widget */
@@ -3132,9 +3226,9 @@ textarea {
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--wordiva-white);
+    background: var(--w-surface);
     border-top: 1px solid var(--wordiva-gray-medium);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--w-shadow-color);
     transform: translateY(-100%);
     opacity: 0;
     visibility: hidden;
@@ -3439,11 +3533,31 @@ input:focus {
   border-radius: 4px;
 }
 
-/* High contrast mode support */
+/* High contrast mode support — override the semantic tokens so the legacy
+   aliases follow, and so each theme keeps the correct polarity. */
 @media (prefers-contrast: high) {
   :root {
-    --wordiva-charcoal-dark: #000000;
-    --wordiva-white: #ffffff;
+    --w-bg: #000000;
+    --w-bg-soft: #000000;
+    --w-surface: #000000;
+    --w-surface-2: #000000;
+    --w-text: #ffffff;
+    --w-text-2: #ffffff;
+    --w-text-3: #ffffff;
+    --w-border: #ffffff;
+    --w-border-strong: #ffffff;
+  }
+
+  [data-theme="light"] {
+    --w-bg: #ffffff;
+    --w-bg-soft: #ffffff;
+    --w-surface: #ffffff;
+    --w-surface-2: #ffffff;
+    --w-text: #000000;
+    --w-text-2: #000000;
+    --w-text-3: #000000;
+    --w-border: #000000;
+    --w-border-strong: #000000;
   }
 
   .blog-card {
@@ -3543,12 +3657,12 @@ html {
 
 ::selection {
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 ::-moz-selection {
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -3558,7 +3672,7 @@ html {
 .no-posts {
   text-align: center;
   padding: var(--wordiva-spacing-xxl) 0;
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
 }
 
 .no-posts h2 {
@@ -3590,7 +3704,7 @@ html {
 
 .no-posts .search-submit {
   background-color: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
   border: none;
   padding: var(--wordiva-spacing-md);
   border-radius: var(--wordiva-border-radius-md);
@@ -3606,7 +3720,7 @@ html {
       var(--wordiva-electric-blue),
       var(--wordiva-royal-purple)) !important;
   border: none !important;
-  color: var(--wordiva-white) !important;
+  color: #ffffff !important;
   transition: all var(--wordiva-transition-fast);
 }
 
@@ -3620,8 +3734,8 @@ html {
 
 .wp-block-quote.is-style-wordiva-highlight {
   background: linear-gradient(135deg,
-      rgba(47, 128, 255, 0.05) 0%,
-      rgba(123, 77, 255, 0.05) 100%);
+      var(--w-brand-soft) 0%,
+      rgba(217, 70, 239, 0.06) 100%);
   border-left: 4px solid var(--wordiva-electric-blue);
   border-radius: var(--wordiva-border-radius-lg);
   padding: var(--wordiva-spacing-xl);
@@ -3654,7 +3768,7 @@ html {
 }
 
 .wp-block-group.is-style-wordiva-card {
-  background: var(--wordiva-white);
+  background: var(--w-surface);
   border-radius: var(--wordiva-border-radius-xl);
   box-shadow: var(--wordiva-shadow-lg);
   padding: var(--wordiva-spacing-xl);
@@ -3682,18 +3796,18 @@ html {
 }
 
 .editor-styles-wrapper .wp-block-button.is-style-wordiva-gradient .wp-block-button__link {
-  background: linear-gradient(135deg, #2f80ff, #7b4dff) !important;
+  background: linear-gradient(135deg, var(--w-brand), var(--w-accent)) !important;
 }
 
 .editor-styles-wrapper .wp-block-quote.is-style-wordiva-highlight {
   background: linear-gradient(135deg,
-      rgba(47, 128, 255, 0.05) 0%,
-      rgba(123, 77, 255, 0.05) 100%);
+      var(--w-brand-soft) 0%,
+      rgba(217, 70, 239, 0.06) 100%);
 }
 
 .editor-styles-wrapper .wp-block-group.is-style-wordiva-card {
-  background: #ffffff;
-  box-shadow: 0 10px 15px rgba(43, 43, 43, 0.1);
+  background: var(--w-surface);
+  box-shadow: 0 10px 15px var(--w-shadow-color);
 }
 
 /* ==========================================================================
@@ -3801,7 +3915,7 @@ html {
 .slack-comments {
   margin-top: var(--wordiva-spacing-xxl);
   padding: var(--wordiva-spacing-xl);
-  background-color: var(--wordiva-white);
+  background-color: var(--w-surface);
   border-radius: var(--wordiva-border-radius-lg);
   box-shadow: var(--wordiva-shadow-sm);
 }
@@ -3810,20 +3924,21 @@ html {
    Background and Layout Fixes (Previously Inline)
    ========================================================================== */
 
-/* Force white background to override any conflicts */
+/* Force the theme background over any plugin conflicts. Must stay
+   background-color, not the background shorthand: the shorthand resets
+   background-image and would wipe the aurora gradients set on body above. */
 body,
 html {
-  background-color: #ffffff !important;
-  background: #ffffff !important;
+  background-color: var(--w-bg) !important;
 }
 
 .site-wrapper {
-  background-color: #ffffff !important;
+  background-color: var(--w-bg) !important;
 }
 
 /* Override any plugin conflicts */
 body.wordiva-theme {
-  background-color: #ffffff !important;
+  background-color: var(--w-bg) !important;
 }
 
 /* Fix single post layout and scrolling */
@@ -3928,7 +4043,7 @@ a.read-more-featured:hover {
 .category-custom-color {
   /* Color will be set via data attribute and CSS custom properties */
   background-color: var(--category-color, var(--wordiva-electric-blue));
-  color: var(--wordiva-white);
+  color: #ffffff;
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 12px;
@@ -3941,8 +4056,8 @@ a.read-more-featured:hover {
 .wordiva-admin-notice {
   border-left: 4px solid var(--wordiva-electric-blue);
   background: linear-gradient(135deg,
-      rgba(47, 128, 255, 0.05) 0%,
-      rgba(123, 77, 255, 0.05) 100%);
+      var(--w-brand-soft) 0%,
+      rgba(217, 70, 239, 0.06) 100%);
 }
 
 .wordiva-admin-notice h3 {
@@ -4050,8 +4165,8 @@ a.read-more-featured:hover {
   text-align: center;
   padding: var(--wordiva-spacing-xxl);
   background: linear-gradient(135deg,
-      rgba(47, 128, 255, 0.05) 0%,
-      rgba(123, 77, 255, 0.05) 100%);
+      var(--w-brand-soft) 0%,
+      rgba(217, 70, 239, 0.06) 100%);
   border-radius: var(--wordiva-border-radius-lg);
   border: 1px solid var(--wordiva-gray-medium);
 }
@@ -4120,8 +4235,8 @@ a.read-more-featured:hover {
 /* Hero Section */
 .error-404-hero {
   background: linear-gradient(135deg,
-      rgba(47, 128, 255, 0.05) 0%,
-      rgba(123, 77, 255, 0.05) 100%);
+      var(--w-brand-soft) 0%,
+      rgba(217, 70, 239, 0.06) 100%);
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -4147,7 +4262,7 @@ a.read-more-featured:hover {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 4px 20px rgba(47, 128, 255, 0.3);
+  text-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
 }
 
 .error-404-title {
@@ -4160,7 +4275,7 @@ a.read-more-featured:hover {
 
 .error-404-description {
   font-size: 1.125rem;
-  color: #666;
+  color: var(--w-text-3);
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -4177,13 +4292,13 @@ a.read-more-featured:hover {
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(47, 128, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
 }
 
 .error-404-btn:hover {
   background: var(--wordiva-royal-purple);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(123, 77, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(217, 70, 239, 0.35);
   color: white;
   text-decoration: none;
 }
@@ -5042,7 +5157,7 @@ body,
 
   .social-link:hover {
     background: var(--wordiva-electric-blue) !important;
-    color: var(--wordiva-white) !important;
+    color: #ffffff !important;
   }
 
   /* Footer bottom */
@@ -5164,7 +5279,7 @@ body,
 
   .social-link:hover {
     background: var(--wordiva-electric-blue) !important;
-    color: var(--wordiva-white) !important;
+    color: #ffffff !important;
   }
 
   .footer-bottom {

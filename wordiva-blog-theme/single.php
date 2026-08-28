@@ -143,7 +143,7 @@ get_header(); ?>
 
                 <section class="wordiva-product-cta" aria-labelledby="wordiva-product-cta-heading">
                     <h3 id="wordiva-product-cta-heading"><?php esc_html_e('Try Wordiva free', 'wordiva-blog-theme'); ?></h3>
-                    <p><?php esc_html_e('Automate your WordPress blog with agentic AI content marketing.', 'wordiva-blog-theme'); ?></p>
+                    <p><?php esc_html_e('Automate your blog website with agentic AI content marketing.', 'wordiva-blog-theme'); ?></p>
                     <a class="wordiva-cta-button" href="<?php echo esc_url(wordiva_get_blog_cta_url()); ?>">
                         <?php esc_html_e('Get started', 'wordiva-blog-theme'); ?>
                     </a>

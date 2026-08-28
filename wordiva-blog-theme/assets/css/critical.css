@@ -2,20 +2,37 @@
 
 /* Essential CSS Variables - Critical Path Only */
 :root {
-  --wordiva-electric-blue: #2f80ff;
-  --wordiva-royal-purple: #7b4dff;
-  --wordiva-white: #ffffff;
-  --wordiva-charcoal-dark: #2b2b2b;
-  --wordiva-charcoal-light: #4a4a4a;
+  --w-bg: #020617;
+  --w-surface: #0f172a;
+  --w-border: #1e293b;
+  --w-text: #f1f5f9;
+  --w-text-2: #94a3b8;
+  --w-brand: #6366f1;
+  --w-accent: #d946ef;
+  --wordiva-electric-blue: var(--w-brand);
+  --wordiva-royal-purple: var(--w-accent);
+  --wordiva-white: var(--w-surface);
+  --wordiva-charcoal-dark: var(--w-text);
+  --wordiva-charcoal-light: var(--w-text-2);
   --wordiva-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --wordiva-spacing-sm: 0.5rem;
   --wordiva-spacing-md: 1rem;
   --wordiva-spacing-lg: 1.5rem;
   --wordiva-spacing-xl: 2rem;
   --wordiva-spacing-xxl: 3rem;
-  --wordiva-border-radius-md: 8px;
-  --wordiva-border-radius-lg: 12px;
-  --wordiva-shadow-md: 0 4px 6px rgba(43, 43, 43, 0.1);
+  --wordiva-border-radius-md: 10px;
+  --wordiva-border-radius-lg: 14px;
+  --wordiva-shadow-md: 0 4px 10px rgba(2, 6, 23, 0.5);
+}
+
+[data-theme="light"] {
+  --w-bg: #ffffff;
+  --w-surface: #ffffff;
+  --w-border: #e2e8f0;
+  --w-text: #0f172a;
+  --w-text-2: #475569;
+  --w-brand: #4f46e5;
+  --w-accent: #c026d3;
 }
 
 /* Critical Reset - Above the fold only */
@@ -30,7 +47,7 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--wordiva-charcoal-dark);
-  background-color: var(--wordiva-white);
+  background-color: var(--w-bg);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -59,7 +76,7 @@ body {
   right: 0;
   z-index: 1000;
   background-color: var(--wordiva-white);
-  border-bottom: 1px solid #E8E8E8;
+  border-bottom: 1px solid var(--w-border);
   height: 80px;
 }
 
@@ -140,7 +157,7 @@ a {
   top: -9999px;
   z-index: 999999;
   background: var(--wordiva-electric-blue);
-  color: var(--wordiva-white);
+  color: #ffffff;
   padding: 8px 16px;
   border-radius: 0 0 4px 4px;
   font-weight: 600;
@@ -164,10 +181,10 @@ a {
 
 /* Hero Section - Critical above fold content */
 .hero-section {
-  background-color: var(--wordiva-white);
+  background-color: var(--w-bg);
   padding: 10px 0 60px 0;
   text-align: center;
-  border-bottom: 1px solid #E8E8E8;
+  border-bottom: 1px solid var(--w-border);
 }
 
 .hero-title {

@@ -133,41 +133,28 @@ function wordiva_enhanced_customize_register($wp_customize) {
         'priority' => 25,
     ));
     
-    // Electric Blue Color
-    $wp_customize->add_setting('wordiva_electric_blue', array(
-        'default'           => '#2F80FF',
-        'sanitize_callback' => 'sanitize_hex_color',
-        'transport'         => 'postMessage',
-    ));
+    // Defaults come from wordiva_get_brand_color_settings() so the pickers always
+    // show the palette style.css actually ships. Leaving a color untouched keeps
+    // the dual dark/light tokens in control.
+    $brand_color_labels = array(
+        'wordiva_electric_blue' => __('Brand Indigo (Primary)', 'wordiva-blog-theme'),
+        'wordiva_royal_purple'  => __('Accent Fuchsia (Secondary)', 'wordiva-blog-theme'),
+        'wordiva_neon_pink'     => __('Neon Pink (Accent)', 'wordiva-blog-theme'),
+    );
     
-    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'wordiva_electric_blue', array(
-        'label'   => __('Electric Blue (Primary)', 'wordiva-blog-theme'),
-        'section' => 'wordiva_brand_colors',
-    )));
-    
-    // Royal Purple Color
-    $wp_customize->add_setting('wordiva_royal_purple', array(
-        'default'           => '#7B4DFF',
-        'sanitize_callback' => 'sanitize_hex_color',
-        'transport'         => 'postMessage',
-    ));
-    
-    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'wordiva_royal_purple', array(
-        'label'   => __('Royal Purple (Secondary)', 'wordiva-blog-theme'),
-        'section' => 'wordiva_brand_colors',
-    )));
-    
-    // Neon Pink Color
-    $wp_customize->add_setting('wordiva_neon_pink', array(
-        'default'           => '#FF4FA3',
-        'sanitize_callback' => 'sanitize_hex_color',
-        'transport'         => 'postMessage',
-    ));
-    
-    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'wordiva_neon_pink', array(
-        'label'   => __('Neon Pink (Accent)', 'wordiva-blog-theme'),
-        'section' => 'wordiva_brand_colors',
-    )));
+    foreach (wordiva_get_brand_color_settings() as $setting_id => $config) {
+        $wp_customize->add_setting($setting_id, array(
+            'default'           => $config[0],
+            'sanitize_callback' => 'sanitize_hex_color',
+            'transport'         => 'postMessage',
+        ));
+        
+        $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, $setting_id, array(
+            'label'       => $brand_color_labels[$setting_id],
+            'description' => __('Overrides both the dark and light theme for this color.', 'wordiva-blog-theme'),
+            'section'     => 'wordiva_brand_colors',
+        )));
+    }
     
     // Layout Options Section
     $wp_customize->add_section('wordiva_layout', array(
@@ -383,25 +370,9 @@ function wordiva_enhanced_customize_register($wp_customize) {
         'type'    => 'text',
     ));
 
-    $wp_customize->add_setting('wordiva_compare_url', array(
-        'default'           => 'https://wordiva.ai/compare',
-        'sanitize_callback' => 'esc_url_raw',
-    ));
-    $wp_customize->add_control('wordiva_compare_url', array(
-        'label'   => __('Compare Page URL', 'wordiva-blog-theme'),
-        'section' => 'wordiva_seo_marketing',
-        'type'    => 'url',
-    ));
-
-    $wp_customize->add_setting('wordiva_integrations_url', array(
-        'default'           => 'https://wordiva.ai/integrations/wordpress',
-        'sanitize_callback' => 'esc_url_raw',
-    ));
-    $wp_customize->add_control('wordiva_integrations_url', array(
-        'label'   => __('Integrations Page URL', 'wordiva-blog-theme'),
-        'section' => 'wordiva_seo_marketing',
-        'type'    => 'url',
-    ));
+    // Note: wordiva_compare_url / wordiva_integrations_url were removed in 2.0.0.
+    // The mega menu and footer build every marketing link from the main site URL
+    // (see inc/nav-links.php), so "Main Site URL" is the single repoint knob.
 
     $wp_customize->add_setting('wordiva_sticky_cta_label', array(
         'default'           => __('Try Wordiva free', 'wordiva-blog-theme'),
@@ -427,24 +398,45 @@ function wordiva_enhanced_customize_register($wp_customize) {
 add_action('customize_register', 'wordiva_enhanced_customize_register');
 
 /**
+ * Brand color settings — single source of truth for both the Customizer
+ * controls and the inline CSS below, so the pickers can never drift from
+ * the palette that style.css actually ships.
+ *
+ * Defaults match the dark theme tokens (--w-brand / --w-accent).
+ *
+ * @return array setting id => array( default hex, css custom property )
+ */
+function wordiva_get_brand_color_settings() {
+    return array(
+        'wordiva_electric_blue' => array('#6366F1', '--wordiva-electric-blue'),
+        'wordiva_royal_purple'  => array('#D946EF', '--wordiva-royal-purple'),
+        'wordiva_neon_pink'     => array('#FF4FA3', '--wordiva-neon-pink'),
+    );
+}
+
+/**
  * Output customizer CSS
  * Note: Styles moved to main stylesheet, this function now only handles dynamic color values
  */
 function wordiva_customizer_css() {
-    $electric_blue = get_theme_mod('wordiva_electric_blue', '#2F80FF');
-    $royal_purple = get_theme_mod('wordiva_royal_purple', '#7B4DFF');
-    $neon_pink = get_theme_mod('wordiva_neon_pink', '#FF4FA3');
-    
-    // Only output dynamic CSS custom properties
-    $dynamic_css = ":root {
-        --wordiva-electric-blue: {$electric_blue};
-        --wordiva-royal-purple: {$royal_purple};
-        --wordiva-neon-pink: {$neon_pink};
-    }";
-    
-    wp_add_inline_style('wordiva-blog-theme-style', $dynamic_css);
+    // Defaults live in style.css as theme-aware aliases (--w-brand / --w-accent).
+    // Only emit overrides when an admin explicitly customized a color, otherwise
+    // the dual dark/light token system stays in control.
+    $overrides = array();
+    foreach (wordiva_get_brand_color_settings() as $mod => $config) {
+        $value = sanitize_hex_color(get_theme_mod($mod, $config[0]));
+        if ($value && strtoupper($value) !== strtoupper($config[0])) {
+            $overrides[] = "{$config[1]}: {$value};";
+        }
+    }
+
+    if (!empty($overrides)) {
+        wp_add_inline_style('wordiva-blog-theme-style', ':root {' . implode(' ', $overrides) . '}');
+    }
 }
-add_action('wp_head', 'wordiva_customizer_css');
+// Must run on wp_enqueue_scripts: styles are printed at wp_head priority 8, so
+// wp_add_inline_style() from wp_head (priority 10) would be silently dropped.
+add_action('wp_enqueue_scripts', 'wordiva_customizer_css', 20);
 
 /**
  * Customizer live preview

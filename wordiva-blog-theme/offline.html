@@ -1,17 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#020617">
     <title>Offline - Wordiva Blog</title>
+    <script>
+        /* Same shared key as the theme, so the offline page honors the
+           visitor's dark/light choice. Dark is the default. */
+        (function() {
+            try {
+                var stored = localStorage.getItem('wordiva-theme');
+                document.documentElement.setAttribute('data-theme', stored === 'light' ? 'light' : 'dark');
+            } catch (e) {}
+        })();
+    </script>
     <style>
+        /* Mirrors the token set in style.css. Kept inline: the service worker
+           serves this page with no theme stylesheet available. */
         :root {
-            --wordiva-electric-blue: #2F80FF;
-            --wordiva-royal-purple: #7B4DFF;
+            --w-bg: #020617;
+            --w-bg-soft: #0f172a;
+            --w-surface: #0f172a;
+            --w-surface-2: #1e293b;
+            --w-border: #1e293b;
+            --w-text: #f1f5f9;
+            --w-text-2: #94a3b8;
+            --w-brand: #6366f1;
+            --w-accent: #d946ef;
+            --w-brand-soft: rgba(99, 102, 241, 0.12);
+            --w-shadow-color: rgba(2, 6, 23, 0.5);
             --wordiva-neon-pink: #FF4FA3;
-            --wordiva-charcoal-dark: #2B2B2B;
-            --wordiva-white: #FFFFFF;
-            --wordiva-gray-light: #F8F9FA;
+        }
+        
+        [data-theme="light"] {
+            --w-bg: #ffffff;
+            --w-bg-soft: #f8fafc;
+            --w-surface: #ffffff;
+            --w-surface-2: #f1f5f9;
+            --w-border: #e2e8f0;
+            --w-text: #0f172a;
+            --w-text-2: #475569;
+            --w-brand: #4f46e5;
+            --w-accent: #c026d3;
+            --w-brand-soft: rgba(79, 70, 229, 0.08);
+            --w-shadow-color: rgba(15, 23, 42, 0.08);
         }
         
         * {
@@ -22,8 +55,12 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, var(--wordiva-white) 0%, var(--wordiva-gray-light) 100%);
-            color: var(--wordiva-charcoal-dark);
+            background: var(--w-bg);
+            background-image:
+                radial-gradient(60rem 30rem at 15% -5%, rgba(79, 70, 229, 0.18), transparent 60%),
+                radial-gradient(50rem 26rem at 90% 0%, rgba(217, 70, 239, 0.1), transparent 55%);
+            background-repeat: no-repeat;
+            color: var(--w-text);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -34,18 +71,18 @@
         .offline-container {
             text-align: center;
             max-width: 600px;
-            background: var(--wordiva-white);
+            background: var(--w-surface);
             padding: 3rem 2rem;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(43, 43, 43, 0.1);
-            border: 1px solid rgba(47, 128, 255, 0.1);
+            box-shadow: 0 20px 40px var(--w-shadow-color);
+            border: 1px solid var(--w-border);
         }
         
         .offline-icon {
             width: 120px;
             height: 120px;
             margin: 0 auto 2rem;
-            background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple));
+            background: linear-gradient(135deg, var(--w-brand), var(--w-accent));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -75,23 +112,22 @@
         
         h1 {
             font-size: 2.5rem;
-            color: var(--wordiva-royal-purple);
+            color: var(--w-text);
             margin-bottom: 1rem;
             font-weight: 700;
         }
         
         .subtitle {
             font-size: 1.25rem;
-            color: var(--wordiva-charcoal-dark);
+            color: var(--w-text-2);
             margin-bottom: 2rem;
-            opacity: 0.8;
         }
         
         .message {
             font-size: 1.1rem;
             line-height: 1.6;
             margin-bottom: 2rem;
-            color: var(--wordiva-charcoal-dark);
+            color: var(--w-text-2);
         }
         
         .actions {
@@ -120,24 +156,24 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, var(--wordiva-electric-blue), var(--wordiva-royal-purple));
-            color: var(--wordiva-white);
+            background: linear-gradient(135deg, var(--w-brand), var(--w-accent));
+            color: #ffffff;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(47, 128, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
         }
         
         .btn-secondary {
-            background: var(--wordiva-gray-light);
-            color: var(--wordiva-charcoal-dark);
-            border: 2px solid var(--wordiva-electric-blue);
+            background: var(--w-surface-2);
+            color: var(--w-text);
+            border: 2px solid var(--w-brand);
         }
         
         .btn-secondary:hover {
-            background: var(--wordiva-electric-blue);
-            color: var(--wordiva-white);
+            background: var(--w-brand);
+            color: #ffffff;
         }
         
         .status {
@@ -146,10 +182,11 @@
             justify-content: center;
             gap: 0.5rem;
             padding: 1rem;
-            background: rgba(255, 79, 163, 0.1);
+            background: var(--w-brand-soft);
+            border: 1px solid var(--w-border);
             border-radius: 8px;
             font-size: 0.9rem;
-            color: var(--wordiva-charcoal-dark);
+            color: var(--w-text-2);
         }
         
         .status-indicator {
@@ -167,14 +204,15 @@
         
         .tips {
             text-align: left;
-            background: var(--wordiva-gray-light);
+            background: var(--w-bg-soft);
+            border: 1px solid var(--w-border);
             padding: 1.5rem;
             border-radius: 8px;
             margin-top: 2rem;
         }
         
         .tips h3 {
-            color: var(--wordiva-royal-purple);
+            color: var(--w-text);
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
@@ -264,7 +302,7 @@
             
             if (navigator.onLine) {
                 statusElement.textContent = 'Connection restored! Redirecting...';
-                statusElement.style.color = 'var(--wordiva-electric-blue)';
+                statusElement.style.color = 'var(--w-brand)';
                 setTimeout(() => {
                     window.location.reload();
                 }, 1500);

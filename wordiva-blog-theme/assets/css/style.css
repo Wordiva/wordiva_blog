@@ -39,7 +39,7 @@
 
 .slack-card-grid .blog-card {
     background: var(--wordiva-white);
-    border: 1px solid #E8E8E8;
+    border: 1px solid var(--w-border);
     border-radius: 12px;
     box-shadow: none;
     overflow: hidden;
@@ -51,7 +51,7 @@
 
 .slack-card-grid .blog-card:hover {
     border-color: var(--wordiva-royal-purple);
-    box-shadow: 0 12px 24px rgba(123, 77, 255, 0.1);
+    box-shadow: 0 12px 24px var(--w-brand-soft);
     transform: translateY(-4px);
 }
 
@@ -87,7 +87,7 @@
 
 .slack-card-grid .featured-card .card-category {
     background: var(--wordiva-electric-blue);
-    color: var(--wordiva-white);
+    color: #ffffff;
 }
 
 .slack-card-grid .featured-card .card-read-more {
@@ -122,9 +122,9 @@
     margin: var(--wordiva-spacing-xl) 0;
     background: linear-gradient(
         135deg,
-        rgba(47, 128, 255, 0.05) 0%,
-        rgba(255, 255, 255, 1) 45%,
-        rgba(123, 77, 255, 0.05) 100%
+        var(--w-brand-soft) 0%,
+        var(--w-surface) 45%,
+        rgba(217, 70, 239, 0.06) 100%
     );
     border: 1px solid var(--wordiva-border-light);
     border-radius: var(--wordiva-border-radius-xl);
@@ -147,11 +147,11 @@
     border-radius: 50%;
     background: linear-gradient(
         135deg,
-        rgba(47, 128, 255, 0.12) 0%,
-        rgba(123, 77, 255, 0.12) 100%
+        var(--w-brand-soft) 0%,
+        rgba(217, 70, 239, 0.12) 100%
     );
     color: var(--wordiva-electric-blue);
-    box-shadow: 0 8px 24px rgba(47, 128, 255, 0.12);
+    box-shadow: 0 8px 24px var(--w-brand-soft);
 }
 
 .no-posts-header {
@@ -230,10 +230,10 @@
 .suggestion-item:hover,
 .suggestion-item:focus-visible {
     border-color: var(--wordiva-electric-blue);
-    background: rgba(47, 128, 255, 0.06);
+    background: var(--w-brand-soft);
     color: var(--wordiva-electric-blue);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(47, 128, 255, 0.12);
+    box-shadow: 0 4px 12px var(--w-brand-soft);
     text-decoration: none;
 }
 
@@ -286,7 +286,7 @@
 .search-form-wrapper .search-form:focus-within {
     background-color: var(--wordiva-white);
     border-color: var(--wordiva-electric-blue);
-    box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+    box-shadow: 0 0 0 3px var(--w-brand-soft);
 }
 
 .search-form-wrapper .search-field {
@@ -311,7 +311,7 @@
 
 .search-form-wrapper .search-submit:hover,
 .search-form-wrapper .search-submit:focus-visible {
-    background: rgba(47, 128, 255, 0.08);
+    background: var(--w-brand-soft);
     color: var(--wordiva-electric-blue);
 }
 
@@ -339,7 +339,7 @@
 .category-link:hover,
 .category-link:focus-visible {
     border-color: var(--wordiva-royal-purple);
-    background: rgba(123, 77, 255, 0.06);
+    background: rgba(217, 70, 239, 0.06);
     color: var(--wordiva-royal-purple);
     text-decoration: none;
     transform: translateY(-1px);
@@ -361,7 +361,7 @@
 
 .category-link:hover .category-count,
 .category-link:focus-visible .category-count {
-    background: rgba(123, 77, 255, 0.12);
+    background: rgba(217, 70, 239, 0.12);
     color: var(--wordiva-royal-purple);
 }
 
@@ -376,22 +376,22 @@
     gap: 0.5rem;
     padding: 0.8125rem 1.75rem;
     background: var(--wordiva-electric-blue);
-    color: var(--wordiva-white);
+    color: #ffffff;
     border-radius: var(--wordiva-border-radius-md);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9375rem;
     transition: all var(--wordiva-transition-normal);
-    box-shadow: 0 4px 14px rgba(47, 128, 255, 0.28);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
 }
 
 .btn-home:hover,
 .btn-home:focus-visible {
     background: var(--wordiva-royal-purple);
-    color: var(--wordiva-white);
+    color: #ffffff;
     text-decoration: none;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(123, 77, 255, 0.35);
+    box-shadow: 0 6px 20px rgba(217, 70, 239, 0.35);
 }
 
 @media (max-width: 767px) {
@@ -512,7 +512,7 @@
 
 .search-description {
     font-size: 1rem;
-    color: #666;
+    color: var(--w-text-3);
     margin-bottom: 40px;
     line-height: 1.6;
     max-width: 600px;
@@ -540,7 +540,7 @@
     display: flex;
     align-items: center;
     background: var(--wordiva-white);
-    border: 2px solid #E8E8E8;
+    border: 2px solid var(--w-border);
     border-radius: 12px;
     padding: 0 20px;
     transition: all 0.3s ease;
@@ -548,11 +548,11 @@
 
 .search-input-wrapper:focus-within {
     border-color: var(--wordiva-royal-purple);
-    box-shadow: 0 0 0 3px rgba(123, 77, 255, 0.1);
+    box-shadow: 0 0 0 3px var(--w-brand-soft);
 }
 
 .search-icon {
-    color: #999;
+    color: var(--w-text-3);
     margin-right: 12px;
     flex-shrink: 0;
 }
@@ -569,7 +569,7 @@
 }
 
 .search-page-field::placeholder {
-    color: #999;
+    color: var(--w-text-3);
 }
 
 .search-page-field:focus,
@@ -601,7 +601,7 @@
 
 .no-results-icon {
     margin-bottom: 30px;
-    color: #ccc;
+    color: var(--w-border-strong);
 }
 
 .no-results-text h2 {
@@ -611,7 +611,7 @@
 }
 
 .no-results-text p {
-    color: #666;
+    color: var(--w-text-3);
     font-size: 1.125rem;
     line-height: 1.6;
 }
@@ -629,14 +629,17 @@
     align-items: center;
 }
 
-.search-pagination .page-numbers {
+/* Scoped to a/span: paginate_links( 'type' => 'list' ) also puts
+   .page-numbers on the wrapping <ul>. */
+.search-pagination a.page-numbers,
+.search-pagination span.page-numbers {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 44px;
     height: 44px;
     padding: 0 16px;
-    border: 2px solid #E8E8E8;
+    border: 2px solid var(--w-border);
     border-radius: 8px;
     color: var(--wordiva-charcoal-dark);
     text-decoration: none;
@@ -644,11 +647,11 @@
     transition: all 0.3s ease;
 }
 
-.search-pagination .page-numbers:hover,
+.search-pagination a.page-numbers:hover,
 .search-pagination .page-numbers.current {
     border-color: var(--wordiva-royal-purple);
     background-color: var(--wordiva-royal-purple);
-    color: var(--wordiva-white);
+    color: #ffffff;
 }
 
 .search-pagination .prev,
@@ -691,7 +694,8 @@
         font-size: 1.125rem;
     }
 
-    .search-pagination .page-numbers {
+    .search-pagination a.page-numbers,
+    .search-pagination span.page-numbers {
         min-width: 40px;
         height: 40px;
         padding: 0 12px;

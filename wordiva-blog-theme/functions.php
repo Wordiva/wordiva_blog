@@ -30,6 +30,7 @@ $wordiva_includes = array(
     'inc/author-profile.php',       // Author E-E-A-T fields
     'inc/post-meta.php',           // Custom post meta boxes
     'inc/helper-functions.php',     // Helper functions and utilities
+    'inc/nav-links.php',            // Hardcoded mega menu + footer link data
     'inc/theme-activation.php',     // Theme activation/deactivation
     'inc/comments.php',            // Comments functionality
 );
@@ -439,14 +440,14 @@ function wordiva_custom_login_styles() {
             box-shadow: 0 4px 6px rgba(43, 43, 43, 0.1);
         }
         .wp-core-ui .button-primary {
-            background-color: #2F80FF;
-            border-color: #2F80FF;
+            background-color: #4f46e5;
+            border-color: #4f46e5;
             text-shadow: none;
             box-shadow: none;
         }
         .wp-core-ui .button-primary:hover {
-            background-color: #1a5fcc;
-            border-color: #1a5fcc;
+            background-color: #4338ca;
+            border-color: #4338ca;
         }
     </style>
     <?php

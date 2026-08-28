@@ -115,12 +115,12 @@ function wordiva_add_theme_support() {
         array(
             'name'  => __('Electric Blue', 'wordiva-blog-theme'),
             'slug'  => 'electric-blue',
-            'color' => '#2F80FF',
+            'color' => '#4f46e5',
         ),
         array(
             'name'  => __('Royal Purple', 'wordiva-blog-theme'),
             'slug'  => 'royal-purple',
-            'color' => '#7B4DFF',
+            'color' => '#d946ef',
         ),
         array(
             'name'  => __('Neon Pink', 'wordiva-blog-theme'),

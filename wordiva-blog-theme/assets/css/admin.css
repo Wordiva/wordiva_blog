@@ -49,8 +49,8 @@
 }
 
 .wordiva-meta-box select:focus, .wordiva-meta-box input[type='number']:focus, .wordiva-meta-box input[type='text']:focus, .wordiva-meta-box textarea:focus {
-    border-color: #2F80FF;
-    box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     outline: none;
 }
 
@@ -65,7 +65,7 @@
     width: 18px;
     height: 18px;
     margin-right: 8px;
-    accent-color: #2F80FF;
+    accent-color: #4f46e5;
 }
 
 .wordiva-meta-box fieldset {
@@ -82,7 +82,7 @@
 }
 
 .wordiva-meta-box fieldset label:hover {
-    color: #2F80FF;
+    color: #4f46e5;
 }
 
 .wordiva-meta-box .description {
@@ -109,7 +109,7 @@
 }
 
 .wordiva-featured-level-primary {
-    background: linear-gradient(135deg, #2F80FF, #7B4DFF);
+    background: linear-gradient(135deg, #4f46e5, #d946ef);
     color: white;
 }
 
@@ -134,8 +134,8 @@
     vertical-align: middle;
 }
 
-.wordiva-card-color-preview.electric-blue { background: #2F80FF; }
-.wordiva-card-color-preview.royal-purple { background: #7B4DFF; }
+.wordiva-card-color-preview.electric-blue { background: #4f46e5; }
+.wordiva-card-color-preview.royal-purple { background: #d946ef; }
 .wordiva-card-color-preview.neon-pink { background: #FF4FA3; }
 .wordiva-card-color-preview.sunrise-orange { background: #FF9F1C; }
 .wordiva-card-color-preview.golden-yellow { background: #FFD166; }
@@ -218,8 +218,8 @@
 }
 
 .wordiva-layout-option input[type='radio']:checked + .wordiva-layout-preview {
-    border-color: #2F80FF;
-    box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.1);
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 .wordiva-layout-preview:before {
@@ -229,7 +229,7 @@
     left: 4px;
     right: 4px;
     height: 20px;
-    background: linear-gradient(135deg, #2F80FF, #7B4DFF);
+    background: linear-gradient(135deg, #4f46e5, #d946ef);
     border-radius: 2px;
 }
 
@@ -259,7 +259,7 @@
 }
 
 .wordiva-layout-option input[type='radio']:checked + .wordiva-layout-preview + .wordiva-layout-label {
-    color: #2F80FF;
+    color: #4f46e5;
     font-weight: 600;
 }
 
@@ -276,7 +276,7 @@
 .wordiva-excerpt-length-wrapper input[type='range'] {
     flex: 1;
     max-width: 200px;
-    accent-color: #2F80FF;
+    accent-color: #4f46e5;
 }
 
 .wordiva-excerpt-length-display {
@@ -284,7 +284,7 @@
     padding: 4px 12px;
     border-radius: 20px;
     font-weight: 600;
-    color: #2F80FF;
+    color: #4f46e5;
     min-width: 60px;
     text-align: center;
     border: 2px solid #e1e1e1;
@@ -371,7 +371,7 @@
 }
 
 .wordiva-meta-box input:focus, .wordiva-meta-box select:focus, .wordiva-meta-box textarea:focus {
-    outline: 2px solid #2F80FF;
+    outline: 2px solid #4f46e5;
     outline-offset: 2px;
 }
 
@@ -429,7 +429,7 @@
 
 /* Featured level indicators */
 .wordiva-featured-level-primary {
-  background: linear-gradient(135deg, #2F80FF, #7B4DFF);
+  background: linear-gradient(135deg, #4f46e5, #d946ef);
   color: white;
   padding: 2px 8px;
   border-radius: 4px;
@@ -452,13 +452,13 @@
 
 /* Admin notice enhancements */
 .wordiva-admin-notice.notice {
-  border-left: 4px solid #2F80FF;
-  background: linear-gradient(135deg, rgba(47, 128, 255, 0.05) 0%, rgba(123, 77, 255, 0.05) 100%);
+  border-left: 4px solid #4f46e5;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.06) 0%, rgba(217, 70, 239, 0.06) 100%);
   padding: 15px;
 }
 
 .wordiva-admin-notice h3 {
-  color: #7B4DFF;
+  color: #d946ef;
   margin-bottom: 10px;
   font-size: 16px;
 }

@@ -5,7 +5,7 @@ Tags: blog, content-marketing, ai, desktop, custom-colors, featured-images, acce
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 2.0.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,19 @@ Yes, you can customize the Wordiva brand colors through the WordPress Customizer
 Yes, the theme includes comprehensive SEO optimization with structured data markup, proper heading hierarchy, and semantic HTML.
 
 == Changelog ==
+
+= 2.0.0 =
+* Premium redesign matching wordiva.ai — dark theme by default with a light toggle
+* Dual dark/light semantic design tokens (indigo brand palette)
+* Two-layer mega navigation (Product / Solutions / Resources / Compare / Pricing)
+* 6-column marketing footer with full wordiva.ai link map
+* Space Grotesk display typography and aurora background accents
+* Theme preference shared with wordiva.ai via the wordiva-theme localStorage key
+* Premium card hover treatment, tokenized breadcrumbs, chips, and CTAs
+* Offline page and high-contrast mode migrated to the same dark/light tokens
+* Brand color pickers now default to the shipped palette and apply correctly
+* Removed the Compare/Integrations URL settings — all marketing links now derive
+  from the single "Main Site URL" setting
 
 = 1.0.0 =
 * Initial release

@@ -14,9 +14,54 @@
         initFeaturedNavigation();
         initNavigationAccessibility();
         initMobileMenu();
+        initMobileAccordion();
+        initThemeToggle();
         initNavScroll();
         initKeyboardNavigation();
     });
+
+    /**
+     * Theme toggle — persists to the shared 'wordiva-theme' localStorage key
+     * (same key as wordiva.ai, same origin, so preference carries across).
+     */
+    function initThemeToggle() {
+        var toggles = document.querySelectorAll('[data-wordiva-theme-toggle]');
+        if (!toggles.length) {
+            return;
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.classList.remove('dark', 'light');
+            document.documentElement.classList.add(theme);
+            try {
+                localStorage.setItem('wordiva-theme', theme);
+            } catch (e) {}
+        }
+
+        toggles.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            });
+        });
+    }
+
+    /**
+     * Mobile drawer accordion groups (Product / Solutions / Resources / Compare).
+     */
+    function initMobileAccordion() {
+        var buttons = document.querySelectorAll('.wordiva-mobile-group-btn');
+        buttons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var expanded = this.getAttribute('aria-expanded') === 'true';
+                buttons.forEach(function(other) {
+                    other.setAttribute('aria-expanded', 'false');
+                });
+                this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+            });
+        });
+    }
     
     /**
      * Initialize search functionality enhancements

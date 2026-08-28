@@ -92,17 +92,14 @@ function wordiva_theme_scripts() {
         echo '<link rel="dns-prefetch" href="//fonts.gstatic.com">' . "\n";
     }, 1);
 
+    wp_enqueue_style(
+        'wordiva-display-font',
+        'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&display=swap',
+        array(),
+        null
+    );
+
     $custom_css = "
-        :root {
-            --wordiva-electric-blue: #2F80FF;
-            --wordiva-royal-purple: #7B4DFF;
-            --wordiva-neon-pink: #FF4FA3;
-            --wordiva-sunrise-orange: #FF9F1C;
-            --wordiva-golden-yellow: #FFD166;
-            --wordiva-charcoal-dark: #2B2B2B;
-            --wordiva-white: #FFFFFF;
-        }
-        body, html, .site-wrapper { background-color: #FFFFFF !important; }
         .wordiva-sticky-cta {
             position: fixed;
             bottom: 1.5rem;
@@ -112,27 +109,27 @@ function wordiva_theme_scripts() {
         .wordiva-sticky-cta-link {
             display: inline-block;
             padding: 0.75rem 1.25rem;
-            background: var(--wordiva-electric-blue);
+            background: var(--w-brand-strong);
             color: #fff;
             border-radius: 999px;
             text-decoration: none;
             font-weight: 600;
-            box-shadow: 0 8px 24px rgba(47, 128, 255, 0.35);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
         }
         .wordiva-browse-section { margin: 2.5rem 0; text-align: center; }
         .wordiva-category-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; justify-content: center; }
         .wordiva-category-chip {
             padding: 0.35rem 0.85rem;
             border-radius: 999px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--w-border);
             text-decoration: none;
             font-size: 0.875rem;
         }
-        .wordiva-newsletter-cta { margin: 2rem 0; padding: 1.5rem; border-radius: 0.75rem; background: #f8fafc; }
-        .wordiva-product-links { margin: 2rem 0; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; }
+        .wordiva-newsletter-cta { margin: 2rem 0; padding: 1.5rem; border-radius: 0.75rem; background: var(--w-bg-soft); border: 1px solid var(--w-border); }
+        .wordiva-product-links { margin: 2rem 0; padding: 1.25rem; border: 1px solid var(--w-border); border-radius: 0.75rem; }
         .wordiva-product-links-list { list-style: none; margin: 0; padding: 0; }
         .wordiva-product-links-list li + li { margin-top: 0.5rem; }
-        .wordiva-topic-block { margin: 2rem 0; padding: 1.25rem; background: #f8fafc; border-radius: 0.75rem; }
+        .wordiva-topic-block { margin: 2rem 0; padding: 1.25rem; background: var(--w-bg-soft); border: 1px solid var(--w-border); border-radius: 0.75rem; }
         .wordiva-product-cta {
             margin: 0;
             padding: 0 2rem 2rem;
@@ -157,6 +154,29 @@ function wordiva_theme_scripts() {
     wp_add_inline_style('wordiva-blog-theme-style', $custom_css);
 }
 add_action('wp_enqueue_scripts', 'wordiva_theme_scripts');
+
+/**
+ * Theme FOUC guard — set data-theme on <html> before first paint.
+ * Mirrors the wordiva.ai root layout script: dark is the default and the
+ * shared 'wordiva-theme' localStorage key carries the preference across
+ * the marketing site and this blog (same origin).
+ */
+function wordiva_theme_fouc_guard() {
+    ?>
+    <script>
+    (function() {
+        try {
+            var stored = localStorage.getItem('wordiva-theme');
+            var theme = stored === 'light' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.classList.remove('dark', 'light');
+            document.documentElement.classList.add(theme);
+        } catch (e) {}
+    })();
+    </script>
+    <?php
+}
+add_action('wp_head', 'wordiva_theme_fouc_guard', 0);
 
 /**
  * Localize main script and comment reply when needed.

@@ -174,11 +174,11 @@ function wordiva_get_card_classes($post_id = null) {
  */
 function wordiva_get_card_color_vars($card_color = '') {
     $color_map = array(
-        'royal-purple' => '#7B4DFF',
+        'royal-purple' => '#d946ef',
         'neon-pink' => '#FF4FA3',
         'sunrise-orange' => '#FF9F1C',
         'golden-yellow' => '#FFD166',
-        '' => '#2F80FF' // Default electric blue
+        '' => '#6366f1' // Default brand indigo
     );
     
     $color = isset($color_map[$card_color]) ? $color_map[$card_color] : $color_map[''];
