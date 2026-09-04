@@ -148,9 +148,30 @@
         }, 4000);
     }
 
+    /**
+     * Live character counters for SEO title / meta description fields
+     */
+    function initSeoCharCounters() {
+        $('.wordiva-char-count').each(function() {
+            const field = $(this);
+            const max = parseInt(field.data('max'), 10) || 0;
+            const label = field.nextAll('.wordiva-char-count-label').first();
+
+            function update() {
+                const len = field.val().length;
+                label.text(len + ' / ' + max + ' characters');
+                label.toggleClass('wordiva-char-count-over', max > 0 && len > max);
+            }
+
+            field.on('input', update);
+            update();
+        });
+    }
+
     // Initialize all functionality when document is ready
     $(document).ready(function() {
         initMetaBoxes();
+        initSeoCharCounters();
         
         /**
          * Initialize card color preview

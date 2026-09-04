@@ -34,8 +34,8 @@ get_header(); ?>
                     }
                 } elseif (is_tag()) {
                     $tag = get_queried_object();
-                    $archive_title = 'Tag: ' . $tag->name;
-                    $archive_description = $tag->description ? $tag->description : 'Browse articles tagged with ' . $tag->name . '.';
+                    $archive_title = sprintf('Posts tagged “%s”', $tag->name);
+                    $archive_description = $tag->description ? $tag->description : 'Articles about ' . $tag->name . ' from the Wordiva blog.';
                 } elseif (is_author()) {
                     $author = get_queried_object();
                     $author_name = wordiva_get_author_display_name($author->ID);

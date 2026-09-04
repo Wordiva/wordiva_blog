@@ -47,7 +47,22 @@ add_action('add_meta_boxes', 'wordiva_add_post_meta_boxes');
 function wordiva_seo_checklist_callback($post) {
     $faq = get_post_meta($post->ID, '_wordiva_enable_faq_schema', true);
     $schema_type = get_post_meta($post->ID, '_wordiva_schema_type', true);
+    $seo_title = get_post_meta($post->ID, '_wordiva_seo_title', true);
+    $seo_description = get_post_meta($post->ID, '_wordiva_seo_description', true);
+    $suffix_len = strlen(' ' . WORDIVA_TITLE_SEPARATOR . ' ' . WORDIVA_TITLE_SUFFIX);
     ?>
+    <p>
+        <label for="wordiva_seo_title"><strong><?php esc_html_e('SEO Title', 'wordiva-blog-theme'); ?></strong></label><br>
+        <input type="text" id="wordiva_seo_title" name="wordiva_seo_title" class="widefat wordiva-char-count" value="<?php echo esc_attr($seo_title); ?>" data-max="<?php echo esc_attr(60 - $suffix_len); ?>" placeholder="<?php echo esc_attr(get_the_title($post)); ?>">
+        <span class="description wordiva-char-count-label"></span>
+        <span class="description"><?php printf(esc_html__('Rendered as “%1$s %2$s %3$s”. Leave blank to use the post title.', 'wordiva-blog-theme'), '…', WORDIVA_TITLE_SEPARATOR, WORDIVA_TITLE_SUFFIX); ?></span>
+    </p>
+    <p>
+        <label for="wordiva_seo_description"><strong><?php esc_html_e('Meta Description', 'wordiva-blog-theme'); ?></strong></label><br>
+        <textarea id="wordiva_seo_description" name="wordiva_seo_description" class="widefat wordiva-char-count" rows="3" data-max="155"><?php echo esc_textarea($seo_description); ?></textarea>
+        <span class="description wordiva-char-count-label"></span>
+        <span class="description"><?php esc_html_e('Leave blank to use the excerpt.', 'wordiva-blog-theme'); ?></span>
+    </p>
     <ul style="margin-left:1em;list-style:disc;">
         <li><?php esc_html_e('Keyword in slug and H1', 'wordiva-blog-theme'); ?></li>
         <li><?php esc_html_e('1200×630 featured image', 'wordiva-blog-theme'); ?></li>
@@ -260,5 +275,30 @@ function wordiva_save_post_meta($post_id) {
     if (isset($_POST['wordiva_schema_type'])) {
         update_post_meta($post_id, '_wordiva_schema_type', sanitize_text_field($_POST['wordiva_schema_type']));
     }
+    if (isset($_POST['wordiva_seo_title'])) {
+        update_post_meta($post_id, '_wordiva_seo_title', sanitize_text_field($_POST['wordiva_seo_title']));
+    }
+    if (isset($_POST['wordiva_seo_description'])) {
+        update_post_meta($post_id, '_wordiva_seo_description', sanitize_textarea_field($_POST['wordiva_seo_description']));
+    }
 }
 add_action('save_post', 'wordiva_save_post_meta');
+
+/**
+ * Expose SEO meta to REST / WP-CLI.
+ */
+function wordiva_register_seo_post_meta() {
+    $auth = function () {
+        return current_user_can('edit_posts');
+    };
+    foreach (array('_wordiva_seo_title', '_wordiva_seo_description', '_wordiva_enable_faq_schema') as $key) {
+        register_post_meta('post', $key, array(
+            'type' => 'string',
+            'single' => true,
+            'show_in_rest' => true,
+            'sanitize_callback' => $key === '_wordiva_seo_description' ? 'sanitize_textarea_field' : 'sanitize_text_field',
+            'auth_callback' => $auth,
+        ));
+    }
+}
+add_action('init', 'wordiva_register_seo_post_meta');

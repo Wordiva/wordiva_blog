@@ -490,3 +490,15 @@
   margin-bottom: 5px;
   color: #2B2B2B;
 }
+/* SEO field character counters */
+#wordiva_seo_checklist .wordiva-char-count-label {
+  display: block;
+  margin: 2px 0 4px;
+  font-size: 11px;
+  color: #646970;
+}
+
+#wordiva_seo_checklist .wordiva-char-count-over {
+  color: #d63638;
+  font-weight: 600;
+}

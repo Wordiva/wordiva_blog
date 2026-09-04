@@ -71,16 +71,63 @@ function wordiva_serve_llms_txt() {
 add_action('template_redirect', 'wordiva_serve_llms_txt');
 
 /**
- * Exclude authors without posts from user sitemap.
+ * Keep thin tag archives (noindex) out of the sitemap.
  */
-function wordiva_filter_user_sitemap($users) {
-    return array_filter($users, function ($user) {
-        return count_user_posts($user->ID, 'post', true) > 0;
-    });
+function wordiva_filter_tag_sitemap_args($args, $taxonomy) {
+    if ($taxonomy !== 'post_tag') {
+        return $args;
+    }
+    $tags = get_terms(array('taxonomy' => 'post_tag', 'hide_empty' => false));
+    if (is_wp_error($tags)) {
+        return $args;
+    }
+    $exclude = array();
+    foreach ($tags as $term) {
+        if (wordiva_is_thin_tag($term)) {
+            $exclude[] = $term->term_id;
+        }
+    }
+    if (!empty($exclude)) {
+        $args['exclude'] = array_merge(isset($args['exclude']) ? (array) $args['exclude'] : array(), $exclude);
+    }
+    return $args;
 }
-add_filter('wp_sitemaps_users_pre_url_list', function ($url_list) {
-    return $url_list;
-});
+add_filter('wp_sitemaps_taxonomies_query_args', 'wordiva_filter_tag_sitemap_args', 10, 2);
+
+/**
+ * Document title: "<SEO title> | Wordiva".
+ */
+function wordiva_document_title_separator() {
+    return WORDIVA_TITLE_SEPARATOR;
+}
+add_filter('document_title_separator', 'wordiva_document_title_separator');
+
+function wordiva_document_title_parts($parts) {
+    if (is_singular()) {
+        $parts['title'] = wordiva_get_seo_title();
+    } elseif (is_home() || is_front_page()) {
+        $parts['title'] = get_bloginfo('name');
+    } elseif (is_tag()) {
+        $parts['title'] = sprintf('Posts tagged “%s”', single_tag_title('', false));
+    } elseif (is_category()) {
+        $parts['title'] = single_cat_title('', false);
+    }
+    unset($parts['tagline']);
+    $parts['site'] = WORDIVA_TITLE_SUFFIX;
+    return $parts;
+}
+add_filter('document_title_parts', 'wordiva_document_title_parts', 20);
+
+/**
+ * Same title string as <title>, for og:title / twitter:title.
+ */
+function wordiva_build_social_title($title) {
+    $paged = max(1, (int) get_query_var('paged'));
+    if ($paged > 1) {
+        $title .= ' ' . WORDIVA_TITLE_SEPARATOR . ' Page ' . $paged;
+    }
+    return $title . ' ' . WORDIVA_TITLE_SEPARATOR . ' ' . WORDIVA_TITLE_SUFFIX;
+}
 
 /**
  * SEO meta tags.
@@ -90,21 +137,17 @@ function wordiva_seo_meta_tags() {
 
     $site_name = get_bloginfo('name');
     $site_description = wordiva_get_default_blog_description();
-    $site_url = wordiva_get_blog_index_url();
     $title = '';
     $description = '';
-    $canonical_url = '';
+    $canonical_url = wordiva_get_canonical_url();
     $image_url = '';
     $image_alt = '';
     $article_type = 'website';
     $robots = wordiva_get_robots_directive();
 
     if (is_singular()) {
-        $title = get_the_title() . ' | ' . $site_name;
-        $description = has_excerpt()
-            ? wp_trim_words(get_the_excerpt(), 25, '...')
-            : wp_trim_words(get_the_content(), 25, '...');
-        $canonical_url = get_permalink();
+        $title = wordiva_get_seo_title();
+        $description = wordiva_get_seo_description();
         if (has_post_thumbnail()) {
             $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
             $image_alt = get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true);
@@ -114,40 +157,34 @@ function wordiva_seo_meta_tags() {
         }
     } elseif (is_home() || is_front_page()) {
         $title = $site_name;
-        if (!empty($site_description)) {
-            $title .= ' | ' . $site_description;
-        }
         $description = $site_description;
-        $canonical_url = $site_url;
     } elseif (is_category()) {
         $category = get_queried_object();
-        $title = $category->name . ' | ' . $site_name;
+        $title = $category->name;
         $description = $category->description
             ? $category->description
             : wordiva_get_category_fallback_description($category->slug);
         if (empty($description)) {
             $description = 'Browse articles in ' . $category->name . '.';
         }
-        $canonical_url = get_category_link($category->term_id);
     } elseif (is_tag()) {
         $tag = get_queried_object();
-        $title = $tag->name . ' | ' . $site_name;
-        $description = $tag->description ? $tag->description : 'Browse articles tagged with ' . $tag->name . '.';
-        $canonical_url = get_tag_link($tag->term_id);
+        $title = sprintf('Posts tagged “%s”', $tag->name);
+        $description = $tag->description ? $tag->description : 'Articles about ' . $tag->name . ' from the Wordiva blog.';
     } elseif (is_author()) {
         $author = get_queried_object();
-        $title = wordiva_get_author_display_name($author->ID) . ' | ' . $site_name;
+        $title = wordiva_get_author_display_name($author->ID);
         $description = $author->description ? $author->description : 'Articles by ' . wordiva_get_author_display_name($author->ID) . '.';
-        $canonical_url = get_author_posts_url($author->ID);
     } elseif (is_search()) {
         $search_query = get_search_query();
-        $title = 'Search Results for "' . $search_query . '" | ' . $site_name;
+        $title = 'Search Results for "' . $search_query . '"';
         $description = 'Search results for "' . $search_query . '" on ' . $site_name . '.';
-        $canonical_url = get_search_link($search_query);
     } elseif (is_404()) {
-        $title = 'Page Not Found | ' . $site_name;
+        $title = 'Page Not Found';
         $description = 'The page you are looking for could not be found.';
     }
+    $title = wordiva_build_social_title($title);
+    $rel_links = wordiva_get_pagination_rel_links();
 
     if (empty($image_url)) {
         $image_url = wordiva_get_default_og_image_url();
@@ -166,6 +203,9 @@ function wordiva_seo_meta_tags() {
     <?php if (wordiva_should_output_canonical() && !empty($canonical_url)) : ?>
     <link rel="canonical" href="<?php echo esc_url($canonical_url); ?>">
     <?php endif; ?>
+    <?php foreach ($rel_links as $rel => $href) : ?>
+    <link rel="<?php echo esc_attr($rel); ?>" href="<?php echo esc_url($href); ?>">
+    <?php endforeach; ?>
 
     <meta property="og:locale" content="<?php echo esc_attr(get_locale()); ?>">
     <meta property="og:type" content="<?php echo esc_attr($article_type); ?>">

@@ -11,6 +11,94 @@ if (!defined('ABSPATH')) {
 }
 
 define('WORDIVA_ORG_ID', 'https://wordiva.ai/#organization');
+define('WORDIVA_TITLE_SUFFIX', 'Wordiva');
+define('WORDIVA_TITLE_SEPARATOR', '|');
+define('WORDIVA_THIN_TAG_MIN_POSTS', 3);
+
+/**
+ * Whether a tag archive is too thin to index.
+ */
+function wordiva_is_thin_tag($term = null) {
+    if (!$term) {
+        $term = get_queried_object();
+    }
+    return $term instanceof WP_Term && (int) $term->count < WORDIVA_THIN_TAG_MIN_POSTS;
+}
+
+/**
+ * Per-post SEO title override, falling back to the post title.
+ */
+function wordiva_get_seo_title($post_id = null) {
+    $post_id = $post_id ?: get_the_ID();
+    $custom = trim((string) get_post_meta($post_id, '_wordiva_seo_title', true));
+    return $custom !== '' ? $custom : get_the_title($post_id);
+}
+
+/**
+ * Per-post meta description override, falling back to excerpt/content.
+ */
+function wordiva_get_seo_description($post_id = null) {
+    $post_id = $post_id ?: get_the_ID();
+    $custom = trim((string) get_post_meta($post_id, '_wordiva_seo_description', true));
+    if ($custom !== '') {
+        return $custom;
+    }
+    return has_excerpt($post_id)
+        ? wp_trim_words(get_the_excerpt($post_id), 25, '...')
+        : wp_trim_words(wp_strip_all_tags(get_post_field('post_content', $post_id)), 25, '...');
+}
+
+/**
+ * Canonical URL for the current request (self-referencing on paginated archives).
+ */
+function wordiva_get_canonical_url() {
+    if (is_singular()) {
+        return get_permalink();
+    }
+    $paged = max(1, (int) get_query_var('paged'));
+    if ($paged > 1 && (is_home() || is_archive())) {
+        return get_pagenum_link($paged);
+    }
+    if (is_home() || is_front_page()) {
+        return wordiva_get_blog_index_url();
+    }
+    if (is_category() || is_tag()) {
+        return get_term_link(get_queried_object());
+    }
+    if (is_author()) {
+        return get_author_posts_url(get_queried_object_id());
+    }
+    if (is_search()) {
+        return get_search_link(get_search_query());
+    }
+    return '';
+}
+
+/**
+ * rel="prev" / rel="next" URLs for paginated home/archive queries.
+ */
+function wordiva_get_pagination_rel_links() {
+    global $wp_query;
+    if (!(is_home() || is_archive()) || empty($wp_query->max_num_pages) || $wp_query->max_num_pages < 2) {
+        return array();
+    }
+    $paged = max(1, (int) get_query_var('paged'));
+    $links = array();
+    if ($paged > 1) {
+        $links['prev'] = $paged === 2 ? wordiva_get_canonical_first_page_url() : get_pagenum_link($paged - 1);
+    }
+    if ($paged < (int) $wp_query->max_num_pages) {
+        $links['next'] = get_pagenum_link($paged + 1);
+    }
+    return $links;
+}
+
+function wordiva_get_canonical_first_page_url() {
+    if (is_home()) {
+        return wordiva_get_blog_index_url();
+    }
+    return get_pagenum_link(1);
+}
 
 /**
  * Default blog SEO description (blog-updates.md).
@@ -76,6 +164,9 @@ function wordiva_get_robots_directive() {
         if ($author && empty($author->description)) {
             return 'noindex, follow';
         }
+    }
+    if (is_tag() && wordiva_is_thin_tag()) {
+        return 'noindex, follow';
     }
     return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 }
@@ -225,9 +316,7 @@ function wordiva_get_blog_posting_schema($post_id = null) {
         return null;
     }
     $permalink = get_permalink($post_id);
-    $excerpt = has_excerpt($post_id)
-        ? wp_trim_words(get_the_excerpt($post_id), 25, '...')
-        : wp_trim_words(wp_strip_all_tags($post->post_content), 25, '...');
+    $excerpt = wordiva_get_seo_description($post_id);
     $image_url = has_post_thumbnail($post_id)
         ? get_the_post_thumbnail_url($post_id, 'large')
         : wordiva_get_default_og_image_url();
@@ -401,14 +490,32 @@ function wordiva_get_category_fallback_description($slug) {
  */
 function wordiva_faq_schema_from_content($content) {
     $pairs = array();
-    if (preg_match_all('/<!-- wp:heading.*?-->.*?<h[2-4][^>]*>(.*?)<\/h[2-4]>.*?<!-- \/wp:heading -->.*?<!-- wp:paragraph.*?-->.*?<p>(.*?)<\/p>/s', $content, $matches, PREG_SET_ORDER)) {
+    $seen = array();
+    $add_pair = function ($question, $answer) use (&$pairs, &$seen) {
+        $question = trim(preg_replace('/\s+/', ' ', wp_strip_all_tags($question)));
+        $answer = trim(preg_replace('/\s+/', ' ', wp_strip_all_tags($answer)));
+        if (strlen($question) > 5 && strlen($answer) > 10 && !isset($seen[$question])) {
+            $seen[$question] = true;
+            $pairs[] = array('question' => $question, 'answer' => $answer);
+        }
+    };
+
+    // core/details blocks: <details><summary>Q</summary> ...A... </details>
+    if (preg_match_all('/<details[^>]*>\s*<summary[^>]*>(.*?)<\/summary>(.*?)<\/details>/s', $content, $matches, PREG_SET_ORDER)) {
         foreach ($matches as $match) {
-            $question = wp_strip_all_tags($match[1]);
-            $answer = wp_strip_all_tags($match[2]);
-            if (strlen($question) > 5 && strlen($answer) > 10) {
-                if (stripos($question, '?') !== false || stripos($question, 'faq') !== false) {
-                    $pairs[] = array('question' => $question, 'answer' => $answer);
-                }
+            $add_pair($match[1], $match[2]);
+        }
+    }
+
+    // Question headings (containing "?") followed by paragraphs until the next heading.
+    if (preg_match_all('/<h([2-4])[^>]*>(.*?)<\/h\1>(.*?)(?=<h[2-4][^>]*>|$)/s', $content, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $match) {
+            $question = wp_strip_all_tags($match[2]);
+            if (strpos($question, '?') === false) {
+                continue;
+            }
+            if (preg_match_all('/<p[^>]*>(.*?)<\/p>/s', $match[3], $paragraphs)) {
+                $add_pair($question, implode(' ', $paragraphs[1]));
             }
         }
     }
