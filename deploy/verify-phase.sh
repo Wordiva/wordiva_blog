@@ -184,6 +184,77 @@ phase_9() {
   log_pass "Phase 9 runs full regression (GA4 is Customizer-dependent — check manually if ID set)"
 }
 
+assert_title_length() {
+  local url="$1" max="$2" label="$3"
+  local title len
+  title="$(curl -sS -L --max-time 30 "$url" | grep -oE '<title>[^<]*</title>' | head -1 | sed -E 's/<\/?title>//g' | sed -e 's/&#8211;/–/g' -e 's/&amp;/\&/g' -e 's/&#038;/\&/g')"
+  len="$(printf '%s' "$title" | wc -m | tr -d ' ')"
+  if [[ -n "$title" && "$len" -le "$max" ]]; then
+    log_pass "$label (${len} chars: ${title})"
+  else
+    log_fail "$label — ${len} chars > ${max}: ${title}"
+  fi
+}
+
+assert_meta_description_length() {
+  local url="$1" max="$2" label="$3"
+  local desc len
+  desc="$(curl -sS -L --max-time 30 "$url" | grep -oE '<meta name="description" content="[^"]*"' | head -1 | sed -E 's/^.*content="//; s/"$//')"
+  len="$(printf '%s' "$desc" | wc -m | tr -d ' ')"
+  if [[ -n "$desc" && "$len" -le "$max" ]]; then
+    log_pass "$label (${len} chars)"
+  else
+    log_fail "$label — ${len} chars > ${max}: ${desc}"
+  fi
+}
+
+phase_10() {
+  printf '\n=== Phase 10: 2026-09-04 SEO brief (pagination, titles, tags, FAQ) ===\n'
+  local page2_code page2_body
+  page2_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "${BASE_URL}/page/2/" || echo "000")"
+  if [[ "$page2_code" == "404" ]]; then
+    log_pass "/page/2/ returns 404 (no thin pagination)"
+  else
+    page2_body="$(curl -sS -L --max-time 30 "${BASE_URL}/page/2/" || true)"
+    if echo "$page2_body" | grep -q 'rel="canonical" href="[^"]*/page/2/\?"'; then
+      log_pass "/page/2/ is self-canonical (HTTP ${page2_code})"
+    else
+      log_fail "/page/2/ (HTTP ${page2_code}) canonical is not self-referencing"
+    fi
+    assert_body_contains "${BASE_URL}/page/2/" 'rel="prev"' "/page/2/ has rel=prev"
+  fi
+  assert_canonical_count "${BASE_URL}/" 1 "Blog home single canonical"
+  assert_body_contains "${BASE_URL}/" 'rel="canonical" href="https://wordiva\.ai/blog/"' "Blog home canonical"
+  assert_body_not_contains "${BASE_URL}/" 'rel="next"' "Blog home has no rel=next when single page"
+  assert_body_contains "${BASE_URL}/" '<title>[^<]*\| Wordiva</title>' "Title suffix | Wordiva on home"
+  assert_body_not_contains "${BASE_URL}/" 'Wordiva \| Wordiva' "No doubled brand in title"
+
+  for slug in \
+    ai-content-marketing/automate-blog-content-without-losing-quality \
+    ai-content-marketing/blog-seo-automation \
+    ai-content-marketing/ai-content-marketing-b2b-automation \
+    ai-content-marketing/b2b-content-calendar-automated-plan; do
+    local url="${BASE_URL}/${slug}"
+    assert_title_length "$url" 60 "Title <= 60 on ${slug##*/}"
+    assert_meta_description_length "$url" 155 "Meta description <= 155 on ${slug##*/}"
+    assert_body_contains "$url" '<title>[^<]*\| Wordiva</title>' "Title suffix on ${slug##*/}"
+    assert_canonical_count "$url" 1 "Single canonical on ${slug##*/}"
+    assert_body_contains "$url" '"@type":"BlogPosting"' "BlogPosting on ${slug##*/}"
+    assert_body_contains "$url" '"@type":"BreadcrumbList"' "BreadcrumbList on ${slug##*/}"
+  done
+  assert_body_contains "${BASE_URL}/ai-content-marketing/b2b-content-calendar-automated-plan" '"@type":"FAQPage"' "FAQPage on calendar post"
+  assert_body_contains "${BASE_URL}/ai-content-marketing/b2b-content-calendar-automated-plan" 'wordiva-faq' "FAQ UI block on calendar post"
+
+  assert_body_contains "${BASE_URL}/tag/${WORDIVA_THIN_TAG:-seo-planning}/" 'noindex, follow' "Thin tag archive noindex"
+  assert_body_contains "${BASE_URL}/tag/${WORDIVA_HEALTHY_TAG:-agentic-ai}/" 'content="index, follow' "Healthy tag archive indexable"
+  assert_body_not_contains "${BASE_URL}/wp-sitemap-taxonomies-post_tag-1.xml" "/tag/${WORDIVA_THIN_TAG:-seo-planning}" "Thin tag absent from sitemap"
+  assert_body_contains "${BASE_URL}/category/ai-content-marketing/" '<title>Ai Content Marketing \| Wordiva</title>|<title>AI Content Marketing \| Wordiva</title>' "Category title format"
+
+  assert_body_contains "${BASE_URL}/" 'G-QNTZ96XNJE' "GA4 G-QNTZ96XNJE present"
+  assert_body_not_contains "${BASE_URL}/" 'G-REEGXK3HRN' "Stale GA4 ID absent"
+  assert_body_contains "${BASE_URL}/feed/" '<item>' "RSS feed still serves items"
+}
+
 run_phase() {
   case "$1" in
     0) phase_0 ;;
@@ -196,13 +267,14 @@ run_phase() {
     7) phase_7 ;;
     8) phase_8 ;;
     9) phase_9 ;;
+    10) phase_10 ;;
     all)
-      for p in 0 1 2 3 4 5 6 7 8; do
+      for p in 0 1 2 3 4 5 6 7 8 10; do
         run_phase "$p"
       done
       ;;
     *)
-      echo "Usage: $0 <0-9|all>" >&2
+      echo "Usage: $0 <0-10|all>" >&2
       exit 2
       ;;
   esac
@@ -210,7 +282,7 @@ run_phase() {
 
 main() {
   if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <0-9|all>" >&2
+    echo "Usage: $0 <0-10|all>" >&2
     exit 2
   fi
   run_phase "$1"
