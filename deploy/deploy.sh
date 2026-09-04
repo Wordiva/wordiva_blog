@@ -75,7 +75,7 @@ verify_site() {
   local body
   body="$(curl -sS -L --max-time 30 "${SITE_URL}")"
 
-  if echo "${body}" | grep -Eqi 'wordiva|wordiva-blog-theme'; then
+  if grep -Eqi 'wordiva|wordiva-blog-theme' <<< "${body}"; then
     log "Page content looks valid (theme/branding detected)."
   else
     die "Site returned HTTP ${http_code} but expected theme content was not found."

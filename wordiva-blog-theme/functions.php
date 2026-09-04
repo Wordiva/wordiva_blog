@@ -216,6 +216,23 @@ function wordiva_improve_semantic_markup($content) {
 add_filter('the_content', 'wordiva_improve_semantic_markup');
 
 /**
+ * Internal links must be crawlable: drop nofollow/target from wordiva.ai anchors.
+ */
+function wordiva_make_internal_links_followable($content) {
+    if (strpos($content, 'wordiva.ai') === false) {
+        return $content;
+    }
+    return preg_replace_callback('/<a\s[^>]*href="https?:\/\/(?:www\.)?wordiva\.ai[^"]*"[^>]*>/i', function ($m) {
+        $tag = preg_replace('/\s+target="[^"]*"/i', '', $m[0]);
+        return preg_replace_callback('/\srel="([^"]*)"/i', function ($rel) {
+            $values = array_diff(preg_split('/\s+/', trim($rel[1])), array('nofollow', 'noopener', 'noreferrer', ''));
+            return $values ? ' rel="' . esc_attr(implode(' ', $values)) . '"' : '';
+        }, $tag);
+    }, $content);
+}
+add_filter('the_content', 'wordiva_make_internal_links_followable', 9);
+
+/**
  * Get configurable URLs from customizer with fallbacks
  */
 function wordiva_get_main_site_url() {

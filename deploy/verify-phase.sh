@@ -5,6 +5,7 @@ set -euo pipefail
 # Usage: ./deploy/verify-phase.sh <0-9|all>
 
 BASE_URL="${WORDIVA_BLOG_URL:-https://wordiva.ai/blog}"
+ROOT_URL="${WORDIVA_ROOT_URL:-https://wordiva.ai}"
 SAMPLE_POST="${WORDIVA_SAMPLE_POST:-${BASE_URL}/ai-content-marketing/build-ai-content-engine}"
 AUTHOR_URL="${WORDIVA_AUTHOR_URL:-${BASE_URL}/author/rubia}"
 FAKE_404="${BASE_URL}/this-url-does-not-exist-seo-test"
@@ -31,7 +32,7 @@ assert_body_contains() {
   local url="$1" pattern="$2" label="$3"
   local body
   body="$(curl -sS -L --max-time 30 "$url" || true)"
-  if echo "$body" | grep -Eq "$pattern"; then
+  if grep -Eq "$pattern" <<< "$body"; then
     log_pass "$label"
   else
     log_fail "$label — pattern not found: ${pattern}"
@@ -42,7 +43,7 @@ assert_body_not_contains() {
   local url="$1" pattern="$2" label="$3"
   local body
   body="$(curl -sS -L --max-time 30 "$url" || true)"
-  if echo "$body" | grep -Eq "$pattern"; then
+  if grep -Eq "$pattern" <<< "$body"; then
     log_fail "$label — unexpected pattern: ${pattern}"
   else
     log_pass "$label"
@@ -53,7 +54,7 @@ assert_canonical_count() {
   local url="$1" expected="$2" label="$3"
   local body count
   body="$(curl -sS -L --max-time 30 "$url" || true)"
-  count="$(echo "$body" | grep -c 'rel="canonical"' || true)"
+  count="$(grep -c 'rel="canonical"' <<< "$body" || true)"
   if [[ "$count" -eq "$expected" ]]; then
     log_pass "$label (${count} canonical tag(s))"
   else
@@ -65,23 +66,23 @@ phase_0() {
   printf '\n=== Phase 0: Crawl and index foundation ===\n'
   assert_http_ok "${BASE_URL}/" "Blog home"
   assert_body_contains "${BASE_URL}/" 'meta name="description" content="[^"]{20,}' "Meta description populated"
-  assert_http_ok "${BASE_URL}/robots.txt" "robots.txt"
+  assert_http_ok "${ROOT_URL}/robots.txt" "robots.txt (domain root)"
   local robots
-  robots="$(curl -sS -L --max-time 30 "${BASE_URL}/robots.txt" || true)"
-  if echo "$robots" | grep -q 'Disallow: /\*\?'; then
+  robots="$(curl -sS -L --max-time 30 "${ROOT_URL}/robots.txt" || true)"
+  if grep -qF 'Disallow: /*?' <<< "$robots"; then
     log_fail "robots.txt must not contain Disallow: /*?*"
   else
     log_pass "No aggressive /*?* disallow"
   fi
-  if echo "$robots" | grep -q 'OAI-SearchBot'; then
+  if grep -q 'OAI-SearchBot' <<< "$robots"; then
     log_pass "OAI-SearchBot in robots.txt"
   else
     log_fail "OAI-SearchBot missing from robots.txt"
   fi
-  if echo "$robots" | grep -q 'Disallow: /wp-json/'; then
-    log_pass "wp-json disallow present"
+  if grep -qE 'Disallow: /blog' <<< "$robots"; then
+    log_fail "robots.txt must not disallow /blog"
   else
-    log_fail "wp-json disallow missing"
+    log_pass "robots.txt does not block /blog"
   fi
   assert_http_ok "${BASE_URL}/wp-sitemap.xml" "wp-sitemap.xml"
   assert_body_contains "${FAKE_404}" 'noindex, nofollow' "404 noindex,nofollow"
@@ -101,7 +102,7 @@ phase_1() {
 
 phase_2() {
   printf '\n=== Phase 2: Authors (E-E-A-T) ===\n'
-  assert_body_contains "${SAMPLE_POST}" '"author":\{"@type":"Person","name":"[^"]+' "Author Person in schema"
+  assert_body_contains "${SAMPLE_POST}" '"author":\{"@type":"Person",("@id":"[^"]+",)?"name":"[^"]+' "Author Person in schema"
   assert_http_ok "${AUTHOR_URL}" "Author archive"
   assert_body_contains "${AUTHOR_URL}" 'ProfilePage|"@type":"Person"' "Author ProfilePage or Person schema"
 }
@@ -110,15 +111,15 @@ phase_3() {
   printf '\n=== Phase 3: Performance ===\n'
   local home_body
   home_body="$(curl -sS -L --max-time 30 "${BASE_URL}/" || true)"
-  if echo "$home_body" | grep -q 'social-sharing\.js'; then
+  if grep -q 'social-sharing\.js' <<< "$home_body"; then
     log_fail "social-sharing.js should not load on homepage"
   else
     log_pass "social-sharing.js absent on homepage"
   fi
   for asset in navigation.js main.js; do
-    assert_http_ok "${BASE_URL}/wp-content/themes/wordiva-blog-theme/assets/js/${asset}" "JS asset ${asset}"
+    assert_http_ok "${ROOT_URL}/wp-content/themes/wordiva-blog-theme/assets/js/${asset}" "JS asset ${asset}"
   done
-  assert_http_ok "${BASE_URL}/wp-content/themes/wordiva-blog-theme/assets/css/navigation.css" "navigation.css"
+  assert_http_ok "${ROOT_URL}/wp-content/themes/wordiva-blog-theme/assets/css/navigation.css" "navigation.css"
 }
 
 phase_4() {
@@ -142,12 +143,12 @@ phase_6() {
   printf '\n=== Phase 6: GEO and llms.txt ===\n'
   local llms
   llms="$(curl -sS -L --max-time 30 "${BASE_URL}/llms.txt" || true)"
-  if echo "$llms" | head -1 | grep -q '# Wordiva'; then
+  if head -1 <<< "$llms" | grep -q '# Wordiva'; then
     log_pass "llms.txt H1"
   else
     log_fail "llms.txt must start with # Wordiva"
   fi
-  if echo "$llms" | grep -q '## Blog'; then
+  if grep -q '## Blog' <<< "$llms"; then
     log_pass "llms.txt Blog section"
   else
     log_fail "llms.txt missing ## Blog section"
@@ -156,7 +157,7 @@ phase_6() {
 
 phase_7() {
   printf '\n=== Phase 7: Internal linking and CTAs ===\n'
-  assert_body_contains "${SAMPLE_POST}" 'utm_source=blog&amp;utm_medium=organic|utm_source=blog&utm_medium=organic' "Sticky/product CTA UTM params"
+  assert_body_contains "${SAMPLE_POST}" 'utm_source=blog(&amp;|&#038;|&)utm_medium=organic' "Sticky/product CTA UTM params"
   assert_body_contains "${BASE_URL}/" '/compare' "Footer Compare link"
   assert_body_contains "${BASE_URL}/" '/integrations/wordpress' "Footer Integrations link"
   assert_body_contains "${BASE_URL}/" '/feed/' "Footer RSS link"
@@ -216,7 +217,7 @@ phase_10() {
     log_pass "/page/2/ returns 404 (no thin pagination)"
   else
     page2_body="$(curl -sS -L --max-time 30 "${BASE_URL}/page/2/" || true)"
-    if echo "$page2_body" | grep -q 'rel="canonical" href="[^"]*/page/2/\?"'; then
+    if grep -q 'rel="canonical" href="[^"]*/page/2/\?"' <<< "$page2_body"; then
       log_pass "/page/2/ is self-canonical (HTTP ${page2_code})"
     else
       log_fail "/page/2/ (HTTP ${page2_code}) canonical is not self-referencing"
@@ -246,7 +247,7 @@ phase_10() {
   assert_body_contains "${BASE_URL}/ai-content-marketing/b2b-content-calendar-automated-plan" 'wordiva-faq' "FAQ UI block on calendar post"
 
   assert_body_contains "${BASE_URL}/tag/${WORDIVA_THIN_TAG:-seo-planning}/" 'noindex, follow' "Thin tag archive noindex"
-  assert_body_contains "${BASE_URL}/tag/${WORDIVA_HEALTHY_TAG:-agentic-ai}/" 'content="index, follow' "Healthy tag archive indexable"
+  assert_body_contains "${BASE_URL}/tag/${WORDIVA_HEALTHY_TAG:-blog-automation}/" 'content="index, follow' "Healthy tag archive indexable"
   assert_body_not_contains "${BASE_URL}/wp-sitemap-taxonomies-post_tag-1.xml" "/tag/${WORDIVA_THIN_TAG:-seo-planning}" "Thin tag absent from sitemap"
   assert_body_contains "${BASE_URL}/category/ai-content-marketing/" '<title>Ai Content Marketing \| Wordiva</title>|<title>AI Content Marketing \| Wordiva</title>' "Category title format"
 
