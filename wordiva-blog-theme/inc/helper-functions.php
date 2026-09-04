@@ -126,6 +126,60 @@ function wordiva_get_featured_posts($limit = 3) {
 }
 
 /**
+ * Related posts: shared tags first, then same category, then most recent.
+ */
+function wordiva_get_related_posts_query($post_id, $limit = 3) {
+    $exclude = array($post_id);
+    $ids = array();
+    $base = array(
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'fields' => 'ids',
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'no_found_rows' => true,
+    );
+
+    $tags = wp_get_post_tags($post_id, array('fields' => 'ids'));
+    if (!empty($tags)) {
+        $ids = get_posts(array_merge($base, array(
+            'posts_per_page' => $limit,
+            'post__not_in' => $exclude,
+            'tag__in' => $tags,
+        )));
+    }
+
+    if (count($ids) < $limit) {
+        $categories = wp_get_post_categories($post_id);
+        if (!empty($categories)) {
+            $ids = array_merge($ids, get_posts(array_merge($base, array(
+                'posts_per_page' => $limit - count($ids),
+                'post__not_in' => array_merge($exclude, $ids),
+                'category__in' => $categories,
+            ))));
+        }
+    }
+
+    if (count($ids) < $limit) {
+        $ids = array_merge($ids, get_posts(array_merge($base, array(
+            'posts_per_page' => $limit - count($ids),
+            'post__not_in' => array_merge($exclude, $ids),
+        ))));
+    }
+
+    if (empty($ids)) {
+        return new WP_Query(array('post__in' => array(0)));
+    }
+
+    return new WP_Query(array(
+        'post_type' => 'post',
+        'post__in' => $ids,
+        'orderby' => 'post__in',
+        'posts_per_page' => count($ids),
+    ));
+}
+
+/**
  * Get card CSS classes based on post meta
  */
 function wordiva_get_card_classes($post_id = null) {

@@ -5,7 +5,7 @@ Tags: blog, content-marketing, ai, desktop, custom-colors, featured-images, acce
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,16 @@ Yes, you can customize the Wordiva brand colors through the WordPress Customizer
 Yes, the theme includes comprehensive SEO optimization with structured data markup, proper heading hierarchy, and semantic HTML.
 
 == Changelog ==
+
+= 2.1.0 =
+* Self-referencing canonicals plus rel=prev/next on paginated archives
+* Unified "<title> | Wordiva" document titles; per-post SEO Title and Meta
+  Description fields (exposed via REST) with live character counters
+* Thin tag archives (fewer than 3 posts) are noindex,follow and excluded from
+  the tag sitemap
+* Blog index posts-per-page now driven by the Customizer setting (default 12)
+* FAQPage schema parses core/details blocks; .wordiva-faq accordion styling
+* Related posts prefer shared tags before falling back to category/recency
 
 = 2.0.0 =
 * Premium redesign matching wordiva.ai — dark theme by default with a light toggle

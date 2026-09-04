@@ -322,25 +322,7 @@ get_header(); ?>
 
             <!-- Related Posts using Card Layout -->
             <?php
-            $related_posts = new WP_Query(array(
-                'post_type' => 'post',
-                'posts_per_page' => 3,
-                'post__not_in' => array(get_the_ID()),
-                'category__in' => wp_get_post_categories(get_the_ID()),
-                'orderby' => 'date',
-                'order' => 'DESC',
-            ));
-
-            // Fallback: If no related posts found by category, get recent posts
-            if (!$related_posts->have_posts()) {
-                $related_posts = new WP_Query(array(
-                    'post_type' => 'post',
-                    'posts_per_page' => 3,
-                    'post__not_in' => array(get_the_ID()),
-                    'orderby' => 'date',
-                    'order' => 'DESC'
-                ));
-            }
+            $related_posts = wordiva_get_related_posts_query(get_the_ID(), 3);
 
             if ($related_posts->have_posts()) : ?>
                 <section class="related-posts slack-related-posts" itemscope itemtype="https://schema.org/ItemList">

@@ -4,7 +4,7 @@ Description: Custom WordPress theme for the Wordiva AI content marketing blog. P
 Author: Wordiva Team
 Author URI: https://wordiva.ai
 Theme URI: https://wordiva.ai
-Version: 2.0.0
+Version: 2.1.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: wordiva-blog-theme
@@ -1645,6 +1645,45 @@ a.page-numbers:hover {
   cursor: pointer;
   font-weight: var(--wordiva-font-weight-semibold);
   color: var(--wordiva-charcoal-dark);
+}
+
+.entry-content .wordiva-faq details {
+  margin: 0 0 var(--wordiva-spacing-sm);
+  padding: var(--wordiva-spacing-sm) var(--wordiva-spacing-md);
+}
+
+.entry-content .wordiva-faq details[open] {
+  border-color: var(--w-brand);
+}
+
+.entry-content .wordiva-faq summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wordiva-spacing-sm);
+  font-size: 1.05rem;
+}
+
+.entry-content .wordiva-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.entry-content .wordiva-faq summary::after {
+  content: '+';
+  flex: none;
+  color: var(--w-brand);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.entry-content .wordiva-faq details[open] summary::after {
+  content: '\2212';
+}
+
+.entry-content .wordiva-faq details > p {
+  margin: var(--wordiva-spacing-sm) 0 0;
+  color: var(--w-text-2);
 }
 
 .single-post-content .wp-block-image,
