@@ -164,7 +164,7 @@ function wordiva_enhanced_customize_register($wp_customize) {
     
     // Blog posts per page
     $wp_customize->add_setting('wordiva_posts_per_page', array(
-        'default'           => 9,
+        'default'           => 12,
         'sanitize_callback' => 'absint',
     ));
     
@@ -174,7 +174,7 @@ function wordiva_enhanced_customize_register($wp_customize) {
         'type'    => 'number',
         'input_attrs' => array(
             'min' => 3,
-            'max' => 12,
+            'max' => 24,
             'step' => 3,
         ),
     ));

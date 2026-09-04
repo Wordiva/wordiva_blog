@@ -33,26 +33,10 @@ get_header(); ?>
                 $main_query = null;
                 
                 // Get featured post first
-                $featured_query = new WP_Query(array(
-                    'posts_per_page' => 1,
-                    'post_status' => 'publish',
-                    'meta_query' => array(
-                        array(
-                            'key' => '_wordiva_featured_post',
-                            'value' => '1',
-                            'compare' => '='
-                        )
-                    )
-                ));
-                
-                if ($featured_query->have_posts()) {
-                    $featured_query->the_post();
-                    $featured_post_id = get_the_ID();
-                    wp_reset_postdata();
-                }
+                $featured_post_id = wordiva_get_featured_post_id() ?: null;
                 
                 // Get regular posts (excluding featured post)
-                $posts_per_page = get_option('posts_per_page', 10);
+                $posts_per_page = wordiva_get_blog_posts_per_page();
                 $paged = get_query_var('paged') ? get_query_var('paged') : 1;
                 
                 $main_query_args = array(

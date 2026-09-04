@@ -251,3 +251,45 @@ function wordiva_body_classes($classes) {
     return $classes;
 }
 add_filter('body_class', 'wordiva_body_classes');
+/**
+ * Posts per page for the blog index (Customizer, default 12).
+ */
+function wordiva_get_blog_posts_per_page() {
+    return max(1, absint(get_theme_mod('wordiva_posts_per_page', 12)));
+}
+
+/**
+ * Keep the main home query in sync with the index grid so /page/N
+ * 404s when the grid has no further pages.
+ */
+function wordiva_home_posts_per_page($query) {
+    if (is_admin() || !$query->is_main_query() || !$query->is_home() || $query->is_feed()) {
+        return;
+    }
+    $query->set('posts_per_page', wordiva_get_blog_posts_per_page());
+    $featured_id = wordiva_get_featured_post_id();
+    if ($featured_id) {
+        $query->set('post__not_in', array($featured_id));
+    }
+}
+
+/**
+ * ID of the post flagged as featured on the blog index (0 if none).
+ */
+function wordiva_get_featured_post_id() {
+    static $featured_id = null;
+    if ($featured_id === null) {
+        $ids = get_posts(array(
+            'post_type' => 'post',
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+            'fields' => 'ids',
+            'no_found_rows' => true,
+            'meta_key' => '_wordiva_featured_post',
+            'meta_value' => '1',
+        ));
+        $featured_id = $ids ? (int) $ids[0] : 0;
+    }
+    return $featured_id;
+}
+add_action('pre_get_posts', 'wordiva_home_posts_per_page');
