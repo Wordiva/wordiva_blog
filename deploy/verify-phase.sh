@@ -256,6 +256,52 @@ phase_10() {
   assert_body_contains "${BASE_URL}/feed/" '<item>' "RSS feed still serves items"
 }
 
+# Distinct in-blog post links on a page (excludes /blog/category/*, the page itself is fine).
+assert_internal_post_links() {
+  local url="$1" min="$2" label="$3"
+  local body count
+  body="$(curl -sS -L --max-time 30 "$url" || true)"
+  count="$(grep -oE 'href="[^"]*/blog/[a-z0-9-]+/[a-z0-9-]+/?"' <<< "$body" | grep -v '/blog/category/' | sort -u | wc -l | tr -d ' ')"
+  if [[ "$count" -ge "$min" ]]; then
+    log_pass "${label} (${count} links)"
+  else
+    log_fail "${label} — expected >= ${min}, found ${count}"
+  fi
+}
+
+phase_11() {
+  printf '\n=== Phase 11: 2026-09-07/08 briefs (glued hrefs, flagship recovery) ===\n'
+
+  # WP-M: the concatenated landing path from GA must never serve a page.
+  local glued="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality)https:/wordiva.ai/blog/ai-content-marketing/blog-seo-automationarticle"
+  local glued_code
+  glued_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$glued" || echo "000")"
+  if [[ "$glued_code" =~ ^2 ]]; then
+    log_fail "Glued landing path must not return 2xx (got HTTP ${glued_code})"
+  else
+    log_pass "Glued landing path not served (HTTP ${glued_code})"
+  fi
+
+  for slug in \
+    ai-content-marketing/automate-blog-content-without-losing-quality \
+    ai-content-marketing/ai-content-marketing-b2b-automation \
+    ai-content-marketing/blog-seo-automation \
+    ai-content-marketing/b2b-content-calendar-automated-plan; do
+    local url="${BASE_URL}/${slug}"
+    assert_body_not_contains "$url" 'href="[^"]*\)http' "No glued href on ${slug##*/}"
+    assert_body_not_contains "$url" 'href="[^"]*https?://[^"?]*https?:' "No double-scheme href on ${slug##*/}"
+    assert_body_not_contains "$url" '<a[^>]*(wordiva\.ai[^>]*nofollow|nofollow[^>]*wordiva\.ai)' "Internal anchors followable on ${slug##*/}"
+    assert_internal_post_links "$url" 3 "Internal post links on ${slug##*/}"
+  done
+
+  # WP-I: flagship recovery signals.
+  local flagship="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality"
+  assert_body_contains "$flagship" '"@type":"FAQPage"' "FAQPage on flagship"
+  # ponytail: JSON-LD is the brief requirement; the .wordiva-faq accordion on the
+  # flagship is content ops (post still uses plain "?" headings).
+  assert_internal_post_links "${BASE_URL}/" 4 "Blog index links to posts"
+}
+
 run_phase() {
   case "$1" in
     0) phase_0 ;;
@@ -269,13 +315,14 @@ run_phase() {
     8) phase_8 ;;
     9) phase_9 ;;
     10) phase_10 ;;
+    11) phase_11 ;;
     all)
-      for p in 0 1 2 3 4 5 6 7 8 10; do
+      for p in 0 1 2 3 4 5 6 7 8 10 11; do
         run_phase "$p"
       done
       ;;
     *)
-      echo "Usage: $0 <0-10|all>" >&2
+      echo "Usage: $0 <0-11|all>" >&2
       exit 2
       ;;
   esac
@@ -283,7 +330,7 @@ run_phase() {
 
 main() {
   if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <0-10|all>" >&2
+    echo "Usage: $0 <0-11|all>" >&2
     exit 2
   fi
   run_phase "$1"

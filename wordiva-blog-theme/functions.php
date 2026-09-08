@@ -216,6 +216,28 @@ function wordiva_improve_semantic_markup($content) {
 add_filter('the_content', 'wordiva_improve_semantic_markup');
 
 /**
+ * Repair hrefs where the content generator glued two links together, e.g.
+ * `href="https://wordiva.ai/blog/a)https:/wordiva.ai/blog/b"` (WP-H / WP-M).
+ * Keeps the first URL and drops the concatenated tail so the anchor stays crawlable.
+ */
+function wordiva_fix_glued_hrefs($content) {
+    if (stripos($content, 'href="') === false) {
+        return $content;
+    }
+    // ponytail: render-time repair only; the post source should still be cleaned.
+    return preg_replace_callback('/href="([^"]+)"/i', function ($m) {
+        $second = stripos($m[1], 'http', 1);
+        // A second scheme means two URLs were concatenated. Skip query strings,
+        // where `...?url=https://...` is legitimate.
+        if ($second === false || strpos($m[1], '?') !== false) {
+            return $m[0];
+        }
+        return 'href="' . esc_url(rtrim(substr($m[1], 0, $second), '(),. ')) . '"';
+    }, $content);
+}
+add_filter('the_content', 'wordiva_fix_glued_hrefs', 8);
+
+/**
  * Internal links must be crawlable: drop nofollow/target from wordiva.ai anchors.
  */
 function wordiva_make_internal_links_followable($content) {
