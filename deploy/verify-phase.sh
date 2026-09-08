@@ -297,8 +297,7 @@ phase_11() {
   # WP-I: flagship recovery signals.
   local flagship="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality"
   assert_body_contains "$flagship" '"@type":"FAQPage"' "FAQPage on flagship"
-  # ponytail: JSON-LD is the brief requirement; the .wordiva-faq accordion on the
-  # flagship is content ops (post still uses plain "?" headings).
+  assert_body_contains "$flagship" 'wordiva-faq' "FAQ accordion on flagship"
   assert_internal_post_links "${BASE_URL}/" 4 "Blog index links to posts"
 }
 
