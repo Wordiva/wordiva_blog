@@ -268,7 +268,7 @@ function wordiva_structured_data() {
             '@type' => 'WebPage',
             '@id' => get_permalink($post_id),
             'url' => get_permalink($post_id),
-            'name' => get_the_title($post_id),
+            'name' => wordiva_get_seo_title($post_id),
             'mainEntity' => array('@id' => get_permalink($post_id) . '#blogposting'),
         ));
 

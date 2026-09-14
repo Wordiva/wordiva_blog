@@ -1,0 +1,97 @@
+{
+  "theme": "2.1.1",
+  "posts": [
+    {
+      "ID": 231,
+      "slug": "b2b-content-calendar-automated-plan",
+      "title": "B2B Content Calendar: Build an Automated Plan",
+      "excerpt": "Build a B2B content calendar that turns ICP pains, SEO opportunities, and product stories into a weekly publishing system.",
+      "modified": "2026-09-04 21:46:23",
+      "url": "https://wordiva.ai/blog/ai-content-marketing/b2b-content-calendar-automated-plan",
+      "meta": {
+        "_wordiva_seo_title": [
+          "B2B Content Calendar: Free 13-Column Template"
+        ],
+        "_wordiva_seo_description": [
+          "Copy a free 13-column B2B content calendar built on buyer pain, SEO gaps and product narrative, plus the one-article-per-week cadence that sustains it."
+        ],
+        "_wordiva_enable_faq_schema": [
+          "1"
+        ]
+      }
+    },
+    {
+      "ID": 222,
+      "slug": "ai-content-marketing-b2b-automation",
+      "title": "AI Content Marketing for B2B: What to Automate",
+      "excerpt": "A strategic guide to AI content marketing for B2B teams: what to automate, what to review, and what to keep human.",
+      "modified": "2026-08-10 19:15:16",
+      "url": "https://wordiva.ai/blog/ai-content-marketing/ai-content-marketing-b2b-automation",
+      "meta": {
+        "_wordiva_seo_title": [
+          "B2B AI Content Marketing: 6 Tasks to Automate"
+        ],
+        "_wordiva_seo_description": [
+          "AI content marketing for B2B: the 6 tasks to automate first, the 4 that must stay human, and an operating model a lean team can start this week."
+        ],
+        "_wordiva_enable_faq_schema": [
+          "1"
+        ]
+      }
+    },
+    {
+      "ID": 211,
+      "slug": "b2b-blog-strategy-founder-workflow",
+      "title": "B2B Blog Strategy: 2-Hour Founder Workflow",
+      "excerpt": "Build a consistent B2B blog strategy in 2 hours a week with a lean workflow for topics, SEO, publishing, and AI automation.",
+      "modified": "2026-08-10 19:15:57",
+      "url": "https://wordiva.ai/blog/ai-content-marketing/b2b-blog-strategy-founder-workflow",
+      "meta": {
+        "_wordiva_seo_title": [],
+        "_wordiva_seo_description": [],
+        "_wordiva_enable_faq_schema": [
+          ""
+        ]
+      }
+    },
+    {
+      "ID": 188,
+      "slug": "blog-seo-automation",
+      "title": "Blog SEO Automation: Scale Traffic With Lean Teams",
+      "excerpt": "Learn how blog SEO automation helps lean teams scale research, optimization, publishing, and traffic growth without hiring.",
+      "modified": "2026-07-22 10:52:32",
+      "url": "https://wordiva.ai/blog/ai-content-marketing/blog-seo-automation",
+      "meta": {
+        "_wordiva_seo_title": [
+          "Blog SEO Automation: 8 Steps for Lean Teams"
+        ],
+        "_wordiva_seo_description": [
+          "Blog SEO automation in 8 steps: keyword discovery, briefs, optimized drafts, on-page SEO and internal linking so 1-2 people can grow traffic weekly."
+        ],
+        "_wordiva_enable_faq_schema": [
+          ""
+        ]
+      }
+    },
+    {
+      "ID": 177,
+      "slug": "automate-blog-content-without-losing-quality",
+      "title": "Automate Blog Content Without Losing Quality: A B2B AI Workflow",
+      "excerpt": "Learn how to automate blog content with agentic AI across strategy, drafting, SEO, review, and publishing without creating generic posts.",
+      "modified": "2026-09-08 19:08:21",
+      "url": "https://wordiva.ai/blog/ai-content-marketing/automate-blog-content-without-losing-quality",
+      "meta": {
+        "_wordiva_seo_title": [
+          "Automate Blog Content: 7 Steps, No Quality Loss"
+        ],
+        "_wordiva_seo_description": [
+          "Automate blog content in 7 steps without losing quality: brand intelligence, keyword strategy, briefs, constrained drafting, SEO, review, publishing."
+        ],
+        "_wordiva_enable_faq_schema": [
+          "1"
+        ]
+      }
+    }
+  ],
+  "glued_hrefs": []
+}

@@ -26,12 +26,55 @@ function wordiva_is_thin_tag($term = null) {
 }
 
 /**
+ * Dispatcher / customer-task title fragments that must never index (WP-P).
+ */
+function wordiva_leaked_task_pattern() {
+    return '/%25task|%2Btask|[%+]task|\btask\s*\(\s*routed\s+by|content-calendar-dispatch|hellomedspa/i';
+}
+
+function wordiva_text_has_leaked_task_payload($text) {
+    return is_string($text) && $text !== '' && preg_match(wordiva_leaked_task_pattern(), $text);
+}
+
+function wordiva_title_is_leaked_task($title) {
+    return wordiva_text_has_leaked_task_payload($title);
+}
+
+function wordiva_strip_leaked_task_payloads($text) {
+    if (!wordiva_text_has_leaked_task_payload($text)) {
+        return $text;
+    }
+    $stripped = preg_replace(
+        array(
+            '/%25task|%2Btask/i',
+            '/[%+]task(?:\s*\([^)]{0,240}\))?/i',
+            '/\btask\s*\(\s*routed\s+by[^)]{0,240}\)/i',
+            '/content-calendar-dispatch/i',
+            '/hellomedspa/i',
+        ),
+        '',
+        $text
+    );
+    if (!is_string($stripped)) {
+        return '';
+    }
+    return trim(preg_replace('/ {2,}/', ' ', $stripped));
+}
+
+function wordiva_get_raw_post_title($post_id = null) {
+    $post = get_post($post_id ?: get_the_ID());
+    return $post ? (string) $post->post_title : '';
+}
+
+/**
  * Per-post SEO title override, falling back to the post title.
  */
 function wordiva_get_seo_title($post_id = null) {
     $post_id = $post_id ?: get_the_ID();
     $custom = trim((string) get_post_meta($post_id, '_wordiva_seo_title', true));
-    return $custom !== '' ? $custom : get_the_title($post_id);
+    $title = $custom !== '' ? $custom : wordiva_get_raw_post_title($post_id);
+    $title = wordiva_strip_leaked_task_payloads($title);
+    return $title !== '' ? $title : __('Blog post', 'wordiva-blog-theme');
 }
 
 /**
@@ -41,11 +84,12 @@ function wordiva_get_seo_description($post_id = null) {
     $post_id = $post_id ?: get_the_ID();
     $custom = trim((string) get_post_meta($post_id, '_wordiva_seo_description', true));
     if ($custom !== '') {
-        return $custom;
+        return wordiva_strip_leaked_task_payloads($custom);
     }
-    return has_excerpt($post_id)
+    $description = has_excerpt($post_id)
         ? wp_trim_words(get_the_excerpt($post_id), 25, '...')
         : wp_trim_words(wp_strip_all_tags(get_post_field('post_content', $post_id)), 25, '...');
+    return wordiva_strip_leaked_task_payloads($description);
 }
 
 /**
@@ -167,6 +211,13 @@ function wordiva_get_robots_directive() {
     }
     if (is_tag() && wordiva_is_thin_tag()) {
         return 'noindex, follow';
+    }
+    if (is_singular()) {
+        $post_id = get_the_ID();
+        if (wordiva_title_is_leaked_task(wordiva_get_raw_post_title($post_id))
+            || wordiva_title_is_leaked_task((string) get_post_meta($post_id, '_wordiva_seo_title', true))) {
+            return 'noindex, follow';
+        }
     }
     return 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 }
@@ -326,7 +377,7 @@ function wordiva_get_blog_posting_schema($post_id = null) {
         '@context' => 'https://schema.org',
         '@type' => 'BlogPosting',
         '@id' => $permalink . '#blogposting',
-        'headline' => get_the_title($post_id),
+        'headline' => wordiva_get_seo_title($post_id),
         'description' => $excerpt,
         'image' => array(
             '@type' => 'ImageObject',
@@ -489,11 +540,15 @@ function wordiva_get_category_fallback_description($slug) {
  * Parse FAQ pairs from post content.
  */
 function wordiva_faq_schema_from_content($content) {
+    $content = wordiva_strip_leaked_task_payloads($content);
     $pairs = array();
     $seen = array();
     $add_pair = function ($question, $answer) use (&$pairs, &$seen) {
         $question = trim(preg_replace('/\s+/', ' ', wp_strip_all_tags($question)));
         $answer = trim(preg_replace('/\s+/', ' ', wp_strip_all_tags($answer)));
+        if (wordiva_text_has_leaked_task_payload($question) || wordiva_text_has_leaked_task_payload($answer)) {
+            return;
+        }
         if (strlen($question) > 5 && strlen($answer) > 10 && !isset($seen[$question])) {
             $seen[$question] = true;
             $pairs[] = array('question' => $question, 'answer' => $answer);

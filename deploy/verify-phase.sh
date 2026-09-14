@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Verify SEO implementation phases against production
-# Usage: ./deploy/verify-phase.sh <0-9|all>
+# Usage: ./deploy/verify-phase.sh <0-13|all>
 
 BASE_URL="${WORDIVA_BLOG_URL:-https://wordiva.ai/blog}"
 ROOT_URL="${WORDIVA_ROOT_URL:-https://wordiva.ai}"
@@ -276,11 +276,20 @@ phase_11() {
   local glued="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality)https:/wordiva.ai/blog/ai-content-marketing/blog-seo-automationarticle"
   local glued_code
   glued_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$glued" || echo "000")"
-  if [[ "$glued_code" =~ ^2 ]]; then
-    log_fail "Glued landing path must not return 2xx (got HTTP ${glued_code})"
-  else
-    log_pass "Glued landing path not served (HTTP ${glued_code})"
-  fi
+  case "$glued_code" in
+    404) log_pass "Glued landing path returns 404" ;;
+    301)
+      local redirect_result
+      redirect_result="$(curl -sS -L -o /dev/null -w '%{http_code} %{url_effective}' --max-time 30 "$glued" || true)"
+      if [[ "$redirect_result" == "200 ${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality" ||
+            "$redirect_result" == "200 ${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality/" ]]; then
+        log_pass "Glued landing path permanently redirects to the flagship"
+      else
+        log_fail "Glued landing redirect must resolve to the canonical flagship (${redirect_result})"
+      fi
+      ;;
+    *) log_fail "Glued landing path must return 404 or 301 (got HTTP ${glued_code})" ;;
+  esac
 
   for slug in \
     ai-content-marketing/automate-blog-content-without-losing-quality \
@@ -301,6 +310,44 @@ phase_11() {
   assert_internal_post_links "${BASE_URL}/" 4 "Blog index links to posts"
 }
 
+phase_12() {
+  printf '\n=== Phase 12: 2026-09-14 brief (query lock, leak scrub, ROI) ===\n'
+  if python3 "$(dirname "${BASH_SOURCE[0]}")/verify-blog-content.py"; then
+    log_pass "September 14 article content checks"
+  else
+    log_fail "September 14 article content checks"
+  fi
+}
+
+phase_13() {
+  printf '\n=== Phase 13: 2026-09-10/11/14 briefs (task leak, titles, glued href) ===\n'
+  local calendar="${BASE_URL}/ai-content-marketing/b2b-content-calendar-automated-plan"
+  local flagship="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality"
+  local seo_auto="${BASE_URL}/ai-content-marketing/blog-seo-automation"
+  local automation="${BASE_URL}/ai-content-marketing/ai-content-marketing-b2b-automation"
+  local roi="${BASE_URL}/content-operations/content-marketing-roi-b2b"
+
+  assert_body_not_contains "$calendar" 'content-calendar-dispatch|hellomedspa|%task|\+task|task \(routed' "No task-title leak on calendar post"
+  assert_body_contains "$calendar" 'B2B Content Calendar' "Calendar still targets b2b content calendar"
+  assert_body_contains "$calendar" '"@type":"FAQPage"' "FAQPage remains on calendar post"
+  assert_body_contains "$flagship" 'Without Losing Quality' "Flagship title restored to ranking query"
+  assert_body_not_contains "$flagship" '>SEO blog automation for content teams</a>' "Flagship no longer uses the SEO-automation query as anchor text"
+  assert_body_contains "$seo_auto" 'SEO Blog Automation for Content Teams' "Push query locked on SEO automation post"
+  assert_body_contains "$automation" 'AI Content Marketing Automation' "B2B automation title targets rising queries"
+  assert_body_contains "$roi" 'B2B Content Marketing ROI: Blog KPIs' "ROI post has shortened SEO title"
+  assert_body_contains "$roi" '"@type":"FAQPage"' "FAQPage on ROI post"
+  assert_body_contains "${BASE_URL}/" 'wordiva-v2-1-2' "Theme version 2.1.2 deployed"
+
+  local glued="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality)https:/wordiva.ai/blog/ai-content-marketing/blog-seo-automationarticle"
+  local glued_code
+  glued_code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$glued" || echo "000")"
+  if [[ "$glued_code" == "404" ]]; then
+    log_pass "Glued landing path still returns 404"
+  else
+    log_fail "Glued landing path must return 404 (got HTTP ${glued_code})"
+  fi
+}
+
 run_phase() {
   case "$1" in
     0) phase_0 ;;
@@ -315,13 +362,15 @@ run_phase() {
     9) phase_9 ;;
     10) phase_10 ;;
     11) phase_11 ;;
+    12) phase_12 ;;
+    13) phase_13 ;;
     all)
-      for p in 0 1 2 3 4 5 6 7 8 10 11; do
+      for p in 0 1 2 3 4 5 6 7 8 10 11 12 13; do
         run_phase "$p"
       done
       ;;
     *)
-      echo "Usage: $0 <0-11|all>" >&2
+      echo "Usage: $0 <0-13|all>" >&2
       exit 2
       ;;
   esac
@@ -329,7 +378,7 @@ run_phase() {
 
 main() {
   if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <0-11|all>" >&2
+    echo "Usage: $0 <0-13|all>" >&2
     exit 2
   fi
   run_phase "$1"

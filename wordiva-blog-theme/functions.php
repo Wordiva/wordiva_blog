@@ -216,6 +216,39 @@ function wordiva_improve_semantic_markup($content) {
 add_filter('the_content', 'wordiva_improve_semantic_markup');
 
 /**
+ * Strip leaked dispatcher / customer-task titles from rendered HTML (WP-P).
+ * ponytail: render-time only; published source should still be cleaned.
+ */
+function wordiva_filter_leaked_task_content($content) {
+    return wordiva_strip_leaked_task_payloads($content);
+}
+add_filter('the_content', 'wordiva_filter_leaked_task_content', 7);
+
+function wordiva_filter_leaked_task_title($title, $post_id = 0) {
+    if (is_admin()) {
+        return $title;
+    }
+    $clean = wordiva_strip_leaked_task_payloads($title);
+    if ($clean !== '') {
+        return $clean;
+    }
+    if (!$post_id) {
+        return $title;
+    }
+    $fallback = wordiva_strip_leaked_task_payloads((string) get_post_meta($post_id, '_wordiva_seo_title', true));
+    return $fallback !== '' ? $fallback : $title;
+}
+add_filter('the_title', 'wordiva_filter_leaked_task_title', 8, 2);
+
+function wordiva_filter_leaked_task_excerpt($excerpt) {
+    if (is_admin()) {
+        return $excerpt;
+    }
+    return wordiva_strip_leaked_task_payloads($excerpt);
+}
+add_filter('get_the_excerpt', 'wordiva_filter_leaked_task_excerpt', 8);
+
+/**
  * Repair hrefs where the content generator glued two links together, e.g.
  * `href="https://wordiva.ai/blog/a)https:/wordiva.ai/blog/b"` (WP-H / WP-M).
  * Keeps the first URL and drops the concatenated tail so the anchor stays crawlable.
