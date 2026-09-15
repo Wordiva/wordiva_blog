@@ -311,32 +311,35 @@ phase_11() {
 }
 
 phase_12() {
-  printf '\n=== Phase 12: 2026-09-14 brief (query lock, leak scrub, ROI) ===\n'
+  printf '\n=== Phase 12: 2026-09-15 brief (query lock, leak scrub, ROI) ===\n'
   if python3 "$(dirname "${BASH_SOURCE[0]}")/verify-blog-content.py"; then
-    log_pass "September 14 article content checks"
+    log_pass "September 15 article content checks"
   else
-    log_fail "September 14 article content checks"
+    log_fail "September 15 article content checks"
   fi
 }
 
 phase_13() {
-  printf '\n=== Phase 13: 2026-09-10/11/14 briefs (task leak, titles, glued href) ===\n'
+  printf '\n=== Phase 13: 2026-09-10/11/14/15 briefs (task leak, titles, glued href) ===\n'
   local calendar="${BASE_URL}/ai-content-marketing/b2b-content-calendar-automated-plan"
   local flagship="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality"
   local seo_auto="${BASE_URL}/ai-content-marketing/blog-seo-automation"
   local automation="${BASE_URL}/ai-content-marketing/ai-content-marketing-b2b-automation"
   local roi="${BASE_URL}/content-operations/content-marketing-roi-b2b"
 
-  assert_body_not_contains "$calendar" 'content-calendar-dispatch|hellomedspa|%task|\+task|task \(routed' "No task-title leak on calendar post"
+  assert_body_not_contains "$calendar" 'content-calendar-dispatch|hellomedspa|%task|\+task|task \(routed|brand-shop|wolf pack|virtual nurse' "No task-title leak on calendar post"
   assert_body_contains "$calendar" 'B2B Content Calendar' "Calendar still targets b2b content calendar"
+  assert_body_contains "$calendar" 'content marketing B2B calendar' "Calendar FAQ targets rising content marketing query"
   assert_body_contains "$calendar" '"@type":"FAQPage"' "FAQPage remains on calendar post"
   assert_body_contains "$flagship" 'Without Losing Quality' "Flagship title restored to ranking query"
+  assert_body_contains "$flagship" 'without losing quality' "Flagship summary H2 uses ranking query"
   assert_body_not_contains "$flagship" '>SEO blog automation for content teams</a>' "Flagship no longer uses the SEO-automation query as anchor text"
   assert_body_contains "$seo_auto" 'SEO Blog Automation for Content Teams' "Push query locked on SEO automation post"
   assert_body_contains "$automation" 'AI Content Marketing Automation' "B2B automation title targets rising queries"
-  assert_body_contains "$roi" 'B2B Content Marketing ROI: Blog KPIs' "ROI post has shortened SEO title"
+  assert_body_contains "$automation" 'CMS publishing' "B2B automation covers CMS publish long-tail"
+  assert_body_contains "$roi" 'Content Marketing ROI for B2B: Blog KPIs' "ROI title leads with ranking query"
   assert_body_contains "$roi" '"@type":"FAQPage"' "FAQPage on ROI post"
-  assert_body_contains "${BASE_URL}/" 'wordiva-v2-1-2' "Theme version 2.1.2 deployed"
+  assert_body_contains "${BASE_URL}/" 'wordiva-v2-1-3' "Theme version 2.1.3 deployed"
 
   local glued="${BASE_URL}/ai-content-marketing/automate-blog-content-without-losing-quality)https:/wordiva.ai/blog/ai-content-marketing/blog-seo-automationarticle"
   local glued_code

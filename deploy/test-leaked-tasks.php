@@ -23,6 +23,9 @@ $cases = array(
     array('+task (routed by content-calendar-dispatch hellomedspa)', '', true),
     array('Intro. content-calendar-dispatch payload here. Keep this.', 'Intro. payload here. Keep this.', true),
     array('Plan for hellomedspa clients leaked', 'Plan for clients leaked', true),
+    array('Draft for brand-shop client', 'Draft for client', true),
+    array('wolf pack campaign copy', 'campaign copy', true),
+    array('virtual nurse scheduling notes', 'scheduling notes', true),
     array('B2B Content Calendar: Free 13-Column Template', 'B2B Content Calendar: Free 13-Column Template', false),
     array('href="https://wordiva.ai/blog/post/"', 'href="https://wordiva.ai/blog/post/"', false),
 );

@@ -5,7 +5,7 @@ Tags: blog, content-marketing, ai, desktop, custom-colors, featured-images, acce
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,10 @@ Yes, you can customize the Wordiva brand colors through the WordPress Customizer
 Yes, the theme includes comprehensive SEO optimization with structured data markup, proper heading hierarchy, and semantic HTML.
 
 == Changelog ==
+
+= 2.1.3 =
+* Expand leaked-task scrub to customer-title fragments (`brand-shop`,
+  `wolf pack`, `virtual nurse`) still surfacing on the calendar URL in GSC
 
 = 2.1.2 =
 * Strip leaked dispatcher/customer-task titles (`%task`, `content-calendar-dispatch`)

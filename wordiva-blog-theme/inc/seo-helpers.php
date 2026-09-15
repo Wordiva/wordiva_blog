@@ -29,7 +29,7 @@ function wordiva_is_thin_tag($term = null) {
  * Dispatcher / customer-task title fragments that must never index (WP-P).
  */
 function wordiva_leaked_task_pattern() {
-    return '/%25task|%2Btask|[%+]task|\btask\s*\(\s*routed\s+by|content-calendar-dispatch|hellomedspa/i';
+    return '/%25task|%2Btask|[%+]task|\btask\s*\(\s*routed\s+by|content-calendar-dispatch|hellomedspa|brand-shop|\bwolf\s+pack\b|virtual\s+nurse/i';
 }
 
 function wordiva_text_has_leaked_task_payload($text) {
@@ -51,6 +51,9 @@ function wordiva_strip_leaked_task_payloads($text) {
             '/\btask\s*\(\s*routed\s+by[^)]{0,240}\)/i',
             '/content-calendar-dispatch/i',
             '/hellomedspa/i',
+            '/brand-shop/i',
+            '/\bwolf\s+pack\b/i',
+            '/virtual\s+nurse/i',
         ),
         '',
         $text

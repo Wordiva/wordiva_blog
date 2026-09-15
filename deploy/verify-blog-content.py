@@ -11,10 +11,13 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
 BASE = os.environ.get('WORDIVA_BLOG_URL', 'https://wordiva.ai/blog').rstrip('/')
-BUNDLE = Path(__file__).resolve().parents[1] / 'briefs' / 'updates' / '2026-09-14'
+BUNDLE = Path(__file__).resolve().parents[1] / 'briefs' / 'updates' / '2026-09-15'
 MANIFEST = json.loads((BUNDLE / 'manifest.json').read_text())
 QUERY = 'seo blog automation for content teams'
-LEAK = ('content-calendar-dispatch', 'hellomedspa', '%task', '+task', 'task (routed')
+LEAK = (
+    'content-calendar-dispatch', 'hellomedspa', '%task', '+task', 'task (routed',
+    'brand-shop', 'wolf pack', 'virtual nurse',
+)
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}
 
 
@@ -190,17 +193,22 @@ def check_post(row):
         assert 'How do I automate publishing AI-optimized articles to my CMS?' in [faq['question'] for faq in page.faqs], 'CMS FAQ missing'
     if row['ID'] == 177:
         assert page.headings[0].startswith('Summary:'), 'Flagship summary missing'
+        assert 'without losing quality' in page.headings[0].lower(), 'Flagship query missing from summary H2'
         assert 'without losing quality' in page.title.lower(), 'Flagship query missing from title'
+        assert 'look cheap' in page.metas['description'][0].lower(), 'Cheap-quality query missing from description'
         assert QUERY not in body, 'Flagship still cannibalizes the SEO automation query'
         assert any('without looking cheap' in faq['question'] for faq in page.faqs), 'Quality FAQ missing'
     if row['ID'] == 222:
         assert page.headings[0].startswith('AI content marketing automation for B2B:'), 'B2B summary missing'
         assert 'ai content marketing automation' in page.title.lower(), 'Rising automation query missing from title'
+        assert any('CMS publishing' in faq['question'] for faq in page.faqs), 'CMS publish FAQ missing'
+        assert 'cms publishing' in page.metas['description'][0].lower(), 'CMS publish missing from description'
     if row['ID'] == 231:
         assert any('calendar to CMS publishing' in faq['question'] for faq in page.faqs), 'Calendar CMS FAQ missing'
         assert any('b2b content calendar' in faq['question'].lower() for faq in page.faqs), 'Calendar query FAQ missing'
+        assert any('content marketing b2b calendar' in faq['question'].lower() for faq in page.faqs), 'Rising calendar FAQ missing'
     if row['ID'] == 245:
-        assert 'content marketing roi' in page.title.lower(), 'ROI query missing from title'
+        assert page.title.lower().startswith('content marketing roi for b2b'), 'ROI query should lead the title'
         assert any('content marketing ROI' in faq['question'] for faq in page.faqs), 'ROI FAQ missing'
     return f'{row["ID"]}: metadata, canonical, indexability, {len(contextual)} contextual links, {len(page.faqs)} matching FAQs'
 
