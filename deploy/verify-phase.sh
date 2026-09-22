@@ -311,11 +311,11 @@ phase_11() {
 }
 
 phase_12() {
-  printf '\n=== Phase 12: 2026-09-15 brief (query lock, leak scrub, ROI) ===\n'
+  printf '\n=== Phase 12: 2026-09-15/21/22 briefs (query lock, leak scrub, flagship, ROI) ===\n'
   if python3 "$(dirname "${BASH_SOURCE[0]}")/verify-blog-content.py"; then
-    log_pass "September 15 article content checks"
+    log_pass "September 22 article content checks"
   else
-    log_fail "September 15 article content checks"
+    log_fail "September 22 article content checks"
   fi
 }
 

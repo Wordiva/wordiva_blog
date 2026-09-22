@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
 BASE = os.environ.get('WORDIVA_BLOG_URL', 'https://wordiva.ai/blog').rstrip('/')
-BUNDLE = Path(__file__).resolve().parents[1] / 'briefs' / 'updates' / '2026-09-15'
+BUNDLE = Path(__file__).resolve().parents[1] / 'briefs' / 'updates' / '2026-09-22'
 MANIFEST = json.loads((BUNDLE / 'manifest.json').read_text())
 QUERY = 'seo blog automation for content teams'
 LEAK = (
@@ -191,12 +191,17 @@ def check_post(row):
         assert QUERY in page.title.lower() and QUERY in page.metas['description'][0].lower(), 'Query missing from metadata'
         assert QUERY in page.headings[0].lower(), 'Query missing from answer-first H2'
         assert 'How do I automate publishing AI-optimized articles to my CMS?' in [faq['question'] for faq in page.faqs], 'CMS FAQ missing'
+        assert any('automate SEO execution' in faq['question'] for faq in page.faqs), 'SEO execution FAQ missing'
+        assert any(a.get('href', '').rstrip('/').endswith('/automate-blog-content-without-losing-quality')
+                   for a in page.body_links), 'Flagship link missing'
     if row['ID'] == 177:
         assert page.headings[0].startswith('Summary:'), 'Flagship summary missing'
         assert 'without losing quality' in page.headings[0].lower(), 'Flagship query missing from summary H2'
         assert 'without losing quality' in page.title.lower(), 'Flagship query missing from title'
-        assert 'look cheap' in page.metas['description'][0].lower(), 'Cheap-quality query missing from description'
+        assert re.search(r'look(ing)? cheap', page.metas['description'][0], re.I), 'Cheap-quality query missing from description'
         assert QUERY not in body, 'Flagship still cannibalizes the SEO automation query'
+        assert 'seo automation' not in body, 'Flagship still carries SEO-automation anchor text'
+        assert any('keep quality high' in faq['question'] for faq in page.faqs), 'Keep-quality FAQ missing'
         assert any('without looking cheap' in faq['question'] for faq in page.faqs), 'Quality FAQ missing'
     if row['ID'] == 222:
         assert page.headings[0].startswith('AI content marketing automation for B2B:'), 'B2B summary missing'
@@ -210,6 +215,7 @@ def check_post(row):
     if row['ID'] == 245:
         assert page.title.lower().startswith('content marketing roi for b2b'), 'ROI query should lead the title'
         assert any('content marketing ROI' in faq['question'] for faq in page.faqs), 'ROI FAQ missing'
+        assert any('founders measure content marketing ROI' in faq['question'] for faq in page.faqs), 'Founder ROI FAQ missing'
     return f'{row["ID"]}: metadata, canonical, indexability, {len(contextual)} contextual links, {len(page.faqs)} matching FAQs'
 
 
